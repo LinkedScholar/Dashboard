@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ngx-footer',
+  selector: 'ls-footer',
   styleUrls: ['./footer.component.scss'],
   template: `
     <span class="created-by">

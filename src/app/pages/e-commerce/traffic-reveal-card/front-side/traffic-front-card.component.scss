@@ -33,7 +33,7 @@
   }
 
   @include media-breakpoint-down(is) {
-    ngx-traffic-bar {
+    ls-traffic-bar {
       display: none;
     }
   }

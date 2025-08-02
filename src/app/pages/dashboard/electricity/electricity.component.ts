@@ -6,7 +6,7 @@ import { takeWhile } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'ngx-electricity',
+  selector: 'ls-electricity',
   styleUrls: ['./electricity.component.scss'],
   templateUrl: './electricity.component.html',
 })

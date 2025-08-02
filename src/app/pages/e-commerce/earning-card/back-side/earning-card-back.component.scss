@@ -3,7 +3,7 @@
 @import '@nebular/theme/styles/global/breakpoints';
 
 @include nb-install-component() {
-  ngx-earning-pie-chart,
+  ls-earning-pie-chart,
   .chart-info {
     flex: 1;
   }
@@ -27,13 +27,13 @@
   }
 
   @include media-breakpoint-between(xl, xl) {
-    ngx-earning-pie-chart {
+    ls-earning-pie-chart {
       flex: 2;
     }
   }
 
   @include media-breakpoint-between(sm, sm) {
-    ngx-earning-pie-chart {
+    ls-earning-pie-chart {
       flex: 2;
     }
   }

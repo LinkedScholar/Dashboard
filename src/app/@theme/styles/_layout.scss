@@ -1,4 +1,4 @@
-@mixin ngx-layout() {
+@mixin ls-layout() {
   @include media-breakpoint-down(is) {
     .row {
       margin-left: -10px;

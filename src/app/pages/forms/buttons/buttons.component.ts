@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { NbComponentShape, NbComponentSize, NbComponentStatus } from '@nebular/theme';
 
 @Component({
-  selector: 'ngx-buttons',
+  selector: 'ls-buttons',
   styleUrls: ['./buttons.component.scss'],
   templateUrl: './buttons.component.html',
 })

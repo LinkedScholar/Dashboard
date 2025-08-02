@@ -6,7 +6,7 @@ import { NbComponentSize, NbMediaBreakpointsService, NbThemeService } from '@neb
 import { Camera, SecurityCamerasData } from '../../../@core/data/security-cameras';
 
 @Component({
-  selector: 'ngx-security-cameras',
+  selector: 'ls-security-cameras',
   styleUrls: ['./security-cameras.component.scss'],
   templateUrl: './security-cameras.component.html',
 })

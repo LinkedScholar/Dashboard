@@ -9,7 +9,7 @@ import {
 } from '@nebular/theme';
 
 @Component({
-  selector: 'ngx-toastr',
+  selector: 'ls-toastr',
   styleUrls: ['./toastr.component.scss'],
   templateUrl: './toastr.component.html',
 })

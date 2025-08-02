@@ -5,7 +5,7 @@ import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'ngx-room-selector',
+  selector: 'ls-room-selector',
   templateUrl: './room-selector.component.html',
   styleUrls: ['./room-selector.component.scss'],
 })

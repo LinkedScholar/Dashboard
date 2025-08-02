@@ -2,7 +2,7 @@ import { Component, HostBinding, Input, OnDestroy } from '@angular/core';
 import { PlayerService, Track } from '../../../../@core/utils/player.service';
 
 @Component({
-  selector: 'ngx-player',
+  selector: 'ls-player',
   styleUrls: ['./player.component.scss'],
   templateUrl: './player.component.html',
 })

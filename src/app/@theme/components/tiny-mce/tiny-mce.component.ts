@@ -2,7 +2,7 @@ import { Component, OnDestroy, AfterViewInit, Output, EventEmitter, ElementRef }
 import { LocationStrategy } from '@angular/common';
 
 @Component({
-  selector: 'ngx-tiny-mce',
+  selector: 'ls-tiny-mce',
   template: '',
 })
 export class TinyMCEComponent implements OnDestroy, AfterViewInit {

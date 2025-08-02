@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ngx-spinner-sizes',
+  selector: 'ls-spinner-sizes',
   templateUrl: 'spinner-sizes.component.html',
 })
 

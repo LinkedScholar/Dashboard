@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ngx-nebular-select',
+  selector: 'ls-nebular-select',
   templateUrl: 'nebular-select.component.html',
   styleUrls: ['nebular-select.component.scss'],
 })

@@ -29,7 +29,7 @@
         "@angular-eslint/component-selector": [
           "error",
           {
-            "prefix": "ngx",
+            "prefix": "ls",
             "style": "kebab-case",
             "type": "element"
           }
@@ -37,7 +37,7 @@
         "@angular-eslint/directive-selector": [
           "error",
           {
-            "prefix": "ngx",
+            "prefix": "ls",
             "style": "camelCase",
             "type": "attribute"
           }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'ngx-components',
+  selector: 'ls-components',
   template: `
     <router-outlet></router-outlet>
   `,

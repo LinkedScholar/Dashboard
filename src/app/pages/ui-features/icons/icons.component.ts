@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NbIconLibraries } from '@nebular/theme';
 
 @Component({
-  selector: 'ngx-icons',
+  selector: 'ls-icons',
   styleUrls: ['./icons.component.scss'],
   templateUrl: './icons.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
