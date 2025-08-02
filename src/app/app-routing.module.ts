@@ -11,6 +11,11 @@ import {
 
 export const routes: Routes = [
   {
+    path: 'landing',
+    loadChildren: () => import('./landing/landing.module')
+      .then(m => m.LandingPageModule),
+  },
+  {
     path: 'pages',
     loadChildren: () => import('./pages/pages.module')
       .then(m => m.PagesModule),
@@ -45,7 +50,7 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '', redirectTo: 'pages', pathMatch: 'full' },
+  { path: '', redirectTo: 'landing', pathMatch: 'full' },
   { path: '**', redirectTo: 'pages' },
 ];
 
