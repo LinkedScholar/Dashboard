@@ -1,0 +1,16 @@
+@import 'bootstrap/scss/mixins/breakpoints';
+@import '@nebular/theme/styles/global/breakpoints';
+@import '../@theme/styles/themes';
+
+@include nb-install-component() {
+    .header {
+        background-color: rgba($color: #FFFFFF, $alpha: 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: none;
+    }
+
+    ::ng-deep nb-layout-header nav {
+        box-shadow: none;
+    }
+}

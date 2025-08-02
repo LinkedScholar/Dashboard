@@ -1,8 +1,12 @@
 <div class="header-container">
     <div class="logo-container">
-      <a href="#" class="sidebar-toggle">
-        <nb-icon icon="menu-2-outline"></nb-icon>
-      </a>
-      <a class="logo" href="#" >ls-<span>admin</span></a>
-    </div>s
+      <a class="linked-header" href="#" >Linked<span class = "header-scholar">Scholar</span></a>
+    </div>
+
+    <div style="gap: 10px;">
+        <button nbButton class="theme-toggle" (click)="toggleTheme()" status = "primary" ghost>
+            <nb-icon icon="sun-outline"></nb-icon>
+        </button>
+        <button nbButton size="medium" status="primary" [routerLink] = "['/auth/login']" ghost>Sign In</button>
+    </div>
 </div>
