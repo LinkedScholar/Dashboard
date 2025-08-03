@@ -1,6 +1,19 @@
 <div class="header-container">
+    
     <div class="logo-container">
-      <a class="linked-header" href="#" >Linked<span class = "header-scholar">Scholar</span></a>
+      <a class="linked-header" routerLink = "/landing" >Linked<span class = "header-scholar">Scholar</span></a>
+      <div 
+        class="solutions-dropdown"
+        (mouseenter)="setSolutionsDropdownOpen(true)"
+        (mouseleave)="setSolutionsDropdownOpen(false)">
+        <p style="margin: 0px;" class="solutions-trigger" >
+            Solutions
+        </p>
+        <nb-icon icon="chevron-down-outline" class="solutions-trigger" [ngClass]="{'open': solutionsDropdownOpen}"></nb-icon>
+        <div class="solutions-dropdown-content" [ngClass]="{'show': solutionsDropdownOpen}">
+            <ls-landing-dropdown-solution *ngFor="let item of solutionsItems" [data] = "item"></ls-landing-dropdown-solution>
+        </div>
+      </div>
     </div>
 
     <div style="gap: 10px;">

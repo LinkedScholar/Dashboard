@@ -5,10 +5,6 @@ import { NbThemeService } from '@nebular/theme';
   templateUrl: './landing.component.html',
   styleUrls: ['./landing.component.scss']
 })
-export class LandingPageComponent  implements OnDestroy {
-  private alive = true;
+export class LandingComponent {
 
-  ngOnDestroy() {
-    this.alive = false;
-  }
 }

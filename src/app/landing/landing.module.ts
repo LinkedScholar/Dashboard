@@ -1,23 +1,45 @@
 import { NgModule } from '@angular/core';
 import { ThemeModule } from '../@theme/theme.module';
-import { LandingPageComponent } from './landing.component';
+import { LandingComponent } from './landing.component';
 import { LandingPageRoutingModule } from './landing-routing.module';
-import { NbSidebarModule, NbLayoutModule, NbButtonModule, NbIconModule} from '@nebular/theme';
+import { NbSidebarModule, NbLayoutModule, NbButtonModule, NbIconModule, NbPopoverModule, NbCardModule, NbInputModule, NbFormFieldModule} from '@nebular/theme';
 import { LandingHeaderComponent } from './landing-header/landing-header.component';
+import { LandingDropdownSolutionComponent } from './landing-header/landing-dropdown-solution/landing-dropdown-solution.component';
+import { LandingContactComponent } from './landing-footer/landing-contact/landing-contact.component';
+import { LandingContributeComponent } from './landing-footer/landing-contribute/landing-contribute.component';
+import { LandingHelpNfactsComponent } from './landing-footer/landing-help-nfacts/landing-help-nfacts.component';
+import { LandingPrivacyComponent } from './landing-footer/landing-privacy/landing-privacy.component';
+import { LandingFooterComponent } from './landing-footer/landing-footer.component';
+import { LandingNotFoundComponent } from './landing-not-found/not-found.component';
+import { FormsModule as ngFormsModule } from '@angular/forms';
+import { LandingAPIComponent } from './landing-footer/landing-api/landing-api.component';
 
 
 @NgModule({
   declarations: [
-    LandingPageComponent,
-    LandingHeaderComponent
+    LandingComponent,
+    LandingHeaderComponent,
+    LandingDropdownSolutionComponent,
+    LandingContactComponent,
+    LandingContributeComponent,
+    LandingHelpNfactsComponent,
+    LandingPrivacyComponent,
+    LandingFooterComponent,
+    LandingNotFoundComponent,
+    LandingAPIComponent
   ],
   imports: [
     ThemeModule,
     LandingPageRoutingModule,
     NbLayoutModule,
-    NbSidebarModule, // NbSidebarModule.forRoot(), //if this is your app.module
+    NbSidebarModule,
     NbButtonModule,
-    NbIconModule
+    NbIconModule,
+    NbPopoverModule,
+    NbCardModule,
+    ngFormsModule,
+    NbInputModule,
+    NbFormFieldModule
   ]
 })
-export class LandingPageModule { }
+export class LandingModule { }

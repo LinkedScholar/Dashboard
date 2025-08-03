@@ -1,0 +1,28 @@
+@import 'bootstrap/scss/mixins/breakpoints';
+@import '@nebular/theme/styles/global/breakpoints';
+@import '../@theme/styles/themes';
+
+@include nb-install-component() {
+    :host {
+        align-items: center;
+      }
+    h5 {
+        color: nb-theme(text-primary-color);
+    }
+
+    .faq-item {
+        border-bottom: 1px solid nb-theme(divider-color);
+
+    }
+
+    .faq-card {
+        margin: 0px auto;
+        max-width: 900px;
+        box-shadow: 0 2px 10px #00000026;
+        ::ng-deep nb-card-body{
+            display: flex;
+            flex-direction: column;
+            gap: 20px;   
+        }
+    }
+}

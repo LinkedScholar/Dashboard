@@ -13,7 +13,7 @@ export const routes: Routes = [
   {
     path: 'landing',
     loadChildren: () => import('./landing/landing.module')
-      .then(m => m.LandingPageModule),
+      .then(m => m.LandingModule),
   },
   {
     path: 'pages',
@@ -56,6 +56,8 @@ export const routes: Routes = [
 
 const config: ExtraOptions = {
   useHash: false,
+  anchorScrolling: 'enabled',
+  scrollPositionRestoration: 'enabled'
 };
 
 @NgModule({

@@ -1,0 +1,19 @@
+
+<nb-card class="faq-card" accent="primary">
+    <nb-card-header>Contact</nb-card-header>
+    <nb-card-body class ="faq-card-body" style="gap: 20px; display: flex; flex-direction: column; align-items: center;">
+        <div class="full-name-inputs" style="width: 100%;">
+            <nb-form-field style="width: 100%;">
+                <input type="text" nbInput shape="semi-round" fullWidth placeholder="Name *">
+            </nb-form-field>
+            <nb-form-field style="width: 100%;">
+                <nb-icon nbPrefix icon="at-outline" pack="eva"></nb-icon>
+                <input type="text" nbInput shape="semi-round" fullWidth placeholder="e-Mail *">
+            </nb-form-field>
+            
+        </div>
+        <input type="text" nbInput shape="semi-round" fullWidth placeholder="Subject *">
+        <textarea rows="5" nbInput fullWidth shape="semi-round"  placeholder="Message"></textarea>
+        <button nbButton status="primary" style="width: fit-content;">Send <nb-icon icon="email-outline"></nb-icon></button>
+    </nb-card-body>
+</nb-card>
