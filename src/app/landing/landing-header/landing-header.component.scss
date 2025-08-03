@@ -2,69 +2,88 @@
 @import '@nebular/theme/styles/global/breakpoints';
 @import '../../@theme/styles/themes';
 
+// A mixin to define the common style for header links/triggers
+@mixin header-link-style {
+  font-weight: 700;
+  color: nb-theme(text-basic-color);
+  font-size: 20px;
+}
+
 @include nb-install-component() {
   display: flex;
   justify-content: space-between;
   width: 100%;
+  background-color: transparent;
 
   .logo-container {
     display: flex;
     align-items: center;
     width: calc(#{nb-theme(sidebar-width)} - #{nb-theme(header-padding)});
-  }
+    gap: 20px;
 
-  nb-action {
-    height: auto;
-    display: flex;
-    align-content: center;
-  }
+    .solutions-dropdown {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
 
-  nb-user {
-    cursor: pointer;
-  }
+      .solutions-trigger {
+        @include header-link-style;
+        text-transform: none;
+        transition: transform 0.2s ease-in-out;
+        font-weight: 500;
+        &.open {
+          transform: rotate(180deg);
+        }
+      }
 
-  ::ng-deep nb-search button {
-    padding: 0!important;
+      .solutions-dropdown-content{
+        background-color: nb-theme(layout-background-color);
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        min-width: 320px;
+        position: absolute;
+        top: calc(100% + #{nb-theme(header-padding)});
+        left: 50%;
+        transition: all 0.3s ease;
+        z-index: 1001;
+        transform: translateX(-50%) translateY(-10px);
+        opacity: 0;
+        visibility: hidden;
+        padding: 16px;
+        &.show {
+          opacity: 1;
+          visibility: visible;
+          transform: translateX(-50%) translateY(0);
+        }
+      }
+    }
+
+    .linked-header {
+      @include header-link-style;
+      text-decoration: none;
+
+      .header-scholar {
+        color: nb-theme(text-primary-color);
+      }
+    }
   }
 
   .header-container {
     display: flex;
     align-items: center;
-    width: auto;
-
-    .sidebar-toggle {
-      @include nb-ltr(padding-right, 1.25rem);
-      @include nb-rtl(padding-left, 1.25rem);
-      text-decoration: none;
-      color: nb-theme(text-hint-color);
-      nb-icon {
-        font-size: 1.75rem;
-      }
-    }
-
-    .logo {
-      padding: 0 1.25rem;
-      font-size: 1.75rem;
-      @include nb-ltr(border-left, 1px solid nb-theme(divider-color));
-      @include nb-rtl(border-right, 1px solid nb-theme(divider-color));
-      white-space: nowrap;
-      text-decoration: none;
-    }
+    width: 100%;
+    justify-content: space-between;
+    background-color: transparent;
   }
 
-  @include media-breakpoint-down(sm) {
-    .control-item {
-      display: none;
-    }
-    .user-action {
-      border: none;
-      padding: 0;
-    }
-  }
-
-  @include media-breakpoint-down(is) {
-    nb-select {
-      display: none;
+  /* Mobile Responsiveness */
+  @media (max-width: 768px) {
+    /* Hide solutions dropdown on mobile */
+    .solutions-dropdown {
+        display: none;
     }
   }
 }

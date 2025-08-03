@@ -1,11 +1,12 @@
 <nb-layout>
-    <nb-layout-header fixed>
+    <nb-layout-header class = "header" fixed>
         <ls-landing-header></ls-landing-header>
     </nb-layout-header>
-
-    <nb-sidebar>Sidebar Content</nb-sidebar>
     
     <nb-layout-column>
-    Page Content <button nbButton>Hello World</button>
+        <router-outlet></router-outlet>
     </nb-layout-column>
+    <nb-layout-footer [fixed]="false">
+        <ls-landing-footer class = "footer"></ls-landing-footer>
+    </nb-layout-footer>
 </nb-layout>

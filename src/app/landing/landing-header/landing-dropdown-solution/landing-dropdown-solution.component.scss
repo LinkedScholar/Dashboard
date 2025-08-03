@@ -1,0 +1,67 @@
+@import 'bootstrap/scss/mixins/breakpoints';
+@import '@nebular/theme/styles/global/breakpoints';
+@import '../../../@theme/styles/themes';
+
+
+@include nb-install-component() {
+    .solution-item {
+        display: flex;
+        align-items: flex-start;
+        padding: 16px;
+        border-radius: 8px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.2s ease;
+        margin-bottom: 4px;
+        
+            
+        &:hover {
+            background-color: nb-theme(color-primary-transparent-100);
+            transform: translateX(4px);
+        }
+        
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    .solution-icon {
+        width: 40px;
+        height: 40px;
+        background: nb-theme(color-primary-transparent-100);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 14px;
+        flex-shrink: 0;
+        transition: all 0.2s ease;
+        font-size: 20px;
+        color: nb-theme(text-primary-color);
+
+    }
+
+    .solution-item:hover .solution-icon {
+        background: nb-theme(color-primary-transparent-200);
+        transform: scale(1.05);
+    }
+
+    .solution-content {
+        flex: 1;
+    }
+
+    .solution-title {
+        font-size: 15px;
+        font-weight: 600;
+        color:  nb-theme(text-default-color);
+        margin-bottom: 4px;
+        line-height: 1.3;
+    }
+
+    .solution-description {
+        font-size: 13px;
+        color:  nb-theme(text-default-color);
+        line-height: 1.4;
+    }
+}
+

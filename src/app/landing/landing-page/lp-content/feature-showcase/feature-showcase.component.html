@@ -1,0 +1,67 @@
+<div class="feature-showcase">
+    <div class="row" [ngStyle]="{'flex-direction': reversed ? 'row-reverse' : 'row'}">
+        <div class="col">
+                <h1 class="title"  [ngStyle]="{'text-align': reversed ? 'right' : 'left'}" [ngClass]="{'float-right': reversed}">
+                    {{data.title}}
+                </h1>
+                <div class="text-container" [ngClass]="{'float-right': reversed}" style="width: 50%;">
+                    <h2 class="subtitle" [ngStyle]="{'text-align': reversed ? 'right' : 'left'}" [ngClass]="{'float-right': reversed}">
+                        {{data.subtitle}}
+                    </h2>
+                    <p [ngClass]="{'float-right': reversed}">
+                        {{data.description}}
+                    </p>
+                </div>
+        </div>
+    </div>  
+    <div class="row" [ngStyle]="{'flex-direction': reversed ? 'row-reverse' : 'row'}">
+        <div class="col">
+            <ul class="features">
+                <li class="feature" *ngFor="let detail of data.fetureDetails; let i = index"
+                (mouseover)="highlightDetail(i)" [ngClass]="{'active-detail': selected_detail == i}">
+                    <nb-icon icon="{{detail.icon}}" class="feature-icon"></nb-icon>
+                    <div class="feature-content">
+                        <span class="feature-title">{{detail.title}}</span><br>
+                        <span class="feature-text"> {{detail.description}}</span>
+                    </div>
+                </li>
+            </ul>
+            <button nbButton hero status="primary" shape="round" size="large"
+            [routerLink]="['contact']" [ngClass]="{'float-right': reversed}">
+                {{data.buttonText}}
+                <nb-icon size="large" icon="chevron-right-outline"></nb-icon>
+            </button>
+        </div>
+        <div class="col">
+            <div class="network-visualization">
+                <div class="visual-mockup">
+                   <div class="mockup-header">
+                      <div class="browser-controls">
+                         <div class="control-dot control-dot--red"></div>
+                         <div class="control-dot control-dot--yellow"></div>
+                         <div class="control-dot control-dot--green"></div>
+                      </div>
+                        <div class="address-input">
+                        <nb-icon icon="link-outline"></nb-icon>
+                        linkedscholar.io/{{data.link}}
+                        </div>
+                   </div>
+                   <div class="mockup-content">
+                      <div class="image-container">
+                        <img alt="{{selected_detail_data.title}} Visualization" class="visual-image" [src]="selected_detail_data.image">
+                        <div class="feature-badge">
+                            <nb-icon [icon]="selected_detail_data.icon"></nb-icon>
+                            <span>{{selected_detail_data.title}}</span>
+                        </div>
+                      </div>
+                   </div>
+                   <div class="feature-indicators">
+                      <div *ngFor="let _ of data.fetureDetails; let i = index" 
+                        class="indicator" [ngClass]="{'active-indicator': selected_detail == i}"
+                        (click)="highlightDetail(i)"></div>
+                   </div>
+                </div>
+             </div>
+        </div>
+    </div>
+</div>  

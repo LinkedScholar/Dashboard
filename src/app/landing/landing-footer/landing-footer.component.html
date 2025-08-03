@@ -1,0 +1,7 @@
+<div class="footer-container">
+    <div class="linked">Linked <span class="scholar">Scholar</span> © 2025</div>
+    <div class="links-container">
+        <a *ngFor="let link of links" [routerLink]="link.path">{{link.title}}</a>
+    </div>
+    <div></div>
+</div>

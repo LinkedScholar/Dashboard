@@ -1,8 +1,25 @@
 <div class="header-container">
+    
     <div class="logo-container">
-      <a href="#" class="sidebar-toggle">
-        <nb-icon icon="menu-2-outline"></nb-icon>
-      </a>
-      <a class="logo" href="#" >ls-<span>admin</span></a>
-    </div>s
+      <a class="linked-header" routerLink = "/landing" >Linked<span class = "header-scholar">Scholar</span></a>
+      <div 
+        class="solutions-dropdown"
+        (mouseenter)="setSolutionsDropdownOpen(true)"
+        (mouseleave)="setSolutionsDropdownOpen(false)">
+        <p style="margin: 0px;" class="solutions-trigger" >
+            Solutions
+        </p>
+        <nb-icon icon="chevron-down-outline" class="solutions-trigger" [ngClass]="{'open': solutionsDropdownOpen}"></nb-icon>
+        <div class="solutions-dropdown-content" [ngClass]="{'show': solutionsDropdownOpen}">
+            <ls-landing-dropdown-solution *ngFor="let item of solutionsItems" [data] = "item"></ls-landing-dropdown-solution>
+        </div>
+      </div>
+    </div>
+
+    <div style="gap: 10px;">
+        <button nbButton class="theme-toggle" (click)="toggleTheme()" status = "primary" ghost>
+            <nb-icon icon="sun-outline"></nb-icon>
+        </button>
+        <button nbButton size="medium" status="primary" [routerLink] = "['/auth/login']" ghost>Sign In</button>
+    </div>
 </div>
