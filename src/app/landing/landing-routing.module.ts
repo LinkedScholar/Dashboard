@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LandingComponent } from './landing.component';
-import { LandingPageComponent } from './landing-page/landing-page.component';
 import { LandingContactComponent } from './landing-footer/landing-contact/landing-contact.component';
 import { LandingContributeComponent } from './landing-footer/landing-contribute/landing-contribute.component';
 import { LandingPrivacyComponent } from './landing-footer/landing-privacy/landing-privacy.component';
 import { LandingNotFoundComponent } from './landing-not-found/not-found.component';
 import { LandingHelpNfactsComponent } from './landing-footer/landing-help-nfacts/landing-help-nfacts.component';
 import { LandingAPIComponent } from './landing-footer/landing-api/landing-api.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+import { LandingComponent } from './landing.component';
 
 const routes: Routes = [
   {
@@ -16,7 +16,7 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        component: LandingPageComponent,
+        component: LandingPageComponent
       },
       {
         path: 'contact',

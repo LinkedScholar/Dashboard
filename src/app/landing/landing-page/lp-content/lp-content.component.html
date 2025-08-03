@@ -1,0 +1,107 @@
+<div class="container">
+    <div class="scroll-indicator" (click)="scrollOneScreenDown()">
+        <h2>
+            Scroll to Learn More
+        </h2>
+        <nb-icon icon="arrow-ios-downward-outline"></nb-icon>
+    </div>
+    
+    <section>
+        <h1>
+            Europe's First Open-Source<br>Research Intelligence Platform
+        </h1>
+        <p>We empower<span class="text-highlight">universities</span>, <span class="text-highlight">researchers</span>, and <span class="text-highlight">private companies</span> to visualize the complex research landscape, identify <span class="text-emphasis">collaboration opportunities</span>, and make smarter <span class="text-emphasis">funding decisions</span> to accelerate innovation.</p>
+        <div class=hero-stats-grid>
+            <div *ngFor="let stat of stats" class="stat" [ngStyle]="{'--delay-index': stat.index}">
+                <nb-icon icon="{{stat.icon}}" class="stat-icon"></nb-icon>
+                <p class="stat-text">{{stat.text}}</p>
+                <p class="stat-value">{{formatNumber(stat.value)}}+</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <nb-card class="info-card">
+            <div class="header">
+                <span class="accent">Transform Research<br>Into Results</span></div>
+            <p>LinkedScholar is built to accelerate
+                <span class="text-emphasis">innovation</span> and
+                <span class="text-emphasis">collaboration</span> for
+                <span class="text-highlight">universities</span>,
+                <span class="text-highlight">industry</span>, and
+                <span class="text-highlight">researchers</span>.
+            </p>
+            <ul class="features">
+                <li class="feature">
+                    <nb-icon icon="flash-outline" class="feature-icon"></nb-icon>
+                    <div class="content">
+                        <span class="feature-title">Interactive Visualizations</span><br>
+                        <span class="feature-text">Visually map hidden connections between researchers, topics, and institutions.</span>
+                    </div>
+                </li>
+                <li class="feature">
+                    <nb-icon class="feature-icon" icon="people-outline"></nb-icon>
+                    <div class="feature-content">
+                        <span class="feature-title">Smart Collaboration</span><br>
+                        <span class="feature-text">Use our AI to find ideal partners and match with EU funding calls.</span>
+                    </div>
+                </li>
+                <li class="feature">
+                    <nb-icon class="feature-icon" icon="radio-button-on-outline"></nb-icon>
+                    <div class="feature-content">
+                        <span class="feature-title">Instant Trend Reports</span><br>
+                        <span class="feature-text">Condense hundreds of academic papers into actionable insights in minutes.</span>
+                    </div>
+                </li>
+            </ul>
+            <button routerLink="contact" nbButton status="primary" shape="semi-round" hero>
+                Start Discovering<nb-icon icon="chevron-right-outline"></nb-icon>
+            </button>
+        </nb-card>
+    </section>
+
+    <section>
+        <h1>
+            Europe's First Open-Source<br>Research Intelligence Platform
+        </h1>
+        <p>An integrated suite of tools designed to help you visualize research networks, build winning teams, and generate strategic insights instantly.</p>
+    </section>
+
+    <section *ngFor="let feature of features" style="max-width: none;">
+        <ls-feature-showcase [data]="feature" [reversed]="feature.reversed" [id]="feature.id"></ls-feature-showcase>
+    </section>
+
+    <section>
+        <h1>
+            Support LinkedScholar
+        </h1>
+        <p style="text-align: justify;">
+            LinkedScholar is more than just a research tool — it's a mission to make academic collaboration more visible, accessible, and insightful for everyone. We're building a transparent and open map of the scholarly world, and we need partners who believe in that vision.
+        </p>
+        <p style="text-align: justify;">
+            By sponsoring LinkedScholar, you directly support the development of open academic infrastructure. Your contributions help us grow our dataset, enhance our visualizations, and keep the platform freely available to researchers, students, and institutions worldwide.
+        </p>
+        <div class="row">
+            <div class="col">
+                <button routerLink="contact" nbButton status="primary" hero shape="round">Sponsor LinkedScholar</button>
+            </div>
+            <div class="col">
+                <button routerLink="contribute" nbButton status="primary" shape="round" outline>Other Ways to Contribute</button>
+            </div>
+        </div>
+    </section>
+    <section>
+        <h1>
+            Trusted by Industry Leaders
+        </h1>
+        <div class="logos">
+            <a class="logo" href="https://www.eudita.es/" rel="noopener noreferrer" target="_blank">
+                <img class="image" src="assets/images/sponsors/eudita.png" alt="Eudita" style="image-rendering: pixelated;">
+            </a>
+            <a class="logo" href="https://i2c.tuwien.ac.at/" rel="noopener noreferrer" target="_blank">
+                <img class="image" src="assets/images/sponsors/i2ctuwien.png" alt="i²c TU Wien">
+            </a>
+        </div>
+    </section>
+    <section></section>
+</div>

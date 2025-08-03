@@ -1,0 +1,253 @@
+@import 'bootstrap/scss/mixins/breakpoints';
+@import '@nebular/theme/styles/global/breakpoints';
+@import '../../../../@theme/styles/themes';
+
+$nice-gradient-color: linear-gradient(135deg, var(--text-basic-color), var(--text-primary-color));
+
+@mixin nice-gradient {
+    background: $nice-gradient-color;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.feature-showcase{
+    margin: 5vh 0;
+    width: 100%;
+    .text-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        padding: 0 5vh;
+        p {
+            text-align: justify;
+        }
+    }
+}
+
+.title{
+    @include nice-gradient();
+    width: 100%;
+}
+.features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; // Slightly reduced gap for more compact feel
+    max-width: 700px; // Constrain feature list width
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left; // Left align the entire features sectio
+
+    .feature {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: var(--border-radius);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        background: var(--background-basic-color-1);
+        border: 1px solid var(--color-basic-default-border);
+        text-align: left; // Ensure left alignment for each feature
+      
+        &.active-detail {
+          background: var(--background-basic-color-2);
+          transform: translateY(-1px);
+          border-color: var(--color-basic-hover-border);
+      
+            .feature-icon {
+                background: $nice-gradient-color;
+                color: var(--color-primary-100);
+            }
+        }
+
+        .feature-icon {
+            flex-shrink: 0;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            transition: all 0.3s ease;
+            color: var(--text-basic-color)
+        }
+
+        .feature-content{
+            .feature-title{
+                font-weight: 600;
+            }
+        }
+    }
+}
+
+.network-visualization {
+    display: flex;
+    align-items: flex-start;
+    gap: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    position: relative;
+    aspect-ratio: 4/3;
+
+    .visual-mockup {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #ffffff;
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+  
+    .mockup-header {
+      display: flex;
+      align-items: center;
+      padding: 12px 16px;
+      background: var(--background-basic-color-2);
+      border-bottom: 1px solid var(--color-basic-default-border);
+      gap: 16px;
+    }
+  
+    .browser-controls {
+      display: flex;
+      gap: 8px;
+    }
+  
+    .control-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+  
+      &--red { background: #ef4444; }
+      &--yellow { background: #f59e0b; }
+      &--green { background: #10b981; }
+    }
+  
+    .address-input {
+        flex: 1;
+        max-width: 300px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--background-basic-color-1);
+        border: 1px solid var(--color-basic-default-border);
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 13px;
+        color: var(--text-basic-color);
+        }
+  
+    .mockup-content {
+      position: relative;
+      height: calc(100% - 45px);
+      overflow: hidden;
+    }
+  
+    .image-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+  
+    .visual-image {
+      width: 100%;
+      height: 100%;
+      object-position: center;
+      object-fit: contain;
+      transform: scale(1);
+      padding : 1vw;
+      border-radius: 2vw;
+      transition: all 0.3s ease;
+      border: none;
+  
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
+  
+    .feature-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--background-basic-color-1);
+        backdrop-filter: blur(10px);
+        border: var(--color-basic-default-border);
+        border-radius: 12px;
+        padding: 8px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-basic-color);
+        box-shadow: var(--shadow);
+        animation: fadeInScale 0.5s ease-out;
+    }
+  
+    .feature-indicators {
+      position: absolute;
+      bottom: 16px;
+      left: 50%;
+      display: flex;
+      gap: 8px;
+      z-index: 10;
+    }
+  
+    .indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--background-basic-color-1);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid gray;
+  
+      &:hover {
+        transform: scale(1.2);
+      }
+  
+      &.active-indicator {
+        background: var(--text-basic-color);
+        width: 24px;
+        border-radius: 4px;
+      }
+    }
+  
+    // Animations
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+  
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
+      50% {
+        transform: scale(1.1);
+        opacity: 0.2;
+      }
+    }
+}

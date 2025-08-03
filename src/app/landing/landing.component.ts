@@ -1,5 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
-import { NbThemeService } from '@nebular/theme';
+import { Component } from '@angular/core';
 @Component({
   selector: 'ls-landing',
   templateUrl: './landing.component.html',

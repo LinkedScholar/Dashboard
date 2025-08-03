@@ -18,6 +18,10 @@
 @import './layout';
 @import './overrides';
 
+html {
+  scroll-behavior: smooth;
+}
+
 // install the framework and custom global styles
 @include nb-install() {
 

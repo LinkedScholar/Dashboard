@@ -1,0 +1,243 @@
+@import 'bootstrap/scss/mixins/breakpoints';
+@import '@nebular/theme/styles/global/breakpoints';
+@import '../../../@theme/styles/themes';
+
+$nice-gradient-color: linear-gradient(135deg, var(--text-basic-color), var(--text-primary-color));
+
+@mixin nice-gradient {
+    background: $nice-gradient-color;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+  
+@include nb-install-component() {
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10rem;
+    }
+    @keyframes floatDown {
+        0% {
+            transform: translate(0, -.5vh);
+        }
+        50% {
+            transform: translate(0, .5vh);
+        }
+        100% {
+            transform: translate(0, -.5vh);
+        }
+        
+    }
+
+    @keyframes fadeInUp {
+        0% {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+    }
+    h1{
+        @include nice-gradient;
+        text-align: center;
+    }
+    h2{
+        font-size: larger;
+    }
+    p {
+        font-size: large;
+        text-align: center;
+        .text-highlight{
+            font-weight: 600;
+            color: var(--text-primary-color);
+        }
+        .text-emphasis{
+            @include nice-gradient;
+            font-weight: 600;
+        }
+    }
+    
+    .hero-stats-grid{
+        display: grid;
+        gap: 2rem;
+        grid-template-columns: repeat(3, 1fr);
+        .stat{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            background-color: var(--background-basic-color-1);
+            border-radius: var(--border-radius);
+            padding: 1rem;
+            padding-left: 3rem;
+            padding-right: 3rem;
+            box-shadow: var(--shadow);
+            animation: fadeInUp .6s cubic-bezier(.65,0,.35,1) forwards;
+            animation-delay: calc(var(--delay-index)* .3s + 1s);
+            opacity: 0;
+            .stat-value{
+                @include nice-gradient;
+                font-size: x-large;
+                font-weight: 600;
+                
+            }
+            .stat-text{
+                font-size: .75rem;
+                text-transform: uppercase;
+                font-weight: 600;
+                color: var(--text-basic-color);
+            }
+            .stat-icon{
+                font-size: xx-large;
+                transition: all .3s ease;
+            }
+        }
+        .stat:hover{
+            .stat-icon{
+                transform: scale(1.1);
+                color: var(--text-primary-color);
+            }
+        }
+    }
+
+    section{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 750px;
+        margin: auto;
+        gap: 2rem;
+        
+    }
+    .scroll-indicator {
+        height: 0%;
+        margin: -10vh;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transform: translate(0, -25vh);
+        nb-icon{
+            padding: 16px;
+            animation: floatDown 2s ease-in-out infinite;
+            align-items: center;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            background: var(--background-basic-color-1);
+            border: 1px solid #3b82f61a;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px #3b82f61a;
+            display: flex;
+            height: 64px;
+            justify-content: center;
+            transition: all .3s ease;
+            width: 64px;
+        }
+    }
+
+    .info-card{
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        box-shadow: var(--shadow);
+        margin-top: 5vh;
+        max-width: 500px;
+        .header{
+            font-size: x-large;
+            font-weight: 600;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .primary{
+                color: var(--text-basic-color);
+            }
+            .accent{
+                @include nice-gradient()
+            }
+        }
+        .features {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 2rem 0;
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem; // Slightly reduced gap for more compact feel
+            max-width: 700px; // Constrain feature list width
+            margin-left: auto;
+            margin-right: auto;
+            text-align: left; // Left align the entire features sectio
+
+            .feature {
+                display: flex;
+                align-items: flex-start;
+                gap: 1rem;
+                padding: 1rem;
+                border-radius: var(--border-radius);
+                transition: all 0.3s ease;
+                cursor: pointer;
+                background: var(--background-basic-color-1);
+                border: 1px solid var(--color-basic-default-border);
+                text-align: left; // Ensure left alignment for each feature
+              
+                &:hover {
+                  background: var(--background-basic-color-2);
+                  transform: translateY(-1px);
+                  border-color: var(--color-basic-hover-border);
+              
+                    .feature-icon {
+                        background: $nice-gradient-color;
+                        color: var(--color-primary-100);
+                    }
+                }
+
+                .feature-icon {
+                    flex-shrink: 0;
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 8px;
+                    transition: all 0.3s ease;
+                    color: var(--text-basic-color)
+                }
+            }
+        }
+    }
+    .logos{
+        display: grid;
+        
+        gap: 2rem;
+        grid-template-columns: repeat(2, 1fr);
+        .logo {
+            max-width: 30vh;
+
+            aspect-ratio: 4/3;
+            padding: 3vh;
+            background-color: whitesmoke;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            .image{
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+                object-position: center;
+            }
+        }
+    }
+}
+

@@ -13,11 +13,14 @@ import { LandingFooterComponent } from './landing-footer/landing-footer.componen
 import { LandingNotFoundComponent } from './landing-not-found/not-found.component';
 import { FormsModule as ngFormsModule } from '@angular/forms';
 import { LandingAPIComponent } from './landing-footer/landing-api/landing-api.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+import { LpSearchbarComponent } from './landing-page/lp-searchbar/lp-searchbar.component';
+import { LpContentComponent } from './landing-page/lp-content/lp-content.component';
+import { FeatureShowcaseComponent } from './landing-page/lp-content/feature-showcase/feature-showcase.component';
 
 
 @NgModule({
   declarations: [
-    LandingComponent,
     LandingHeaderComponent,
     LandingDropdownSolutionComponent,
     LandingContactComponent,
@@ -26,7 +29,12 @@ import { LandingAPIComponent } from './landing-footer/landing-api/landing-api.co
     LandingPrivacyComponent,
     LandingFooterComponent,
     LandingNotFoundComponent,
-    LandingAPIComponent
+    LandingAPIComponent,
+    LandingPageComponent,
+    LandingComponent,
+    LpSearchbarComponent,
+    LpContentComponent,
+    FeatureShowcaseComponent
   ],
   imports: [
     ThemeModule,

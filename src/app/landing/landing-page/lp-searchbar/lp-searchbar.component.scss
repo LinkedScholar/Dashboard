@@ -1,0 +1,73 @@
+@import 'bootstrap/scss/mixins/breakpoints';
+@import '@nebular/theme/styles/global/breakpoints';
+@import '../../../@theme/styles/themes';
+:host{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    height: 100%;
+}
+@include nb-install-component() {
+
+    h1 {
+        color: var(--text-basic-color);
+        font-size: 50px;
+        font-weight: 600;
+        margin: 0;
+        padding: 0;
+    }
+    h6 {
+        font-weight: 300;
+        color: var(--text-basic-color);
+        margin: 0;
+        padding: 0;
+    }
+    .search-page{
+        height: 100%;
+        max-width: 900px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        .search-section{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+        .title-container {
+            display: flex;
+            flex-direction: row;
+            align-items: baseline;
+            justify-content: center;
+            
+            .title-scholar {
+                color: var(--text-primary-color);
+            }
+            .version-text {
+                font-family: fangsong;
+                font-style: italic;
+                font-weight: 300;
+                color : var(--color-basic-600);
+                font-size: 20px;
+            }
+            
+        }
+        .search-bar{
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+        .search-buttons{
+            display: flex;
+            flex: row;
+            gap: 20px;
+
+        }
+    }
+    
+    
+}

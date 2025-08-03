@@ -1,4 +1,4 @@
-<nb-layout withScroll>
+<nb-layout>
     <nb-layout-header class = "header" fixed>
         <ls-landing-header></ls-landing-header>
     </nb-layout-header>
@@ -6,7 +6,7 @@
     <nb-layout-column>
         <router-outlet></router-outlet>
     </nb-layout-column>
-    <nb-layout-footer>
+    <nb-layout-footer [fixed]="false">
         <ls-landing-footer class = "footer"></ls-landing-footer>
     </nb-layout-footer>
 </nb-layout>

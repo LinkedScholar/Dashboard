@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 @Component({
   selector: 'ls-landing-page',
   templateUrl: './landing-page.component.html',
