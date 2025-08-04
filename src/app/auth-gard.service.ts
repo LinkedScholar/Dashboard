@@ -1,21 +1,31 @@
-import { CanActivateFn, Router } from '@angular/router';
-import { inject } from '@angular/core';
+import { CanActivateFn, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { inject, Injectable } from '@angular/core';
 import { NbAuthService } from '@nebular/auth';
-import { map } from 'rxjs/operators';
+import { first, map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
+@Injectable()
+export class PermissionsService {
 
-export const authGuard: CanActivateFn = (route, state) => {
-  const authService = inject(NbAuthService);
-  const router = inject(Router);
+    constructor(private router: Router, private authService: NbAuthService) {}
 
-  return authService.isAuthenticated().pipe(
-    map(authenticated => {
-      if (!authenticated) {
-        router.navigate(['auth/login']);
-        return false;
-      }
+    canActivate(): Observable<boolean> {
+        return this.authService.isAuthenticated().pipe(
+            map(authenticated => {
+              if (!authenticated) {
+                this.router.navigate(['auth/login']);
+                return false;
+              }
+              return true;
+            }),
+            first(),
+          );
+    }
+}
 
-      return true;
-    }),
-  );
+export const canActivateTeam: CanActivateFn = (
+  route: ActivatedRouteSnapshot,
+  state: RouterStateSnapshot,
+) => {
+  return inject(PermissionsService).canActivate();
 };

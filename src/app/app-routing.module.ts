@@ -8,7 +8,7 @@ import {
   NbRequestPasswordComponent,
   NbResetPasswordComponent,
 } from '@nebular/auth';
-import { authGuard } from './auth-gard.service';
+import { canActivateTeam } from './auth-gard.service';
 
 export const routes: Routes = [
   {
@@ -20,7 +20,7 @@ export const routes: Routes = [
     path: 'pages',
     loadChildren: () => import('./pages/pages.module')
       .then(m => m.PagesModule),
-    canActivate: [authGuard],
+    canActivate: [canActivateTeam],
   },
   {
     path: 'auth',

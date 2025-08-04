@@ -22,6 +22,7 @@ import {
 } from '@nebular/theme';
 import { NbAuthModule, NbAuthService, NbAuthSimpleToken, NbDummyAuthStrategy, NbDummyAuthStrategyOptions } from '@nebular/auth';
 import { error } from 'console';
+import { PermissionsService } from './auth-gard.service';
 
 const formSetting: any = {
   redirectDelay: 0,
@@ -68,7 +69,7 @@ const formSetting: any = {
       },
     }),
   ],
-  providers: [NbAuthService],
+  providers: [NbAuthService, PermissionsService],
   bootstrap: [AppComponent],
 })
 export class AppModule {
