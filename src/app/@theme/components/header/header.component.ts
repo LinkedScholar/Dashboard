@@ -1,10 +1,12 @@
+import { Router } from '@angular/router';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
 
 import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
-import { map, takeUntil } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { NbAuthService } from '@nebular/auth';
 
 @Component({
   selector: 'ls-header',
@@ -38,14 +40,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
+  userMenu = [ { title: 'Profile' }, { title: 'Log out', click: () => this.logout() } ];
 
   constructor(private sidebarService: NbSidebarService,
               private menuService: NbMenuService,
               private themeService: NbThemeService,
               private userService: UserData,
               private layoutService: LayoutService,
-              private breakpointService: NbMediaBreakpointsService) {
+              private breakpointService: NbMediaBreakpointsService,
+              private authService: NbAuthService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -69,6 +73,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       )
       .subscribe(themeName => this.currentTheme = themeName);
+
+    this.menuService.onItemClick()
+      .pipe(
+        filter(({ tag }) => tag === 'user-context-menu'),
+        map(({ item: { title } }) => title),
+      ).subscribe(title => {
+        if (title === 'Log out') {
+          this.logout();
+        }
+      });
   }
 
   ngOnDestroy() {
@@ -89,6 +103,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   navigateHome() {
     this.menuService.navigateHome();
+    return false;
+  }
+
+  logout() {
+    console.log('logout');
+    this.authService.logout('email').subscribe(() => {
+      this.router.navigate(['/auth/login']);
+    });
     return false;
   }
 }
