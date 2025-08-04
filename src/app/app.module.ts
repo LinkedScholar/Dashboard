@@ -20,7 +20,16 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
+import { NbAuthModule, NbAuthService, NbAuthSimpleToken, NbDummyAuthStrategy, NbDummyAuthStrategyOptions } from '@nebular/auth';
+import { error } from 'console';
 
+const formSetting: any = {
+  redirectDelay: 0,
+  showMessages: {
+    success: true,
+    error: true,
+  },
+};
 
 @NgModule({
   declarations: [AppComponent],
@@ -40,7 +49,26 @@ import {
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    NbAuthModule.forRoot({
+      strategies: [
+        NbDummyAuthStrategy.setup({name : 'email'}),
+      ],
+      forms: {
+        login: formSetting,
+        register: formSetting,
+        requestPassword: formSetting,
+        resetPassword: formSetting,
+        logout: {
+          redirectDelay: 0,
+          redirect: {
+            success: '/auth/login',
+            failure: null,
+          }
+        },
+      },
+    }),
   ],
+  providers: [NbAuthService],
   bootstrap: [AppComponent],
 })
 export class AppModule {
