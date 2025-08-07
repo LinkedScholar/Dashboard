@@ -20,8 +20,7 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
-import { NbAuthModule, NbAuthService, NbAuthSimpleToken, NbDummyAuthStrategy, NbDummyAuthStrategyOptions } from '@nebular/auth';
-import { error } from 'console';
+import { NbAuthModule, NbAuthService, NbDummyAuthStrategy } from '@nebular/auth';
 import { PermissionsService } from './auth-gard.service';
 
 const formSetting: any = {

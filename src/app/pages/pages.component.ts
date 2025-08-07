@@ -8,7 +8,7 @@ import { MENU_ITEMS } from './pages-menu';
   template: `
     <ls-one-column-layout>
       <nb-menu [items]="menu"></nb-menu>
-      <router-outlet></router-outlet>
+      <ng-content select="router-outlet"></ng-content>
     </ls-one-column-layout>
   `,
 })

@@ -52,8 +52,14 @@ export const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'ls',
+    loadChildren: () => import('./ls/ls.module')
+      .then(m => m.LsModule),
+    canActivate: [canActivateTeam],
+  },
   { path: '', redirectTo: 'landing', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  { path: '**', redirectTo: 'landing' },
 ];
 
 const config: ExtraOptions = {

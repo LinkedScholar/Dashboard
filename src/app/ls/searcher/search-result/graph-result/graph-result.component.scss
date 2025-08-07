@@ -1,0 +1,9 @@
+.force-graph-container {
+    flex: 1;
+  }
+  
+  /* Optional: Add styles for your nodes and links */
+  .nodes circle {
+    stroke: #fff;
+    stroke-width: 3.5px;
+  }

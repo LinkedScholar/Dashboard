@@ -1,0 +1,67 @@
+@import 'bootstrap/scss/mixins/breakpoints';
+@import '@nebular/theme/styles/global/breakpoints';
+@import '../../@theme/styles/themes';
+
+// A mixin to define the common style for header links/triggers
+@mixin header-link-style {
+  font-weight: 700;
+  color: nb-theme(text-basic-color);
+  font-size: 20px;
+}
+
+@include nb-install-component() {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  background-color: transparent;
+
+  .logo-container {
+    display: flex;
+    align-items: center;
+    width: calc(#{nb-theme(sidebar-width)} - #{nb-theme(header-padding)});
+    gap: 20px;
+
+    .linked-header {
+      @include header-link-style;
+      text-decoration: none;
+
+      .header-scholar {
+        color: nb-theme(text-primary-color);
+      }
+    }
+  }
+
+  .header-container {
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
+    background-color: transparent;
+
+    .links-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-direction: row;
+      p{
+        transition: color 0.3s ease-in-out;
+        margin: 0;
+        
+      }
+      p:hover {
+        cursor: pointer;
+        color: var(--text-primary-color);
+      }
+    }
+    .search-bar {
+        text-overflow: ellipsis;
+    }
+    .links-container .active{
+      p {
+        color: var(--text-primary-color);
+      }
+    }
+  }
+}

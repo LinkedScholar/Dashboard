@@ -1,0 +1,144 @@
+<div class="row"> <!-- SEARCH BAR -->
+    <div class="col">
+        <nb-card>
+            <nb-card-body>
+                <div class="row">
+                    <div class="col-2" style="display: flex;">
+                        <nb-select placeholder="Hint" [(selected)]="selectedItem" style="flex: 1;">
+                            <nb-option *ngFor="let item of searchOptions; let i = index" [value]="i">
+                                {{ item }}
+                            </nb-option>
+                        </nb-select>
+                    </div>
+                    <div class="col">
+                        <nb-form-field>
+                            <input nbInput type="text" fullWidth placeholder="Search for..." shape="square" size="large"
+                                [(ngModel)]="searchTerm" name="scholarlySearch">
+                        </nb-form-field>
+                    </div>
+                </div>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>
+
+<div class="row-reverse"> <!-- SEARCH BAR -->
+    <div class="col">
+        
+    </div>
+</div>
+<div class="row" style="position: absolute; top: 12.5rem; left: 1.5rem; z-index: 10; width: 40%;"> <!-- FILTERS -->
+    <div class="col-2">
+        <button nbButton hero (click)="toggleFilters()" status="primary">
+            <nb-icon icon="funnel-outline"/>
+        </button>
+    </div>
+    <div class="col-6">
+        <nb-accordion *ngIf="showFilters">
+            <nb-accordion-item>
+             <nb-accordion-item-header>Product Details</nb-accordion-item-header>
+             <nb-accordion-item-body>
+               Item Content
+             </nb-accordion-item-body>
+            </nb-accordion-item>
+        </nb-accordion>
+    </div>
+</div>
+
+<div class="lists row align-items-stretch"> <!-- Results -->
+    <div *ngIf="layoutConfiguration != 0" [ngClass]="layoutConfigurationClass[layoutConfiguration][0]" style="transition: all 0.5s ease;">
+        <div style="display: flex; flex-direction: row; justify-items: end; position: absolute; top: -1rem; right: 0; z-index: 10;">
+            <nb-select placeholder="Sorted by" [(selected)]="sortOption" style="flex: 1;">
+                <nb-option *ngFor="let item of sortOptions; let i = index" [value]="i">
+                    {{ item }}
+                </nb-option>
+            </nb-select>
+        </div>
+        <nb-card style="height: calc(100vh - 15rem);">
+            <nb-card-body style="padding: 0;">  
+                <nb-list>
+                    <nb-list-item *ngFor="let result of results" style="align-items: baseline; gap: 1rem">
+                        <nb-user onlyPicture 
+                            [name]="result.name"
+                            [picture]="result.picture"
+                            [badgeText]="'Eng...'"
+                            [badgeStatus]="'info'"
+                            [badgePosition]="'bottom right'"
+                            size="large"
+                            >
+                        </nb-user>
+                        <br>
+                        <div style="display: flex; flex-direction: column; align-items: baseline; gap: .5rem">
+                            <button nbButton ghost style="padding: 0;">{{result.name}}</button>
+                            <div style="display: flex; gap: 0.5rem;">
+                                <span style="border: 1px solid var(--text-basic-color); padding: 5px;">Citations: {{result.citations}}</span> 
+                                <span style="border: 1px solid var(--text-basic-color); padding: 5px;">H-index: {{result.hIndex}}</span> 
+                            </div>
+                            <button nbButton ghost style="padding: 2px 10px;">
+                                <nb-icon icon="home-outline" nbPrefix></nb-icon>
+                                {{result.university.name}}
+                            </button>
+                            <div>
+                                <span>Research areas: </span>
+                                <button nbButton outline *ngFor=" let area of result.researchAreas" style="padding: 2px 10px;" ghost> 
+                                    {{area}}
+                                </button>
+                            </div>
+                        </div>
+                    </nb-list-item>
+                    <nb-list-item style="display: flex; justify-content: center;">
+                        
+                        <button nbButton status="basic" *ngIf="currentPage > 2"
+                            (click) = "setCurrentPage(1)">
+                            1
+                        </button>
+
+                        <button nbButton status="control" *ngIf="currentPage > 3">
+                            ...
+                        </button>
+                        
+                        <button nbButton status="basic" *ngIf="currentPage != 1"
+                            (click) = "setCurrentPage(currentPage - 1)">
+                            {{currentPage - 1}}
+                        </button>
+
+                        <button nbButton status="primary" disabled>
+                            {{currentPage}}
+                        </button>
+
+                        <button nbButton status="basic" *ngIf="currentPage != maxPage"
+                            (click) = "setCurrentPage(currentPage + 1)">
+                            {{currentPage + 1}}
+                        </button>
+
+
+                        <button nbButton status="control" *ngIf="currentPage < maxPage - 2">
+                            ...
+                        </button>
+
+                        <button nbButton status="basic" *ngIf="currentPage < maxPage - 1"
+                            (click) = "setCurrentPage(maxPage)">
+                            {{maxPage}}
+                        </button>
+                        
+                    </nb-list-item>
+                </nb-list>
+            </nb-card-body>
+        </nb-card>
+    </div>       
+    <div *ngIf="layoutConfiguration != 4" [ngClass]="layoutConfigurationClass[layoutConfiguration][1]" style="display: flex; transition: all 0.5s ease; overflow: hidden;">      
+        <app-force-graph [nodes]="graphNodes" [links]="graphLinks" style="flex: 1; display: flex;"></app-force-graph>
+    </div>
+</div>
+
+<div class="row " style="position: absolute; bottom: 1rem; left: 0; width: 100%; "> <!-- LayoutSwitcher -->
+    <button  *ngFor="let item of 5 | range"
+        nbButton
+        shape="round"
+        outline
+        [status]="item === layoutConfiguration ? 'primary' : 'basic'"
+        (click)="changeLayout(item)"
+        style="width: 16px; height: 16px; padding: 0; margin: auto;"></button>
+</div>
+
+
