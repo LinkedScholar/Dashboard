@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, ViewChild, ElementRef, Input, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnChanges, ViewChild, ElementRef, Input, SimpleChanges, OnDestroy, ViewEncapsulation } from '@angular/core';
 import * as d3 from 'd3';
 
 // Define interfaces for type safety
@@ -15,19 +15,23 @@ interface Link extends d3.SimulationLinkDatum<Node> {
 @Component({
   selector: 'app-force-graph',
   template: `
-    <div #graphContainer class="force-graph-container"></div>
+    <div #chartContainer class="force-graph-container"></div>
   `,
-  styleUrls: ['./graph-result.component.scss']
+  styleUrls: ['./graph-result.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class GraphResultComponent implements OnInit, OnChanges, OnDestroy {
-  @ViewChild('graphContainer', { static: true }) private graphContainer!: ElementRef;
+  @ViewChild('chartContainer', { static: true }) private chartContainer!: ElementRef;
   @Input() nodes: Node[] = [];
   @Input() links: Link[] = [];
+  @Input() width: number = 800;
+  @Input() height: number = 600;
 
-  private svg: d3.Selection<SVGSVGElement, unknown, null, undefined> | null = null;
+  private svg: d3.Selection<SVGElement, unknown, null, undefined> | null = null;
   private simulation: d3.Simulation<Node, undefined> | null = null;
-  private linkElement: d3.Selection<d3.BaseType | SVGLineElement, Link, SVGGElement, unknown> | null = null;
-  private nodeElement: d3.Selection<d3.BaseType | SVGCircleElement, Node, SVGGElement, unknown> | null = null;
+  private graphGroup: d3.Selection<SVGElement, unknown, null, undefined> | null = null;
+  private linkElement: d3.Selection<d3.BaseType | SVGLineElement, Link, SVGElement, unknown> | null = null;
+  private nodeElement: d3.Selection<d3.BaseType | SVGCircleElement, Node, SVGElement, unknown> | null = null;
   private resizeObserver!: ResizeObserver;
 
   constructor() {}
@@ -35,19 +39,13 @@ export class GraphResultComponent implements OnInit, OnChanges, OnDestroy {
   ngOnInit(): void {
     // We'll handle graph creation in ngOnChanges, but we can set up the
     // resize observer here to make the graph responsive
-    this.setupResizeObserver();
+    this.initializeGraph();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     // Only update the graph if the nodes or links inputs have changed
     if ((changes['nodes'] || changes['links']) && this.nodes && this.links) {
-      if (!this.svg) {
-        // First time initialization
-        this.initializeGraph();
-      } else {
-        // Update existing graph with new data
-        this.updateGraph();
-      }
+      this.renderGraph();
     }
   }
 
@@ -56,41 +54,37 @@ export class GraphResultComponent implements OnInit, OnChanges, OnDestroy {
     if (this.simulation) {
       this.simulation.stop();
     }
-    if (this.resizeObserver) {
-      this.resizeObserver.disconnect();
-    }
-  }
-
-  private setupResizeObserver(): void {
-    this.resizeObserver = new ResizeObserver(() => {
-      // Re-render the graph when the container size changes
-      this.initializeGraph();
-    });
-    this.resizeObserver.observe(this.graphContainer.nativeElement);
   }
 
   private initializeGraph(): void {
-    const element = this.graphContainer.nativeElement;
+    const element = this.chartContainer.nativeElement;
     const width = element.offsetWidth;
     const height = element.offsetHeight;
 
-    // Clear previous SVG to prevent duplicates on resize
     d3.select(element).selectAll('svg').remove();
-
     this.svg = d3.select(element)
       .append('svg')
-      .attr('width', width)
-      .attr('height', height);
+      .attr('width', '100%') // Use CSS for responsive sizing
+      .attr('height', '100%')
+      .attr('viewBox', `0 0 ${width} ${height}`); // Use viewBox to scale content
 
-    // Create the force simulation
-    this.simulation = d3.forceSimulation<Node, Link>(this.nodes)
-      .force('link', d3.forceLink<Node, Link>(this.links).id((d: any) => d.id))
-      .force('charge', d3.forceManyBody().strength(-200))
-      .force('center', d3.forceCenter(width / 2, height / 2))
-      .on('tick', () => this.ticked());
+    // Append a group element that will contain the graph.
+    // This is the element we'll transform for panning and zooming.
+    this.graphGroup = this.svg.append('g');
 
-    // Define the links
-    this.linkElement = this.svg.append('g')
+    this.nodeElement = this.graphGroup.append('g')
+      .attr('class', 'nodes')
+      .selectAll('circle')
+      .data(this.nodes)
+      .join('circle')
+      .attr('class', 'node-group')
+      .attr('fill', (d: any) => d3.schemeCategory10[d.group])
+      .call(d3.drag<SVGCircleElement, Node>()
+      .on('start', this.dragstarted)
+      .on('drag', this.dragged)
+      .on('end', this.dragended));
+
+    this.linkElement = this.graphGroup.append('g')
       .attr('class', 'links')
       .selectAll('line')
       .data(this.links)
@@ -98,49 +92,67 @@ export class GraphResultComponent implements OnInit, OnChanges, OnDestroy {
       .attr('stroke', '#999')
       .attr('stroke-opacity', 0.6);
 
-    // Define the nodes
-    this.nodeElement = this.svg.append('g')
-      .attr('class', 'nodes')
-      .selectAll('circle')
-      .data(this.nodes)
-      .join('circle')
-      .attr('r', 5)
-      .attr('fill', (d: any) => d3.schemeCategory10[d.group])
-      .call(d3.drag<SVGCircleElement, Node>()
-        .on('start', this.dragstarted)
-        .on('drag', this.dragged)
-        .on('end', this.dragended)
-      );
+    // Add a zoom behavior to the SVG. It listens for mouse events
+    // and transforms the graphGroup element.
+    const zoom = d3.zoom<SVGSVGElement, unknown>()
+      .scaleExtent([0.5, 8]) // Set zoom limits
+      .on('zoom', (event) => {
+        this.graphGroup?.attr('transform', event.transform);
+      });
+
+    // Apply the zoom behavior to the SVG.
+    this.svg.call(zoom);
+
+    const circles = this.svg.selectAll('.circle');
+
+    circles
+      .on('mouseover', (event, d) => {
+        d3.select(event.currentTarget).classed('hovered', true);
+      })
+      .on('mouseout', (event, d) => {
+        d3.select(event.currentTarget).classed('hovered', false);
+      });
+
   }
 
-  private updateGraph(): void {
-    if (!this.simulation || !this.linkElement || !this.nodeElement) {
-      return;
-    }
+  private renderGraph(): void {
+    const element = this.chartContainer.nativeElement;
+    const width = element.offsetWidth;
+    const height = element.offsetHeight;
+    
+    // If the simulation doesn't exist, set it up.
+    if (!this.simulation) {
+      this.simulation = d3.forceSimulation<Node, Link>(this.nodes)
+        .force('link', d3.forceLink<Node, Link>(this.links).id((d: any) => d.id))
+        .force('charge', d3.forceManyBody().strength(-200))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+        .on('tick', () => this.ticked());
+    } else {
+      // If it exists, update it with new data.
+      this.simulation.nodes(this.nodes);
+      this.simulation.force('link')!.links(this.links);
 
-    // Update simulation with new data
-    this.simulation.nodes(this.nodes);
-    this.simulation.force('link')!.links(this.links);
 
-    // Update links
+      
+      }
     this.linkElement = this.linkElement.data(this.links, (d: Link) => (d.source as Node).id + '-' + (d.target as Node).id)
-      .join('line')
-      .attr('stroke', '#999')
-      .attr('stroke-opacity', 0.6);
+        .join('line')
+        .attr('stroke', '#999')
+        .attr('stroke-opacity', 0.6);
+        // Update nodes
 
-    // Update nodes
-    this.nodeElement = this.nodeElement.data(this.nodes, (d: Node) => d.id)
-      .join('circle')
-      .attr('r', 5)
-      .attr('fill', (d: any) => d3.schemeCategory10[d.group])
-      .call(d3.drag<SVGCircleElement, Node>()
-        .on('start', this.dragstarted)
-        .on('drag', this.dragged)
-        .on('end', this.dragended)
-      );
+      this.nodeElement = this.nodeElement.data(this.nodes, (d: Node) => d.id)
+        .join('circle')
+        .attr('r', 5)
+        .attr('fill', (d: any) => d3.schemeCategory10[d.group])
+        .call(d3.drag < SVGCircleElement, Node > ()
+            .on('start', this.dragstarted)
+            .on('drag', this.dragged)
+            .on('end', this.dragended)
+        );
 
-    // Reheat the simulation so it doesn't get stuck
-    this.simulation.alpha(1).restart();
+      // Reheat the simulation to make the nodes adjust to the new center
+      this.simulation.alpha(1).restart();
   }
 
   private ticked = (): void => {

@@ -46,7 +46,7 @@
 </div>
 
 <div class="lists row align-items-stretch"> <!-- Results -->
-    <div *ngIf="layoutConfiguration != 0" [ngClass]="layoutConfigurationClass[layoutConfiguration][0]" style="transition: all 0.5s ease;">
+    <div  style="transition: all 0.5s ease;" [ngClass]="layoutConfigurationWidth[layoutConfiguration][0]">
         <div style="display: flex; flex-direction: row; justify-items: end; position: absolute; top: -1rem; right: 0; z-index: 10;">
             <nb-select placeholder="Sorted by" [(selected)]="sortOption" style="flex: 1;">
                 <nb-option *ngFor="let item of sortOptions; let i = index" [value]="i">
@@ -57,7 +57,7 @@
         <nb-card style="height: calc(100vh - 15rem);">
             <nb-card-body style="padding: 0;">  
                 <nb-list>
-                    <nb-list-item *ngFor="let result of results" style="align-items: baseline; gap: 1rem">
+                    <nb-list-item *ngFor="let result of results" style="align-items: baseline; gap: 1rem" class ="result-item">
                         <nb-user onlyPicture 
                             [name]="result.name"
                             [picture]="result.picture"
@@ -126,8 +126,15 @@
             </nb-card-body>
         </nb-card>
     </div>       
-    <div *ngIf="layoutConfiguration != 4" [ngClass]="layoutConfigurationClass[layoutConfiguration][1]" style="display: flex; transition: all 0.5s ease; overflow: hidden;">      
-        <app-force-graph [nodes]="graphNodes" [links]="graphLinks" style="flex: 1; display: flex;"></app-force-graph>
+    <div style="display: flex; transition: all 0.5s ease; position: relative;"  #graphContainer  [ngClass]="layoutConfigurationWidth[layoutConfiguration][1]">      
+        <div style="display: flex; flex-direction: row; justify-items: end; position: absolute; top: -1rem; right: 0; z-index: 10;">
+            <nb-select placeholder="Grouped by" [(selected)]="sortOption" style="flex: 1;">
+                <nb-option *ngFor="let item of sortOptions; let i = index" [value]="i">
+                    {{ item }}
+                </nb-option>
+            </nb-select>
+        </div>
+        <app-force-graph [nodes]="graphNodes" [links]="graphLinks"[width]="graphWidth" [height]="graphHeight" style="overflow: hidden; display: flex; flex: 1;"></app-force-graph>
     </div>
 </div>
 

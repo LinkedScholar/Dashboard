@@ -1,9 +1,17 @@
 .force-graph-container {
-    flex: 1;
+  position: relative;
+  flex: 1;
+}
+
+circle{
+  r: 5;
+  transition: r 0.5s ease;
+  &.node-group {
+    cursor: pointer;
   }
   
-  /* Optional: Add styles for your nodes and links */
-  .nodes circle {
-    stroke: #fff;
-    stroke-width: 3.5px;
+  &.node-group:hover {
+    r: 10;
   }
+}
+

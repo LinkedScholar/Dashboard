@@ -16,6 +16,11 @@ const routes: Routes = [{
       loadChildren: () => import('./searcher/searcher.module')
         .then(m => m.SearcherModule)
     },
+    {
+      path: 'report',
+      loadChildren: () => import('./report-generator/report-generator.module')
+        .then(m => m.ReportGeneratorModule)
+    },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {
       path: '**',

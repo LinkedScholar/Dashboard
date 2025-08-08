@@ -14,12 +14,18 @@
                 <nb-icon [icon]="currentTheme == 'dark' ? 'sun-outline' : 'moon-outline'"></nb-icon>
             </button>
         </div>
-
-        <nb-user size="large"
-            name="John Doe"
-            title="EULiST member"
-            badgeText="user"
-            badgeStatus="info"
-            badgePosition="bottom right"/>
+        <nb-actions size="small">
+            <nb-action class="user-action">
+                <nb-user [nbContextMenu]="userMenu"
+                size="large"
+                name="John Doe"
+                title="EULiST member"
+                badgeText="user"
+                badgeStatus="info"
+                badgePosition="bottom right"
+                nbContextMenuTag="user-context-menu"/>
+            </nb-action>
+        </nb-actions>
+        
     </div>
 </div>

@@ -1,5 +1,5 @@
 import { filter } from 'rxjs/operators';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MockResultsService } from '../mock-results.service';
 
@@ -10,18 +10,21 @@ import { MockResultsService } from '../mock-results.service';
   templateUrl: './search-result.component.html',
   styleUrls: ['./search-result.component.scss']
 })
-export class SearchResultComponent implements OnInit{
+export class SearchResultComponent implements OnInit, OnDestroy{
+
+  @ViewChild('graphContainer', { static: true }) private graphContainer!: ElementRef;
+  private resizeObserver!: ResizeObserver;
 
   constructor(private route: ActivatedRoute, private dataService: MockResultsService) {}
 
   searchTerm: string = '';
 
-  layoutConfigurationClass=[
-    ['col-0'     , 'col-12'],
-    ['col-3', 'col-9'],
-    ['col-6', 'col-6'],
-    ['col-9', 'col-3'],
-    ['col-12', 'col-0'],
+  layoutConfigurationWidth=[
+    ['cc0', 'cc4'],
+    ['cc1', 'cc3'],
+    ['cc2', 'cc2'],
+    ['cc3', 'cc1'],
+    ['cc4', 'cc0']
   ];
 
 
@@ -78,6 +81,9 @@ export class SearchResultComponent implements OnInit{
   pageSize: number = 10;
   maxPage: number = 25;
 
+  graphWidth: number = 0;
+  graphHeight: number = 0;
+
   toggleFilters() {
     this.showFilters = !this.showFilters;
   }
@@ -88,7 +94,34 @@ export class SearchResultComponent implements OnInit{
       this.searchTerm = params['q'];
     });
 
+    this.setupResizeObserver();
+
   }
+
+  private setupResizeObserver(): void {
+
+    this.resizeObserver = new ResizeObserver(() => {
+      const element = this.graphContainer.nativeElement;
+      this.graphWidth = element.offsetWidth;
+      this.graphHeight = element.offsetHeight;
+    });
+    
+    this.resizeObserver.observe(this.graphContainer.nativeElement);
+    
+  }
+    
+    
+
+
+  ngOnDestroy(): void {
+
+    if (this.resizeObserver) {
+    
+    this.resizeObserver.disconnect();
+    
+    }
+    
+    }
 
   changeLayout(layout: number) {
     this.layoutConfiguration = layout;

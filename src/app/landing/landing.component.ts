@@ -12,7 +12,7 @@ export class LandingComponent implements OnInit{
   ngOnInit() {
     this.authService.isAuthenticated().subscribe(auth => {
       if (auth) {
-        this.router.navigate(['/pages']);
+        this.router.navigate(['/ls']);
       }
     })
   }
