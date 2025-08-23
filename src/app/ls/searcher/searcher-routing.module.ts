@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { SearcherComponent } from './searcher.component';
 import { LandingNotFoundComponent } from '../../landing/landing-not-found/not-found.component';
 import { SearchResultComponent } from './search-result/search-result.component';
-import { SearchBarComponent } from './search-bar/search-bar.component';
+import { SearcherComponent } from './searcher.component';
 
 const routes: Routes = [{
   path: '',
@@ -11,17 +10,14 @@ const routes: Routes = [{
   children: [
     {
       path: '',
-      component: SearchBarComponent
-    },
-    {
-      path: 'search',
-      component: SearchResultComponent
+      component: SearchResultComponent,
     },
     {
       path: '**',
       component: LandingNotFoundComponent,
     },
   ]},
+  
   
 ];
 

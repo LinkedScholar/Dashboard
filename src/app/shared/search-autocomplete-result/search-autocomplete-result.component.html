@@ -1,0 +1,5 @@
+<div *ngFor="let result of sortedResults" (click)="onSelect(result)" class="search-result">
+    <nb-icon [icon]="getIcon(result.type)"></nb-icon>
+    <p [innerHTML]="highlightMatch(result.name, query) | safeHtml"></p>
+    
+</div>

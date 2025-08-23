@@ -46,7 +46,7 @@
 </div>
 
 <div class="lists row align-items-stretch"> <!-- Results -->
-    <div  style="transition: all 0.5s ease;" [ngClass]="layoutConfigurationWidth[layoutConfiguration][0]">
+    <div  style="transition: all 0.5s ease; position: relative;" [ngClass]="layoutConfigurationWidth[layoutConfiguration][0]">
         <div style="display: flex; flex-direction: row; justify-items: end; position: absolute; top: -1rem; right: 0; z-index: 10;">
             <nb-select placeholder="Sorted by" [(selected)]="sortOption" style="flex: 1;">
                 <nb-option *ngFor="let item of sortOptions; let i = index" [value]="i">

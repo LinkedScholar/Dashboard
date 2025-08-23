@@ -1,42 +1,41 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SearcherComponent } from './searcher.component';
+import { NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbListModule, NbSelectModule, NbThemeModule } from '@nebular/theme';
 import { SearchResultComponent } from './search-result/search-result.component';
-import { SearcherRoutingModule } from './searcher-routing.module';
-import { SearchBarComponent } from './search-bar/search-bar.component';
-import { NbAccordionModule, NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbLayoutModule, NbListModule, NbSelectModule, NbUserModule } from '@nebular/theme';
-import { FormsModule } from '@angular/forms';
-import { MockResultsService } from './mock-results.service';
 import { GraphResultComponent } from './search-result/graph-result/graph-result.component';
-import { RangePipe } from '../../range.pipe';
+import { GraphListBridgeService } from './graph-list-bridge.service';
+import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../../shared/shared.module';
+import { SearcherRoutingModule } from './searcher-routing.module';
+import { SearcherComponent } from './searcher.component';
+
+
 
 @NgModule({
   declarations: [
-    SearcherComponent,
     SearchResultComponent,
-    SearchBarComponent,
     GraphResultComponent,
-    RangePipe
-  ],
-  providers: [
-    MockResultsService
+    SearcherComponent
   ],
   imports: [
     CommonModule,
-    // OUR MODULES
-    SearcherRoutingModule,
     FormsModule,
-    // NEBULAR MODULES
-    NbCardModule,
-    NbFormFieldModule,
-    NbInputModule,
-    NbSelectModule,
-    NbAccordionModule,
-    NbUserModule,
+
+    SearcherRoutingModule,
+
+
     NbIconModule,
     NbButtonModule,
-    NbLayoutModule,
-    NbListModule
-  ]
+    NbCardModule,
+    NbThemeModule,
+    NbSelectModule,
+    NbFormFieldModule,
+    NbListModule,
+
+    SharedModule
+    
+  ],
+
+  providers: [GraphListBridgeService],
 })
 export class SearcherModule { }

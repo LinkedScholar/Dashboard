@@ -3,11 +3,12 @@
       <a class="linked-header" routerLink = "/ls" >Linked<span class = "header-scholar">Scholar</span></a>
     </div>
     
-    <div class="links-container">
+    <!-- div class="links-container">
         <div *ngFor="let link of links; let i = index" [routerLink]="link.url" routerLinkActive="active">
             <p>{{link.title}}</p>
         </div>
-    </div>
+    </div-->
+    
     <div style="display: flex; flex-direction: row; gap: 20px; align-items: center; justify-content: center;">
         <div style="gap: 10px;">
             <button nbButton class="theme-toggle" (click)="toggleTheme()" status = "primary" ghost>

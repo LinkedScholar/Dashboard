@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LsComponent } from './ls.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { LandingNotFoundComponent } from '../landing/landing-not-found/not-found.component';
 const routes: Routes = [{
   path: '',
@@ -9,17 +8,13 @@ const routes: Routes = [{
   children: [
     {
       path: 'dashboard',
-      component: DashboardComponent
+      loadChildren: () => import('./dashboard/dashboard.module')
+        .then(m => m.DashboardModule)
     },
     {
-      path: 'searcher',
+      path: 'search',
       loadChildren: () => import('./searcher/searcher.module')
         .then(m => m.SearcherModule)
-    },
-    {
-      path: 'report',
-      loadChildren: () => import('./report-generator/report-generator.module')
-        .then(m => m.ReportGeneratorModule)
     },
     { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
     {

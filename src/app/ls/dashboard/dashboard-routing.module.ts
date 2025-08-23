@@ -1,22 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DashboardComponent } from './dashboard.component';
 import { LandingNotFoundComponent } from '../../landing/landing-not-found/not-found.component';
-import { ReportGeneratorComponent } from './report-generator.component';
-import { RpDashboardComponent } from './rp-dashboard/rp-dashboard.component';
 
 const routes: Routes = [{
   path: '',
-  component: ReportGeneratorComponent,
+  component: DashboardComponent,
   children: [
-    {
-      path: '',
-      component: RpDashboardComponent,
-    },
     {
       path: '**',
       component: LandingNotFoundComponent,
     },
   ]},
+  
   
 ];
 
@@ -29,6 +25,6 @@ const routes: Routes = [{
     RouterModule,
   ],
 })
-export class ReportGeneratorRoutingModule {
+export class DashboardRoutingModule {
 }
 

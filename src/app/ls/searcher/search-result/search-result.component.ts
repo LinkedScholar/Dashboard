@@ -1,7 +1,8 @@
-import { filter } from 'rxjs/operators';
-import { Component, ElementRef, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MockResultsService } from '../mock-results.service';
+import { GraphListBridgeService } from '../graph-list-bridge.service';
+import { MockResultsService } from '../../../shared/mock-results.service';
 
 
 
@@ -15,7 +16,8 @@ export class SearchResultComponent implements OnInit, OnDestroy{
   @ViewChild('graphContainer', { static: true }) private graphContainer!: ElementRef;
   private resizeObserver!: ResizeObserver;
 
-  constructor(private route: ActivatedRoute, private dataService: MockResultsService) {}
+  constructor(private route: ActivatedRoute, private dataService: MockResultsService,
+      private graphListBridge: GraphListBridgeService) {}
 
   searchTerm: string = '';
 

@@ -107,7 +107,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    console.log('logout');
     this.authService.logout('email').subscribe(() => {
       this.router.navigate(['/auth/login']);
     });

@@ -1,0 +1,10 @@
+.lg{
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .lg{
+        display: flex;
+    }
+    
+}
