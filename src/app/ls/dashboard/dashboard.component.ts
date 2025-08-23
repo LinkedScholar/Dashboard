@@ -36,7 +36,7 @@ export class DashboardComponent implements OnInit{
   }
 
   submitSearch(): void {
-    this.router.navigate(['/ls/search'], { queryParams: { q: this.searchElement.name , t: this.searchElement.name } });
+    this.router.navigate(['/ls/search'], { queryParams: { q: this.searchElement.name , t: this.searchElement.type } });
   }
 
   onSearch(): void {
