@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbListModule, NbSelectModule, NbThemeModule } from '@nebular/theme';
+import { NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbListModule, NbSelectModule, NbThemeModule, NbUserModule } from '@nebular/theme';
 import { SearchResultComponent } from './search-result/search-result.component';
 import { GraphResultComponent } from './search-result/graph-result/graph-result.component';
 import { GraphListBridgeService } from './graph-list-bridge.service';
@@ -31,6 +31,8 @@ import { SearcherComponent } from './searcher.component';
     NbSelectModule,
     NbFormFieldModule,
     NbListModule,
+    NbInputModule,
+    NbUserModule,
 
     SharedModule
     

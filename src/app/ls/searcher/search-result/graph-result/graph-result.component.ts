@@ -72,6 +72,15 @@ export class GraphResultComponent implements OnInit, OnChanges, OnDestroy {
     // This is the element we'll transform for panning and zooming.
     this.graphGroup = this.svg.append('g');
 
+
+    this.linkElement = this.graphGroup.append('g')
+      .attr('class', 'links')
+      .selectAll('line')
+      .data(this.links)
+      .join('line')
+      .attr('stroke', '#999')
+      .attr('stroke-opacity', 0.6);
+      
     this.nodeElement = this.graphGroup.append('g')
       .attr('class', 'nodes')
       .selectAll('circle')
@@ -84,13 +93,7 @@ export class GraphResultComponent implements OnInit, OnChanges, OnDestroy {
       .on('drag', this.dragged)
       .on('end', this.dragended));
 
-    this.linkElement = this.graphGroup.append('g')
-      .attr('class', 'links')
-      .selectAll('line')
-      .data(this.links)
-      .join('line')
-      .attr('stroke', '#999')
-      .attr('stroke-opacity', 0.6);
+    
 
     // Add a zoom behavior to the SVG. It listens for mouse events
     // and transforms the graphGroup element.
@@ -116,6 +119,10 @@ export class GraphResultComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private renderGraph(): void {
+    if (!this.linkElement || !this.nodeElement) {
+      this.initializeGraph();
+    }
+
     const element = this.chartContainer.nativeElement;
     const width = element.offsetWidth;
     const height = element.offsetHeight;
