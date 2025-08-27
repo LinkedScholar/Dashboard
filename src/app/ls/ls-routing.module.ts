@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LsComponent } from './ls.component';
 import { LandingNotFoundComponent } from '../landing/landing-not-found/not-found.component';
+import { PersonProfileComponent } from './searcher/person-profile/person-profile.component';
+import { InstitutionProfileComponent } from './searcher/institution-profile/institution-profile.component';
 const routes: Routes = [{
   path: '',
   component: LsComponent,
@@ -10,6 +12,14 @@ const routes: Routes = [{
       path: 'dashboard',
       loadChildren: () => import('./dashboard/dashboard.module')
         .then(m => m.DashboardModule)
+    },
+    {
+      path: 'person/:id',
+      component: PersonProfileComponent,
+    },
+    {
+      path: 'institution/:id',
+      component: InstitutionProfileComponent,
     },
     {
       path: 'search',

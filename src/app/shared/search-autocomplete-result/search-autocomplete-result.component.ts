@@ -80,10 +80,10 @@ export class SearchAutocompleteResultComponent {
     switch (type) {
       case 'person':
         return 'person-outline';
-      case 'university':
+      case 'institution':
         return 'home-outline';
       default:
-        return 'person-outline';
+        return 'question-mark-outline';
     }
   }
 }

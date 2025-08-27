@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
+import { Person, University } from './result-types/result-types.module';
 
 
-const people: any[] =  [
+const people: Person[] =  [
   {
     "name": "Amelia Brooks",
     "age": 10,
     "citations": 10,
     "hIndex": 10,
-    "university": {
-      "name": "Nautilus University",
-      "address": "456 Oak Avenue"
-    },
+    "university": 1,
     "id": 1,
     "researchAreas": [
       "Computational Linguistics",
@@ -23,10 +21,7 @@ const people: any[] =  [
     "age": 20,
     "citations": 20,
     "hIndex": 20,
-    "university": {
-      "name": "Starlight Institute of Technology",
-      "address": "789 Pine Lane"
-    },
+    "university": 2,
     "id": 2,
     "researchAreas": [
       "Machine Learning",
@@ -39,10 +34,7 @@ const people: any[] =  [
     "age": 30,
     "citations": 50,
     "hIndex": 15,
-    "university": {
-      "name": "Evergreen Research Center",
-      "address": "101 Maple Boulevard"
-    },
+    "university": 3,
     "id": 3,
     "researchAreas": [
       "Data Science",
@@ -54,10 +46,7 @@ const people: any[] =  [
     "age": 25,
     "citations": 10,
     "hIndex": 5,
-    "university": {
-      "name": "Crestview College",
-      "address": "222 Birch Street"
-    },
+    "university": 4,
     "id": 4,
     "researchAreas": [
       "Artificial Intelligence",
@@ -70,10 +59,7 @@ const people: any[] =  [
     "age": 40,
     "citations": 100,
     "hIndex": 25,
-    "university": {
-      "name": "Horizon Polytechnic",
-      "address": "333 Cedar Court"
-    },
+    "university": 5,
     "id": 5,
     "researchAreas": [
       "Biomedical Engineering",
@@ -85,10 +71,7 @@ const people: any[] =  [
     "age": 35,
     "citations": 80,
     "hIndex": 20,
-    "university": {
-      "name": "Summit University",
-      "address": "444 Elm Drive"
-    },
+    "university": 6,
     "id": 6,
     "researchAreas": [
       "Software Engineering",
@@ -101,10 +84,7 @@ const people: any[] =  [
     "age": 28,
     "citations": 60,
     "hIndex": 18,
-    "university": {
-      "name": "Riverbend Institute",
-      "address": "555 Pine Street"
-    },
+    "university": 7,
     "id": 7,
     "researchAreas": [
       "Neuroscience",
@@ -116,10 +96,7 @@ const people: any[] =  [
     "age": 32,
     "citations": 90,
     "hIndex": 22,
-    "university": {
-      "name": "Pinnacle College",
-      "address": "666 Oak Drive"
-    },
+    "university": 8,
     "id": 8,
     "researchAreas": [
       "Data Mining",
@@ -131,10 +108,7 @@ const people: any[] =  [
     "age": 27,
     "citations": 70,
     "hIndex": 19,
-    "university": {
-      "name": "Oceanic University",
-      "address": "777 Maple Avenue"
-    },
+    "university": 3,
     "id": 9,
     "researchAreas": [
       "Cloud Computing",
@@ -146,10 +120,7 @@ const people: any[] =  [
     "age": 31,
     "citations": 85,
     "hIndex": 21,
-    "university": {
-      "name": "Highland Technical College",
-      "address": "888 Birch Lane"
-    },
+    "university": 1,
     "id": 10,
     "researchAreas": [
       "Blockchain",
@@ -293,12 +264,26 @@ export class MockResultsService {
     
     // return name + type tuple
     let result = [];
-    resultingPeople.forEach(person => result.push({name: person.name, type: 'person'}));
-    resultingUniversities.forEach(university => result.push({name: university.name, type: 'university'}));
+    resultingPeople.forEach(person => result.push({name: person.name, type: 'person', id: person.id}));
+    resultingUniversities.forEach(university => result.push({name: university.name, type: 'institution', id: university.id}));
     return result.slice(0, maxItems);
   }
 
-  getPerson(id: number){
-    return people[id];
+  getPerson(id: number) : Person | null {
+    for (let person of people){
+      if (person.id == id){
+        return person;
+      }
+    }
+    return null;
+  }
+
+  getUniversity(id: number) : University | null {
+    for (let university of universities){
+      if (university.id == id){
+        return university;
+      }
+    }
+    return null;
   }
 }

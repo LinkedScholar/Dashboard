@@ -4,6 +4,7 @@ import { SafeHtmlPipe } from './safe-html.pipe';
 import { RangePipe } from './range.pipe';
 import { SearchAutocompleteResultComponent } from './search-autocomplete-result/search-autocomplete-result.component';
 import { NbIconModule } from '@nebular/theme';
+import { StackedBarComponent } from './charts/stacked-bar/stacked-bar.component';
 
 
 
@@ -11,7 +12,8 @@ import { NbIconModule } from '@nebular/theme';
   declarations: [
     SafeHtmlPipe,
     RangePipe,
-    SearchAutocompleteResultComponent
+    SearchAutocompleteResultComponent,
+    StackedBarComponent
   ],
   imports: [
     CommonModule,
@@ -21,7 +23,8 @@ import { NbIconModule } from '@nebular/theme';
   exports: [
     SafeHtmlPipe,
     RangePipe,
-    SearchAutocompleteResultComponent
+    SearchAutocompleteResultComponent,
+    StackedBarComponent
   ]
 })
 export class SharedModule { }

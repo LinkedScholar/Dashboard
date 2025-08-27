@@ -1,0 +1,130 @@
+<div class="row">
+    <div class="col-3">
+        <nb-card>
+            <nb-card-body>
+                <div class="row">
+                    <nb-user
+                        [name]="personName"
+                        [picture]="personPicture"
+                        title="Teacher"
+                        size="giant"
+                        shape="semi-round"
+                        >
+                    </nb-user>
+                </div>
+                <div class="row">
+                    <p>
+                        Departement d'informatique et de Recherche Operationnelle
+                    Faculte des Arts et des Sciences, Universite de Montreal;Mila - Quebec Artificial Intelligence Institute;LawZero
+                    </p>
+                </div>
+                <div class="row" style="justify-content: space-evenly;">
+                    <button nbButton status="primary"><nb-icon icon="star"></nb-icon></button>
+                    <button nbButton status="primary"><nb-icon icon="star"></nb-icon></button>
+                    <button nbButton status="primary"><nb-icon icon="star"></nb-icon></button>
+                    <button nbButton status="primary"><nb-icon icon="star"></nb-icon></button>
+                    <button nbButton status="primary"><nb-icon icon="star"></nb-icon></button>
+                </div>
+                <br>
+                
+                <div class="row" style="justify-content: space-evenly;">
+                    <button nbButton status="primary"><nb-icon icon="star"></nb-icon></button>
+                    <button nbButton status="primary"><nb-icon icon="star"></nb-icon></button>
+                    <button nbButton status="primary"><nb-icon icon="star"></nb-icon></button>
+                </div>
+            </nb-card-body>
+        </nb-card>
+        <nb-card>
+            <nb-accordion multi>
+                <nb-accordion-item expanded="true">
+                    <nb-accordion-item-header>
+                        Bio
+                    </nb-accordion-item-header>
+                    <nb-accordion-item-body>
+                        A nebula is an interstellar cloud of dust, hydrogen, helium and other ionized gases.
+                        Originally, nebula was a name for any diffuse astronomical object,
+                        including galaxies beyond the Milky Way.
+                    </nb-accordion-item-body>
+                </nb-accordion-item>
+                <nb-accordion-item expanded="true">
+                    <nb-accordion-item-header>
+                        Education
+                    </nb-accordion-item-header>
+                    <nb-accordion-item-body>
+                        <ul>
+                            <li>PhD in Computer Science, University of Montreal</li>
+                            <li>Master in Computer Science, Universite de Montreal</li>
+                            <li>Bachelor in Computer Science, Universite de Montreal</li>
+                        </ul>
+                    </nb-accordion-item-body>
+                </nb-accordion-item>
+                <nb-accordion-item expanded="true">
+                    <nb-accordion-item-header>
+                        Experience
+                    </nb-accordion-item-header>
+                    <nb-accordion-item-body>
+                        <ul>
+                            <li>Amazon</li>
+                            <li>Microsoft</li>
+                            <li>Google</li>
+                        </ul>
+                    </nb-accordion-item-body>
+                </nb-accordion-item>
+                <nb-accordion-item expanded="true">
+                    <nb-accordion-item-header>
+                        Awards
+                    </nb-accordion-item-header>
+                    <nb-accordion-item-body>
+                        <ul>
+                            <li>Honors in Computer Science</li>
+                            <li>Best Paper Award</li>
+                            <li>Best Student Paper Award</li>
+                        </ul>
+                    </nb-accordion-item-body>
+                </nb-accordion-item>
+            </nb-accordion>
+        </nb-card>
+    </div>
+    <div class="col-6">
+        <nb-card>
+            <nb-card-body>
+                <nb-tabset>
+                    <nb-tab tabTitle="Users"
+                            badgeText="99+"
+                            badgeStatus="danger">
+                      <p>List of <strong>users</strong>.</p>
+                    </nb-tab>
+                    <nb-tab tabTitle="Orders"
+                            badgeText="12"
+                            badgePosition="bottom right"
+                            badgeStatus="warning">
+                      <p>List of <strong>orders</strong>.</p>
+                    </nb-tab>
+                    <nb-tab tabTitle="Transactions"
+                            badgeText="new"
+                            badgePosition="top right"
+                            badgeStatus="success">
+                      <p>List of <strong>transactions</strong>.</p>
+                    </nb-tab>
+                    <nb-tab tabTitle="Notifications"
+                            badgeDot
+                            badgePosition="center start"
+                            badgeStatus="danger">
+                      <p>List of <strong>notifications</strong>.</p>
+                    </nb-tab>
+                  </nb-tabset>
+            </nb-card-body>
+        </nb-card>
+    </div>
+    <div class="col-3">
+        <nb-card>
+            <nb-card-body>
+                <ls-stacked-bar 
+                    [data]="chartData" 
+                    [title]="'Research areas'">
+                </ls-stacked-bar>
+            </nb-card-body>
+        </nb-card>
+    </div>
+
+</div>

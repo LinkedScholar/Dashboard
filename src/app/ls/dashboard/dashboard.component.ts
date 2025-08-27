@@ -32,7 +32,15 @@ export class DashboardComponent implements OnInit{
 
   handleResultSelection(selectedItem: any): void {
     this.searchElement = selectedItem;
-    this.submitSearch();
+    if (this.searchElement.type == 'person'){
+      this.router.navigate(["/ls/person", this.searchElement.id]);
+    }
+    else if (this.searchElement.type == 'institution') {
+      this.router.navigate(["/ls/institution", this.searchElement.id]);
+    }
+    else{
+      this.submitSearch();
+    }
   }
 
   submitSearch(): void {

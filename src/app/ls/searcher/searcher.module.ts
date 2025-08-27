@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbListModule, NbSelectModule, NbThemeModule, NbUserModule } from '@nebular/theme';
+import { NbAccordionModule, NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbListModule, NbSelectModule, NbTabsetModule, NbThemeModule, NbUserModule } from '@nebular/theme';
 import { SearchResultComponent } from './search-result/search-result.component';
 import { GraphResultComponent } from './search-result/graph-result/graph-result.component';
 import { GraphListBridgeService } from './graph-list-bridge.service';
@@ -8,6 +8,8 @@ import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { SearcherRoutingModule } from './searcher-routing.module';
 import { SearcherComponent } from './searcher.component';
+import { PersonProfileComponent } from './person-profile/person-profile.component';
+import { InstitutionProfileComponent } from './institution-profile/institution-profile.component';
 
 
 
@@ -15,7 +17,9 @@ import { SearcherComponent } from './searcher.component';
   declarations: [
     SearchResultComponent,
     GraphResultComponent,
-    SearcherComponent
+    SearcherComponent,
+    PersonProfileComponent,
+    InstitutionProfileComponent
   ],
   imports: [
     CommonModule,
@@ -33,6 +37,8 @@ import { SearcherComponent } from './searcher.component';
     NbListModule,
     NbInputModule,
     NbUserModule,
+    NbAccordionModule,
+    NbTabsetModule,
 
     SharedModule
     
