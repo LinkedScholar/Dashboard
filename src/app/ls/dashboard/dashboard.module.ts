@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { DashboardComponent } from './dashboard.component';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbListModule, NbSelectModule } from '@nebular/theme';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 
 
@@ -24,6 +24,7 @@ import { SharedModule } from '../../shared/shared.module';
     FormsModule,
     NbSelectModule,
     NbListModule,
+    ReactiveFormsModule,
 
     SharedModule
   ],

@@ -10,9 +10,8 @@
 					</div>
 					<form (ngSubmit)="onFormSubmit()">
 						<nb-form-field >
-							<input nbInput type="text" fullWidth placeholder="Search for..." shape="round" size="large" [(ngModel)]="searchTerm"
-								name="scholarlySearch" (ngModelChange)="onSearch()" (focus)="onInputFocus()" 
-								(blur)="onInputBlur()" >
+							<input nbInput type="text" fullWidth placeholder="Search for..." shape="round" size="large" (focus)="onInputFocus()" 
+								(blur)="onInputBlur()" [formControl]="searchControl" >
 						</nb-form-field>
 					</form>
 					<div style="position: relative;" >

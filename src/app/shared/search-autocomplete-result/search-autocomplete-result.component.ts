@@ -22,7 +22,7 @@ function levenshteinDistance(s: string, t: string): number {
     }
   }
 
-  return d[n][m];
+  return d[n][m] / Math.max(s.length, t.length);
 }
 
 @Component({
@@ -41,11 +41,11 @@ export class SearchAutocompleteResultComponent {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['results'] && this.results) {
-      this.sortAndHighlightResults();
+      this.sortResults();
     }
   }
 
-  sortAndHighlightResults(): void {
+  private sortResults(): void {
     if (!this.query) {
       this.sortedResults = this.results;
       return;

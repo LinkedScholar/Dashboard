@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MockResultsService } from '../../shared/mock-results.service';
+import { BackendBridgeService } from '../../shared/backend-bridge.service';
+import { Observable } from 'rxjs';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, switchMap, map, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'ls-dashboard',
@@ -15,11 +19,30 @@ export class DashboardComponent implements OnInit{
   searchElement: any = null;
 
   
-  searchResults: any[] = [];
-  constructor(private router: Router, private mockData : MockResultsService) {}
+  searchResults: any = [];
+  searchControl = new FormControl();
+
+
+
+  constructor(private router: Router, private mockData : MockResultsService, private backendBridge: BackendBridgeService) {}
 
   ngOnInit(): void {
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap(searchTerm => this.backendBridge.findBestMatches(searchTerm).pipe(
+        tap(results => {
+          console.log(results);
+        this.searchResults = results; // <-- Assign the data here
+      }))
+    )
+    ).subscribe();
 
+    this.searchControl.valueChanges.pipe(
+      tap(searchTerm => {
+        this.searchTerm = searchTerm;
+      })
+    ).subscribe();
   }
 
   onFormSubmit() {
@@ -47,16 +70,6 @@ export class DashboardComponent implements OnInit{
     this.router.navigate(['/ls/search'], { queryParams: { q: this.searchElement.name , t: this.searchElement.type } });
   }
 
-  onSearch(): void {
-    if (!this.searchTerm) {
-      this.searchResults = [];
-      return;
-    }
-
-    this.searchResults = this.mockData.search(this.searchTerm);
-    
-  }
-
   // Method to set the focus state
   onInputFocus() {
     this.isInputFocused = true;
@@ -65,7 +78,7 @@ export class DashboardComponent implements OnInit{
   // Method to clear the focus state
   onInputBlur() {
     setTimeout(() => {
-      this.isInputFocused = false;
+      this.isInputFocused = true;
     }, 150);
   }
 }

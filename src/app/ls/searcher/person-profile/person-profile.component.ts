@@ -2,6 +2,31 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MockResultsService } from '../../../shared/mock-results.service';
 
+function simpleHash(inputString) {
+  // Initialize the hash value
+  let hash = 0;
+
+  // Check if the input is a valid string
+  if (typeof inputString !== 'string' || inputString.length === 0) {
+    return 0; // Return 0 or handle error for invalid input
+  }
+
+  // Iterate over each character of the string
+  for (let i = 0; i < inputString.length; i++) {
+    const char = inputString.charCodeAt(i);
+    // Use a bitwise OR to keep the hash an integer and perform a simple calculation
+    hash = ((hash << 5) - hash) + char;
+    // Convert to a 32bit integer
+    hash |= 0;
+  }
+
+  // Use the modulo operator to constrain the hash to a number between 0 and 9999
+  const constrainedHash = Math.abs(hash) % 10000;
+
+  // Add 1 to the result to make the range 1 to 10000
+  return constrainedHash + 1;
+}
+
 @Component({
   selector: 'ls-person-profile',
   templateUrl: './person-profile.component.html',
@@ -11,7 +36,7 @@ export class PersonProfileComponent implements OnInit{
 
   personId: number;
   personName: string = "Loaded";
-  personPicture: string = "https://avatars.githubusercontent.com/u/2131211"
+  personPicture: string = "https://avatars.githubusercontent.com/u/2131211" // TODO: FIXME
 
   chartData = [
     { 
@@ -69,8 +94,8 @@ export class PersonProfileComponent implements OnInit{
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.personId = +params['id']; // The '+' converts the string to a number
-      // Now you can use this.personId to fetch data, etc.
+      this.personId = params['id']; 
+      this.personPicture = "https://avatars.githubusercontent.com/u/" + simpleHash(this.personId) // TODO: FIXME
       this.personName = this.mockData.getPerson(this.personId).name
     });
   }
