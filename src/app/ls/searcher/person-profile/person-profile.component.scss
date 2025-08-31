@@ -1,0 +1,13 @@
+.accordion-item{
+    color: var(--text-basic-color);
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.accordion-item:hover{
+    color: var(--text-primary-color);
+}
+
+.initial-col{
+    max-height: 70vh;
+}

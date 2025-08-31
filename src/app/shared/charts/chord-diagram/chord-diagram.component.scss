@@ -1,0 +1,16 @@
+.chord-diagram-container {
+    /* Use a fixed aspect ratio (e.g., 1:1 for a square) */
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%; /* This is the "padding hack" for a 1:1 aspect ratio */
+    height: 0;
+    overflow: hidden;
+}
+
+.chord-diagram {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}

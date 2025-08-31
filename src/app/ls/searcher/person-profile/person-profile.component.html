@@ -26,19 +26,20 @@
                         including galaxies beyond the Milky Way.
                     </nb-accordion-item-body>
                 </nb-accordion-item>
-                <nb-accordion-item expanded="true">
+                <nb-accordion-item expanded="true" *ngIf="affiliations.length > 0">
                     <nb-accordion-item-header>
                         Education
                     </nb-accordion-item-header>
                     <nb-accordion-item-body>
-                        <ul>
-                            <li>PhD in Computer Science, University of Montreal</li>
-                            <li>Master in Computer Science, Universite de Montreal</li>
-                            <li>Bachelor in Computer Science, Universite de Montreal</li>
-                        </ul>
+                        <div *ngFor="let edu of affiliations, let i = index"
+                            (click)="navigateToInstitution(i)" style="cursor: pointer;">
+                            <p class="accordion-item"> 
+                                - {{edu[1]}}
+                            </p>
+                        </div>
                     </nb-accordion-item-body>
                 </nb-accordion-item>
-                <nb-accordion-item expanded="true">
+                <!--nb-accordion-item expanded="true">
                     <nb-accordion-item-header>
                         Experience
                     </nb-accordion-item-header>
@@ -49,8 +50,8 @@
                             <li>Google</li>
                         </ul>
                     </nb-accordion-item-body>
-                </nb-accordion-item>
-                <nb-accordion-item expanded="true">
+                </nb-accordion-item-->
+                <!--nb-accordion-item expanded="true">
                     <nb-accordion-item-header>
                         Awards
                     </nb-accordion-item-header>
@@ -61,7 +62,7 @@
                             <li>Best Student Paper Award</li>
                         </ul>
                     </nb-accordion-item-body>
-                </nb-accordion-item>
+                </nb-accordion-item-->
             </nb-accordion>
         </nb-card>
     </div>
@@ -71,7 +72,7 @@
                 <nb-tabset>
                     <nb-tab tabTitle="Papers"
                             badgePosition="bottom right"
-                            badgeText="1232"
+                            badgeText="{{paperCount}}"
                             badgeStatus="primary">
                       <p>List of <strong>Papers</strong>.</p>
                     </nb-tab>
@@ -88,12 +89,56 @@
     <div class="col-3">
         <nb-card>
             <nb-card-body>
+                <h5 style="text-align: center;">General Statistics</h5>
+                <div class="row">
+                    <div class="col">
+                        <strong>Publications:</strong> {{paperCount}}<br>
+                        <strong>Citations:</strong> {{citationCount}}<br>
+                        <strong>G-index:</strong> {{gIndex}}<br>
+                    </div>
+                    <div class="col"> 
+                        <strong>h-index:</strong> {{hIndex}}<br>
+                        <strong>i10-index:</strong> {{i10Index}}<br>
+                        <strong>Impact:</strong> {{sociabilityIndex}}<br>
+                    </div>
+                </div>
+            </nb-card-body>
+        </nb-card>
+        <nb-card>
+            <nb-card-body>
                 <ls-stacked-bar 
                     [data]="chartData" 
                     [title]="'Research areas'">
                 </ls-stacked-bar>
             </nb-card-body>
         </nb-card>
-    </div>
+        <nb-card>
+            <nb-card-body>
+                <h5 style="text-align: center;">
+                    Co-Authors
+                </h5>
+                <ls-chord-diagram
+                    [matrix]="matrix" 
+                    [labels]="labels">
 
+                </ls-chord-diagram>
+                <nb-list nbInfiniteList
+                    [threshold]="500"
+                    (bottomThreshold)="loadNext()"
+                    style="max-height: 50vh;">
+                    <nb-list-item *ngFor="let coAuthor of coAuthors">
+                        
+                        <div (click)="navigateToPerson(coAuthor[0])" style="cursor: pointer;">
+                            <nb-user 
+                                [name]="coAuthor[2]"
+                                [picture]="getFakePicture(coAuthor[0])"
+                                [badgeText]="coAuthor[1]"
+                                badgePosition="bottom right">
+                            </nb-user>
+                        </div>
+                    </nb-list-item>
+                </nb-list>
+            </nb-card-body>
+        </nb-card>
+    </div>
 </div>

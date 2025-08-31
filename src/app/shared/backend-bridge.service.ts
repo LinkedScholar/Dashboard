@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -9,13 +9,32 @@ export class BackendBridgeService {
   constructor( private http: HttpClient) {}
 
   findBestMatches(query: string) {
-    console.log(query)
     const postData = {
       query: query
     };
 
     let result : any = [];
     return this.http.post('/api/autocomplete_options', postData);
+  }
+
+  getPersonBasicData(personId: string) {
+    return this.http.get(`/api/person/${personId}`);
+  }
+
+  getPersonResearchInteres(personId: string) {
+    return this.http.get(`/api/person_interests/${personId}`);
+  }
+
+  getCoAuthors(personId: string, skip: number = 0) {
+    const obj = {skip: skip};
+    const httpParams = new HttpParams({ fromObject: obj });
+    const queryString = httpParams.toString(); // 
+    const fullUrl = `/api/person_coauthors/${personId}?${queryString}`;  
+    return this.http.get(fullUrl);
+  }
+
+  getCoAuthorMatrix(personId: string) {
+    return this.http.get('/api/person_coauthor_matrix/' + personId);
   }
 
 }

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbAccordionModule, NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbListModule, NbSelectModule, NbTabsetModule, NbThemeModule, NbUserModule } from '@nebular/theme';
+import { NbAccordionModule, NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbLayoutModule, NbListModule, NbSelectModule, NbTabsetModule, NbThemeModule, NbUserModule } from '@nebular/theme';
 import { SearchResultComponent } from './search-result/search-result.component';
 import { GraphResultComponent } from './search-result/graph-result/graph-result.component';
 import { GraphListBridgeService } from './graph-list-bridge.service';
@@ -39,6 +39,7 @@ import { InstitutionProfileComponent } from './institution-profile/institution-p
     NbUserModule,
     NbAccordionModule,
     NbTabsetModule,
+    NbLayoutModule,
 
     SharedModule
     

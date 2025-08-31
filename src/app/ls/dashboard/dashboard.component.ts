@@ -32,7 +32,6 @@ export class DashboardComponent implements OnInit{
       distinctUntilChanged(),
       switchMap(searchTerm => this.backendBridge.findBestMatches(searchTerm).pipe(
         tap(results => {
-          console.log(results);
         this.searchResults = results; // <-- Assign the data here
       }))
     )
@@ -78,7 +77,7 @@ export class DashboardComponent implements OnInit{
   // Method to clear the focus state
   onInputBlur() {
     setTimeout(() => {
-      this.isInputFocused = true;
+      this.isInputFocused = false;
     }, 150);
   }
 }

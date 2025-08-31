@@ -5,6 +5,7 @@ import { RangePipe } from './range.pipe';
 import { SearchAutocompleteResultComponent } from './search-autocomplete-result/search-autocomplete-result.component';
 import { NbIconModule } from '@nebular/theme';
 import { StackedBarComponent } from './charts/stacked-bar/stacked-bar.component';
+import { ChordDiagramComponent } from './charts/chord-diagram/chord-diagram.component';
 
 
 
@@ -13,7 +14,8 @@ import { StackedBarComponent } from './charts/stacked-bar/stacked-bar.component'
     SafeHtmlPipe,
     RangePipe,
     SearchAutocompleteResultComponent,
-    StackedBarComponent
+    StackedBarComponent,
+    ChordDiagramComponent
   ],
   imports: [
     CommonModule,
@@ -24,7 +26,8 @@ import { StackedBarComponent } from './charts/stacked-bar/stacked-bar.component'
     SafeHtmlPipe,
     RangePipe,
     SearchAutocompleteResultComponent,
-    StackedBarComponent
+    StackedBarComponent,
+    ChordDiagramComponent,
   ]
 })
 export class SharedModule { }
