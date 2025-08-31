@@ -56,7 +56,7 @@ export class PersonProfileComponent implements OnInit{
   labels : any;
 
   loading = true;
-
+  papers : any = [];
 
   
   constructor(private router: Router, private route : ActivatedRoute, private mockData : MockResultsService, private backendBridge: BackendBridgeService) {}
@@ -90,7 +90,10 @@ export class PersonProfileComponent implements OnInit{
         })
       });
 
-      
+      this.backendBridge.getPersonPapers(this.personId).subscribe(data => {
+        console.log(data)
+        this.papers = data;
+      })
     });
 
     // RANDOM VALUES for gIndex and others

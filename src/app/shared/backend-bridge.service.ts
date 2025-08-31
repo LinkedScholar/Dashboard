@@ -25,6 +25,14 @@ export class BackendBridgeService {
     return this.http.get(`/api/person_interests/${personId}`);
   }
 
+  getPersonPapers(personId: string, skip: number = 0) {
+    const obj = {skip: skip};
+    const httpParams = new HttpParams({ fromObject: obj });
+    const queryString = httpParams.toString(); // 
+    const fullUrl = `/api/person_papers/${personId}?${queryString}`;  
+    return this.http.get(fullUrl);
+  }
+
   getCoAuthors(personId: string, skip: number = 0) {
     const obj = {skip: skip};
     const httpParams = new HttpParams({ fromObject: obj });

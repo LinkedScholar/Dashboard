@@ -2,16 +2,14 @@
     <div class="col-3">
         <nb-card>
             <nb-card-body>
-                <div class="row">
-                    <nb-user
-                        [name]="personName"
-                        [picture]="personPicture"
-                        title="Teacher"
-                        size="giant"
-                        shape="semi-round"
-                        >
-                    </nb-user>
-                </div>
+                <nb-user
+                    [name]="personName"
+                    [picture]="personPicture"
+                    title="Teacher"
+                    size="giant"
+                    shape="semi-round"
+                    >
+                </nb-user>
             </nb-card-body>
         </nb-card>
         <nb-card>
@@ -39,30 +37,6 @@
                         </div>
                     </nb-accordion-item-body>
                 </nb-accordion-item>
-                <!--nb-accordion-item expanded="true">
-                    <nb-accordion-item-header>
-                        Experience
-                    </nb-accordion-item-header>
-                    <nb-accordion-item-body>
-                        <ul>
-                            <li>Amazon</li>
-                            <li>Microsoft</li>
-                            <li>Google</li>
-                        </ul>
-                    </nb-accordion-item-body>
-                </nb-accordion-item-->
-                <!--nb-accordion-item expanded="true">
-                    <nb-accordion-item-header>
-                        Awards
-                    </nb-accordion-item-header>
-                    <nb-accordion-item-body>
-                        <ul>
-                            <li>Honors in Computer Science</li>
-                            <li>Best Paper Award</li>
-                            <li>Best Student Paper Award</li>
-                        </ul>
-                    </nb-accordion-item-body>
-                </nb-accordion-item-->
             </nb-accordion>
         </nb-card>
     </div>
@@ -74,7 +48,14 @@
                             badgePosition="bottom right"
                             badgeText="{{paperCount}}"
                             badgeStatus="primary">
-                      <p>List of <strong>Papers</strong>.</p>
+                            <nb-list>
+                                <nb-list-item *ngFor="let paper of papers" style="display: flex; flex-direction: column; align-items: start;">
+                                    <p><strong>{{paper[2]}}</strong></p>
+                                    <p><strong>Citations: </strong>{{paper[6]}} <strong>Year: </strong> {{paper[1]}}</p>
+                                    <p style="font-size: smaller;">Authors: <a style="cursor: pointer;" *ngFor="let author of paper[7]" (click)='navigateToPerson(author["id"])'>{{author["name"]}}, </a></p>
+                                    <p style="font-size: smaller;">Keywords: <span *ngFor="let keyword of paper[3]">{{keyword}}, </span></p>
+                                </nb-list-item>
+                            </nb-list>
                     </nb-tab>
                     <nb-tab tabTitle="Patents"
                             badgeText="WIP"
