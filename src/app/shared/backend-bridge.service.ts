@@ -1,5 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { PaperData } from '../ls/searcher/person-profile/person-profile.component';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -25,12 +28,17 @@ export class BackendBridgeService {
     return this.http.get(`/api/person_interests/${personId}`);
   }
 
-  getPersonPapers(personId: string, skip: number = 0) {
+  getPersonPapers(personId: string, skip: number = 0) : Observable<PaperData[]>{
     const obj = {skip: skip};
     const httpParams = new HttpParams({ fromObject: obj });
     const queryString = httpParams.toString(); // 
     const fullUrl = `/api/person_papers/${personId}?${queryString}`;  
-    return this.http.get(fullUrl);
+    return this.http.get(fullUrl).pipe(
+      map(response => {
+        // You can add validation or more complex transformations here
+        return response as PaperData[];
+      })
+    );
   }
 
   getCoAuthors(personId: string, skip: number = 0) {

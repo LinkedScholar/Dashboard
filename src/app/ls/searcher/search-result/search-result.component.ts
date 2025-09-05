@@ -37,7 +37,7 @@ export class SearchResultComponent implements OnInit, OnDestroy{
     "Topic",
     "Title",
     "Keyword",
-    "Abstract",
+    "Venue",
     "Author",
     "Institution",
   ]
@@ -94,6 +94,14 @@ export class SearchResultComponent implements OnInit, OnDestroy{
 
     this.route.queryParams.subscribe(params => {
       this.searchTerm = params['q'];
+      if ('t' in params) {
+        for (let i = 0; i < this.searchOptions.length; i++) {
+          if (this.searchOptions[i].toLowerCase() == params['t'].toLowerCase()) {
+            this.selectedItem = i;
+            break;
+          }
+        }
+      } 
     });
 
     this.setupResizeObserver();

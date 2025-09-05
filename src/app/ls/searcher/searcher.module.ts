@@ -10,6 +10,8 @@ import { SearcherRoutingModule } from './searcher-routing.module';
 import { SearcherComponent } from './searcher.component';
 import { PersonProfileComponent } from './person-profile/person-profile.component';
 import { InstitutionProfileComponent } from './institution-profile/institution-profile.component';
+import { UserPlaceHolderComponent } from './user-place-holder/user-place-holder.component';
+import { PagingFooterComponent } from './paging-footer/paging-footer.component';
 
 
 
@@ -19,7 +21,9 @@ import { InstitutionProfileComponent } from './institution-profile/institution-p
     GraphResultComponent,
     SearcherComponent,
     PersonProfileComponent,
-    InstitutionProfileComponent
+    InstitutionProfileComponent,
+    UserPlaceHolderComponent,
+    PagingFooterComponent
   ],
   imports: [
     CommonModule,

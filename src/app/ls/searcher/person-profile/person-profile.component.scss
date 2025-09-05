@@ -11,3 +11,16 @@
 .initial-col{
     max-height: 70vh;
 }
+
+p {
+    margin-bottom: 0;
+}
+
+.chord-diagram {
+    transition: height 3s ease;
+    height: 100%;
+    overflow: hidden;
+    &.chord-diagram-empty {
+        height: 0;
+    }
+}

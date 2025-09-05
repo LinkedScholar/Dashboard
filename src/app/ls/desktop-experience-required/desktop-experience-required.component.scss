@@ -1,8 +1,9 @@
 .lg{
     display: none;
+    z-index: 1000000000;
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1000px) {
     .lg{
         display: flex;
     }

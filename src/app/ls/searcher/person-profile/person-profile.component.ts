@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MockResultsService } from '../../../shared/mock-results.service';
 import { BackendBridgeService } from '../../../shared/backend-bridge.service';
+import { Title } from '@angular/platform-browser';
+import { map } from 'leaflet';
 
 function simpleHash(inputString, maxValue = 10000) {
   // Initialize the hash value
@@ -28,6 +30,25 @@ function simpleHash(inputString, maxValue = 10000) {
   return constrainedHash + 1;
 }
 
+interface Venue {
+  name: string;
+  id: string;
+}
+
+interface Person {
+  name: string;
+  id: string;
+}
+
+export interface PaperData {
+  id: string;
+  title: string;
+  year: number,
+  keywords: string[],
+  venue: Venue;
+  citations: number;
+  co_authors: Person[];
+}
 
 
 @Component({
@@ -42,6 +63,7 @@ export class PersonProfileComponent implements OnInit{
   personPicture: string; // TODO: FIXME
   paperCount = 0;
   citationCount = 0;
+  nPages = 1;
   affiliations = [];
 
   chartData:any = [];
@@ -58,20 +80,33 @@ export class PersonProfileComponent implements OnInit{
   loading = true;
   papers : any = [];
 
+  coAuthorsPlaceholers = [];
+  currentPage = 1;
+  loadingPages = true;
   
-  constructor(private router: Router, private route : ActivatedRoute, private mockData : MockResultsService, private backendBridge: BackendBridgeService) {}
+  constructor(
+    private router: Router,
+    private route : ActivatedRoute,
+    private mockData : MockResultsService,
+    private backendBridge: BackendBridgeService,
+    private titleService: Title) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
+
+      this.restartVariables();
+
       this.personId = params['id']; 
       this.personPicture = this.getFakePicture(this.personId);
-      // this.personName = this.mockData.getPerson(+this.personId).name
+
       this.backendBridge.getPersonBasicData(this.personId).subscribe(data => {
         data = data[0];
         this.personName = data[0];
         this.citationCount = data[1];
         this.paperCount = data[2];
+        this.nPages = Math.ceil(this.paperCount / 10);
         this.affiliations = data[3];
+        this.titleService.setTitle(`Linked Scholar - ${this.personName}`);
       });
 
       this.backendBridge.getPersonResearchInteres(this.personId).subscribe(data => {
@@ -81,6 +116,7 @@ export class PersonProfileComponent implements OnInit{
       this.backendBridge.getCoAuthors(this.personId).subscribe(data => {
         this.coAuthors = data;
         this.loading = false;
+        this.coAuthorsPlaceholers = [];
         
       }).add(() => {
         this.backendBridge.getCoAuthorMatrix(this.personId).subscribe(data => {
@@ -90,10 +126,15 @@ export class PersonProfileComponent implements OnInit{
         })
       });
 
-      this.backendBridge.getPersonPapers(this.personId).subscribe(data => {
-        console.log(data)
-        this.papers = data;
-      })
+      this.backendBridge.getPersonPapers(this.personId).subscribe(
+        (data: PaperData[]) => {
+          this.papers = data;
+          this.loadingPages = false;
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
     });
 
     // RANDOM VALUES for gIndex and others
@@ -101,6 +142,26 @@ export class PersonProfileComponent implements OnInit{
     this.hIndex = simpleHash(this.personId + "hIndex", 100);
     this.i10Index = simpleHash(this.personId + "i10Index", 100);
     this.sociabilityIndex = simpleHash(this.personId + "sociabilityIndex", 100);
+  }
+
+  restartVariables() {
+    this.personName = "...";
+    this.citationCount = 0;
+    this.paperCount = 0;
+    this.affiliations = [];
+
+    this.chartData = [];
+    this.coAuthors = [];
+    this.loading = true;
+
+    this.coAuthorsPlaceholers = new Array(3);
+
+    this.matrix = [];
+    this.labels = [];
+
+    this.papers = [];
+    this.nPages = 1;
+
   }
 
   navigateToInstitution(id: number) {
@@ -111,6 +172,10 @@ export class PersonProfileComponent implements OnInit{
     this.router.navigate(['/ls/person', id]);
   }
 
+  navigateToVenue(name: string) {
+    this.router.navigate(['/ls/search'], { queryParams: { q: name , t: 'venue' } });
+  }
+
   getFakePicture(id) {
     return "https://avatars.githubusercontent.com/u/" + simpleHash(id) // TODO: FIXME
   }
@@ -118,6 +183,7 @@ export class PersonProfileComponent implements OnInit{
   loadNext() {
     if (this.loading) { return }
     this.loading = true;
+    this.coAuthorsPlaceholers = new Array(3);
     this.backendBridge.getCoAuthors(this.personId, this.coAuthors.length).subscribe(data => {
       let f:any = data
       if (f)
@@ -125,6 +191,22 @@ export class PersonProfileComponent implements OnInit{
         this.coAuthors.push(...f);
         this.loading = false;
       }
+      this.coAuthorsPlaceholers = [];
     })
+  }
+
+  handleNewPage(page) {
+    this.loadingPages = true;
+    this.currentPage = page;
+    this.backendBridge.getPersonPapers(this.personId, (this.currentPage - 1)*10).subscribe(
+      (data: PaperData[]) => {
+        this.papers = data;
+        this.loadingPages = false;
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+        this.loadingPages = false;
+      }
+    );
   }
 }

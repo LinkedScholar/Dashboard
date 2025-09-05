@@ -22,7 +22,7 @@ function levenshteinDistance(s: string, t: string): number {
     }
   }
 
-  return d[n][m] / Math.max(s.length, t.length);
+  return d[n][m];
 }
 
 @Component({
@@ -82,6 +82,8 @@ export class SearchAutocompleteResultComponent {
         return 'person-outline';
       case 'institution':
         return 'home-outline';
+      case 'venue':
+        return 'navigation-outline';
       default:
         return 'question-mark-outline';
     }

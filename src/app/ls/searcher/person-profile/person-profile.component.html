@@ -50,10 +50,15 @@
                             badgeStatus="primary">
                             <nb-list>
                                 <nb-list-item *ngFor="let paper of papers" style="display: flex; flex-direction: column; align-items: start;">
-                                    <p><strong>{{paper[2]}}</strong></p>
-                                    <p><strong>Citations: </strong>{{paper[6]}} <strong>Year: </strong> {{paper[1]}}</p>
-                                    <p style="font-size: smaller;">Authors: <a style="cursor: pointer;" *ngFor="let author of paper[7]" (click)='navigateToPerson(author["id"])'>{{author["name"]}}, </a></p>
-                                    <p style="font-size: smaller;">Keywords: <span *ngFor="let keyword of paper[3]">{{keyword}}, </span></p>
+                                    <p><strong>{{paper.title}}</strong></p>
+                                    <p><strong>Citations: </strong>{{paper.citations}} <strong>Year: </strong> {{paper.year}}</p>
+                                    <p style="font-size: smaller;"><strong>Authors: </strong><a style="cursor: pointer;" *ngFor="let author of paper.co_authors" (click)='navigateToPerson(author.id)'>{{author.name}}, </a></p>
+                                    <p style="font-size: smaller;" *ngIf="(paper.keywords.length > 0)"><strong>Keywords: </strong><span *ngFor="let keyword of paper.keywords">{{keyword}}, </span></p>
+                                    <p style="font-size: smaller;" *ngIf="paper.venue"><strong>Venue: </strong><a style="cursor: pointer;" (click)="navigateToVenue(paper.venue.name)">{{paper.venue.name}}</a></p>
+                                </nb-list-item>
+                                <nb-list-item *ngIf="nPages > 1">
+                                    <ls-paging-footer
+                                        [currentPage]="currentPage" [maxPage]="nPages" (search)="handleNewPage($event)" [disabled]="loadingPages"></ls-paging-footer>
                                 </nb-list-item>
                             </nb-list>
                     </nb-tab>
@@ -85,7 +90,7 @@
                 </div>
             </nb-card-body>
         </nb-card>
-        <nb-card>
+        <nb-card *ngIf="chartData && chartData.length > 0">
             <nb-card-body>
                 <ls-stacked-bar 
                     [data]="chartData" 
@@ -94,17 +99,19 @@
             </nb-card-body>
         </nb-card>
         <nb-card>
-            <nb-card-body>
+            <nb-card-body style="display: flex; flex-direction: column;">
                 <h5 style="text-align: center;">
                     Co-Authors
                 </h5>
                 <ls-chord-diagram
                     [matrix]="matrix" 
-                    [labels]="labels">
+                    [labels]="labels"
+                    class="chord-diagram"
+                    [ngClass]="(matrix.length > 0) ? '' : 'chord-diagram-empty'">
 
                 </ls-chord-diagram>
                 <nb-list nbInfiniteList
-                    [threshold]="500"
+                    [threshold]="100"
                     (bottomThreshold)="loadNext()"
                     style="max-height: 50vh;">
                     <nb-list-item *ngFor="let coAuthor of coAuthors">
@@ -117,6 +124,9 @@
                                 badgePosition="bottom right">
                             </nb-user>
                         </div>
+                    </nb-list-item>
+                    <nb-list-item *ngFor="let _ of coAuthorsPlaceholers">
+                        <ls-user-place-holder></ls-user-place-holder>
                     </nb-list-item>
                 </nb-list>
             </nb-card-body>
