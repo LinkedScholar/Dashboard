@@ -53,4 +53,26 @@ export class BackendBridgeService {
     return this.http.get('/api/person_coauthor_matrix/' + personId);
   }
 
+  getConnectivity(authors: string[]) {
+
+    const postData = {
+      authors: authors
+    };
+
+    let result : any = [];
+    return this.http.post('/api/authors_conectivity', postData);
+  }
+
+  searchResult(query: string, option: string) {
+    const obj = {
+      q: query,
+      t: option,
+      target: 'researcher'
+    };
+    const httpParams = new HttpParams({ fromObject: obj });
+    const queryString = httpParams.toString(); // 
+    const fullUrl = `/api/search?${queryString}`;
+    return this.http.get(fullUrl);
+  }
+
 }

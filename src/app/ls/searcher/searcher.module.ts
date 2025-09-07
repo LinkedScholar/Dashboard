@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NbAccordionModule, NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbLayoutModule, NbListModule, NbSelectModule, NbTabsetModule, NbThemeModule, NbUserModule } from '@nebular/theme';
 import { SearchResultComponent } from './search-result/search-result.component';
-import { GraphResultComponent } from './search-result/graph-result/graph-result.component';
+import { ForceGraphComponent } from './search-result/graph-result/graph-result.component';
 import { GraphListBridgeService } from './graph-list-bridge.service';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
@@ -12,18 +12,20 @@ import { PersonProfileComponent } from './person-profile/person-profile.componen
 import { InstitutionProfileComponent } from './institution-profile/institution-profile.component';
 import { UserPlaceHolderComponent } from './user-place-holder/user-place-holder.component';
 import { PagingFooterComponent } from './paging-footer/paging-footer.component';
+import { AuthorListComponent } from './search-result/author-list/author-list.component';
 
 
 
 @NgModule({
   declarations: [
     SearchResultComponent,
-    GraphResultComponent,
+    ForceGraphComponent,
     SearcherComponent,
     PersonProfileComponent,
     InstitutionProfileComponent,
     UserPlaceHolderComponent,
-    PagingFooterComponent
+    PagingFooterComponent,
+    AuthorListComponent
   ],
   imports: [
     CommonModule,

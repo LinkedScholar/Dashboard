@@ -1,17 +1,42 @@
-.force-graph-container {
-  position: relative;
-  flex: 1;
+.graph-container {
+  border-radius: 4px;
+  overflow: hidden;
+  background: transparent;
 }
 
-circle{
-  r: 5;
-  transition: r 0.5s ease;
-  &.node-group {
-    cursor: pointer;
-  }
-  
-  &.node-group:hover {
-    r: 10;
-  }
+:host ::ng-deep .node {
+  cursor: pointer;
 }
 
+:host ::ng-deep .node circle{
+  cursor: pointer;
+
+  stroke: var(--text-info-color);
+  stroke-width: 1px;
+}
+:host ::ng-deep .node text{
+  fill: var(--text-basic-color);
+  transform: translateY(1rem);
+}
+
+:host ::ng-deep .node .label-background{
+  fill: var(--background-basic-color-1);
+  transform: translateY(1rem);
+  opacity: 0.9;
+  rx: 5;
+  ry: 5;
+}
+
+:host ::ng-deep .node:hover circle {
+  stroke: var(--text-basic-color);
+  stroke-width: 2px;
+}
+
+:host ::ng-deep .link {
+  opacity: 0.6;
+}
+
+:host ::ng-deep .node text {
+  pointer-events: none;
+  user-select: none;
+}
