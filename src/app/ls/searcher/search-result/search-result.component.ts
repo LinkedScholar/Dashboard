@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { GraphListBridgeService } from '../graph-list-bridge.service';
 import { MockResultsService } from '../../../shared/mock-results.service';
 import { BackendBridgeService } from '../../../shared/backend-bridge.service';
+import { group } from 'console';
+import { link } from 'fs';
 
 
 
@@ -43,8 +45,6 @@ export class SearchResultComponent implements OnInit, OnDestroy{
   ]
 
   sortOptions: string [] = [
-    "H-Index",
-    "Activity",
     "#Citations",
     "#Papers"
   ]
@@ -56,7 +56,7 @@ export class SearchResultComponent implements OnInit, OnDestroy{
   ]
 
   sortOption: number = 3;
-  groupByOption: number = 0;
+  groupByOption: number = 1;
 
   filterOptions: string[] = [
     
@@ -68,7 +68,7 @@ export class SearchResultComponent implements OnInit, OnDestroy{
 
   layoutConfiguration: number = 2;
 
-  graphData = { nodes: [], links: [] };
+  graphData = { nodes: [], links: [], category_nodes: [] };
 
   currentPage: number = 1;
   pageSize: number = 10;
@@ -113,6 +113,7 @@ export class SearchResultComponent implements OnInit, OnDestroy{
           console.log(data);
           let links = [];
           let nodes = [];
+          let category_nodes = [];
 
           if (Array.isArray(data)) {
             for (let i = 0; i < data.length; i++) {
@@ -136,13 +137,54 @@ export class SearchResultComponent implements OnInit, OnDestroy{
             nodes.push({
               id: author.id,
               name: author.name,
-              group: hash
+              group: hash,
+              size: author.paper_count
             })
+
+
+            if (this.groupByOption == 1) {
+              
+              if (author.affiliations != null){
+                let cat_name = author.affiliations[0].name;
+                let found = false;
+                hash = this.simpleHash(cat_name, 10);
+
+                for (let i = 0; i < category_nodes.length; i++) {
+                  if (category_nodes[i].name == cat_name) {
+                    found = true;
+                    links.push({
+                      source: author.id,
+                      target: category_nodes[i].id,
+                      value: 1,
+                      type: 'category'
+                    })
+                  }
+                } 
+                if (!found && cat_name != null) {
+                  category_nodes.push({
+                    name: cat_name,
+                    size: 200,
+                    id: cat_name,
+                    type: 'category',
+                    group: hash
+                  })
+
+                  links.push({
+                    source: author.id,
+                    target: cat_name,
+                    value: 1,
+                    type: 'category'
+                  })
+                }
+              }
+            }
           }
 
+          
           this.graphData = {
             nodes: nodes,
-            links: links
+            links: links,
+            category_nodes: category_nodes
           }
         })
       })

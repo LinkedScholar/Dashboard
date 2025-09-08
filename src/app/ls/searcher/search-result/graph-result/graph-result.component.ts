@@ -18,17 +18,21 @@ export interface GraphNode extends d3.SimulationNodeDatum {
   id: string;
   name: string;
   group: number;
+  type: string;
   color?: string;
+  size?: number;
 }
 
 export interface GraphLink extends d3.SimulationLinkDatum<GraphNode> {
   source: string | GraphNode;
   target: string | GraphNode;
   value: number;
+  type: string;
 }
 
 export interface GraphData {
   nodes: GraphNode[];
+  category_nodes: GraphNode[];
   links: GraphLink[];
 }
 
@@ -43,12 +47,12 @@ export interface GraphData {
 export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('container', { static: true }) containerRef!: ElementRef;
 
-  @Input() data: GraphData = { nodes: [], links: [] };
+  @Input() data: GraphData = { nodes: [], links: [], category_nodes: [] };
   @Input() width: number = 800;
   @Input() height: number = 600;
   @Input() nodeRadius: number = 20;
-  @Input() linkDistance: number = 100;
-  @Input() chargeStrength: number = -300;
+  @Input() linkDistance: number = 400;
+  @Input() chargeStrength: number = -1;
   @Input() enableDrag: boolean = true;
   @Input() enableZoom: boolean = true;
 
@@ -125,10 +129,14 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     this.simulation = d3.forceSimulation<GraphNode>(this.internalNodes)
       .force('link', d3.forceLink<GraphNode, GraphLink>(this.internalLinks)
         .id(d => d.id)
-        .distance(this.linkDistance))
-      .force('charge', d3.forceManyBody().strength(this.chargeStrength))
+        .distance(d => d.type === 'category' ? 0 : this.linkDistance))
+      
+      .force('charge', d3.forceManyBody().strength(d => d.type === 'category' ? 0 : this.chargeStrength))
       .force('center', d3.forceCenter(this.width / 2, this.height / 2))
-      .force('collision', d3.forceCollide().radius(this.nodeRadius + 2));
+      .force('collision', d3.forceCollide().radius(d => {
+        if (d.type === 'category') return 0; // No collision for category nodes
+        return this.nodeRadius + 2;
+      }));
 
     this.simulation.on('tick', () => this.ticked());
 
@@ -138,7 +146,11 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
 
   private updateData(): void {
     // Deep copy the input data to avoid mutations
-    this.internalNodes = JSON.parse(JSON.stringify(this.data.nodes || []));
+    this.internalNodes = [
+      ...JSON.parse(JSON.stringify(this.data.category_nodes || [])),
+      ...JSON.parse(JSON.stringify(this.data.nodes || []))
+    ];
+    
     this.internalLinks = JSON.parse(JSON.stringify(this.data.links || []));
 
     // Update links
@@ -151,7 +163,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     this.simulation.nodes(this.internalNodes);
     this.simulation.force('link', d3.forceLink<GraphNode, GraphLink>(this.internalLinks)
       .id(d => d.id)
-      .distance(this.linkDistance));
+      .distance(d => d.type === 'category' ? 0 : this.linkDistance))
     
     // Restart simulation
     this.simulation.alpha(1).restart();
@@ -170,9 +182,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     // Add new links
     const linkEnter = this.linkElements.enter()
       .append('line')
-      .attr('class', 'link')
-      .attr('stroke', '#999')
-      .attr('stroke-opacity', 0.6)
+      .attr('class', (d: GraphLink) => `link ${d.type}`)
       .attr('stroke-width', (d: GraphLink) => Math.sqrt(d.value))
       .on('click', (event: MouseEvent, d: GraphLink) => {
         event.stopPropagation();
@@ -197,22 +207,22 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     // Add circles
     nodeEnter.append('circle')
-      .attr('r', this.nodeRadius)
+      .attr('r', (d: GraphNode) => 5* Math.sqrt(d.size) || this.nodeRadius)
       .attr('fill', (d: GraphNode) => d.color || d3.schemeCategory10[d.group % 10])
+      .attr('opacity', (d: GraphNode) => d.type === 'category' ? 0.3 : 1);
 
     nodeEnter.append('rect')
-      .attr('class', 'label-background')
       .attr('width', 0)
-      .attr('height', 0);
+      .attr('height', 0)
+      .attr('class', (d: GraphNode) => d.type === 'category' ? 'category-label-background label-background' : 'label-background');
 
     // Add labels
     nodeEnter.append('text')
       .attr('text-anchor', 'middle')
       .attr('font-size', '12px')
       .attr('font-weight', 'bold')
-      .text((d: GraphNode) => d.name);
-
-    
+      .text((d: GraphNode) => d.name)
+      .attr('class', (d: GraphNode) => d.type === 'category' ? 'category-label' : 'label');
 
     // Add event listeners
     nodeEnter
@@ -246,8 +256,9 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
       })
       .on('end', (event, d) => {
         if (!event.active) this.simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
+        // not resetting to null makes node fixed
+        //d.fx = null;
+        //d.fy = null;
       });
   }
 
@@ -320,6 +331,9 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     this.g.select('.nodes')
     .selectAll('text')
     .attr('visibility', shouldShowLabels ? 'visible' : 'hidden')
+    this.g.select('.nodes')
+    .selectAll('.label-background')
+    .attr('visibility', shouldShowLabels ? 'visible' : 'hidden')
   }
 
   private updateLabelBackgrounds(): void {
@@ -329,7 +343,6 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
         const group = d3.select(this);
         const textNode = group.select('text').node() as SVGTextElement;
         const bgRect = group.select('.label-background');
-        console.log(textNode, bgRect);
         if (textNode && !bgRect.empty()) {
           const bbox = textNode.getBBox();
           bgRect

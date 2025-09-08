@@ -6,6 +6,7 @@
 
 :host ::ng-deep .node {
   cursor: pointer;
+  backdrop-filter: blur(5px);
 }
 
 :host ::ng-deep .node circle{
@@ -13,15 +14,29 @@
 
   stroke: var(--text-info-color);
   stroke-width: 1px;
+  transition: all 0.3s ease;
 }
 :host ::ng-deep .node text{
   fill: var(--text-basic-color);
   transform: translateY(1rem);
 }
 
+:host ::ng-deep .node .category-label{
+  fill: var(--text-basic-color);
+  transform: translateY(4rem);
+}
+
 :host ::ng-deep .node .label-background{
   fill: var(--background-basic-color-1);
   transform: translateY(1rem);
+  opacity: 0.9;
+  rx: 5;
+  ry: 5;
+}
+
+:host ::ng-deep .node .category-label-background{
+  fill: var(--background-basic-color-1);
+  transform: translateY(4rem);
   opacity: 0.9;
   rx: 5;
   ry: 5;
@@ -33,7 +48,14 @@
 }
 
 :host ::ng-deep .link {
+  stroke: #999;
   opacity: 0.6;
+
+  &.category {
+    stroke: var(--text-info-color);
+    stroke-dasharray: 5,5; 
+
+  }
 }
 
 :host ::ng-deep .node text {
