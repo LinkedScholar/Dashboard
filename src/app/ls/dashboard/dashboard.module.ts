@@ -5,12 +5,14 @@ import { DashboardRoutingModule } from './dashboard-routing.module';
 import { NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbListModule, NbSelectModule } from '@nebular/theme';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
+import { ProjectsComponent } from './projects/projects.component';
 
 
 
 @NgModule({
   declarations: [
     DashboardComponent,
+    ProjectsComponent,
   ],
   imports: [
     CommonModule,

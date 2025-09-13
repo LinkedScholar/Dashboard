@@ -1,6 +1,6 @@
 import { Component, Input, Output, SimpleChanges, EventEmitter } from '@angular/core';
 
-function levenshteinDistance(s: string, t: string): number {
+export function levenshteinDistance(s: string, t: string): number {
   const d = [];
   const n = s.length;
   const m = t.length;

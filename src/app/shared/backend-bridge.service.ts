@@ -35,7 +35,6 @@ export class BackendBridgeService {
     const fullUrl = `/api/person_papers/${personId}?${queryString}`;  
     return this.http.get(fullUrl).pipe(
       map(response => {
-        // You can add validation or more complex transformations here
         return response as PaperData[];
       })
     );
@@ -63,16 +62,22 @@ export class BackendBridgeService {
     return this.http.post('/api/authors_conectivity', postData);
   }
 
-  searchResult(query: string, option: string) {
+  searchResult(query: string, option: string, sort: string, page: number) {
     const obj = {
       q: query,
       t: option,
-      target: 'researcher'
+      target: 'researcher',
+      page: page,
+      s: sort
     };
     const httpParams = new HttpParams({ fromObject: obj });
     const queryString = httpParams.toString(); // 
     const fullUrl = `/api/search?${queryString}`;
     return this.http.get(fullUrl);
+  }
+
+  getBestType(query: string) {
+    return this.http.get(`api/getBestType/${query}`)
   }
 
 }

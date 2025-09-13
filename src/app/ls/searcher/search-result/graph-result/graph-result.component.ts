@@ -51,8 +51,8 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   @Input() width: number = 800;
   @Input() height: number = 600;
   @Input() nodeRadius: number = 20;
-  @Input() linkDistance: number = 400;
-  @Input() chargeStrength: number = -1;
+  @Input() linkDistance: number = 200;
+  @Input() chargeStrength: number = -100;
   @Input() enableDrag: boolean = true;
   @Input() enableZoom: boolean = true;
 
@@ -103,7 +103,8 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     this.svg = d3.select(container)
       .append('svg')
       .attr('width', this.width)
-      .attr('height', this.height);
+      .attr('height', this.height)
+      .attr("style", "max-width: 100%; height: auto;");
 
     // Create main group for zoom/pan
     this.g = this.svg.append('g');
@@ -132,11 +133,12 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
         .distance(d => d.type === 'category' ? 0 : this.linkDistance))
       
       .force('charge', d3.forceManyBody().strength(d => d.type === 'category' ? 0 : this.chargeStrength))
-      .force('center', d3.forceCenter(this.width / 2, this.height / 2))
       .force('collision', d3.forceCollide().radius(d => {
         if (d.type === 'category') return 0; // No collision for category nodes
         return this.nodeRadius + 2;
-      }));
+      })).force('x', d3.forceX())
+      .force('y', d3.forceY());
+
 
     this.simulation.on('tick', () => this.ticked());
 
@@ -145,6 +147,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private updateData(): void {
+    if (!this.data) return;
     // Deep copy the input data to avoid mutations
     this.internalNodes = [
       ...JSON.parse(JSON.stringify(this.data.category_nodes || [])),
@@ -219,10 +222,9 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     // Add labels
     nodeEnter.append('text')
       .attr('text-anchor', 'middle')
-      .attr('font-size', '12px')
       .attr('font-weight', 'bold')
       .text((d: GraphNode) => d.name)
-      .attr('class', (d: GraphNode) => d.type === 'category' ? 'category-label' : 'label');
+      .attr('class', (d: GraphNode) => d.type === 'category' ? 'category-label' : 'node-label');
 
     // Add event listeners
     nodeEnter
@@ -263,23 +265,25 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private ticked(): void {
-    this.linkElements
-      .attr('x1', (d: GraphLink) => (d.source as GraphNode).x)
-      .attr('y1', (d: GraphLink) => (d.source as GraphNode).y)
-      .attr('x2', (d: GraphLink) => (d.target as GraphNode).x)
-      .attr('y2', (d: GraphLink) => (d.target as GraphNode).y);
-
-    this.nodeElements
-      .attr('transform', (d: GraphNode) => `translate(${d.x},${d.y})`);
+    if (this.linkElements && this.nodeElements) {
+      this.linkElements
+        .attr('x1', (d: GraphLink) => (d.source as GraphNode).x)
+        .attr('y1', (d: GraphLink) => (d.source as GraphNode).y)
+        .attr('x2', (d: GraphLink) => (d.target as GraphNode).x)
+        .attr('y2', (d: GraphLink) => (d.target as GraphNode).y);
+  
+      this.nodeElements
+        .attr('transform', (d: GraphNode) => `translate(${d.x},${d.y})`);
+    }
   }
 
   private updateDimensions(): void {
     this.svg
       .attr('width', this.width)
-      .attr('height', this.height);
+      .attr('height', this.height)
+      .attr('viewBox', `${-this.width / 2} ${-this.height / 2} ${this.width} ${this.height}`)
 
     this.simulation
-      .force('center', d3.forceCenter(this.width / 2, this.height / 2))
       .alpha(1)
       .restart();
   }
@@ -338,10 +342,14 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
 
   private updateLabelBackgrounds(): void {
     // Update background rectangles for existing labels
+    let scale = this.getCurrentZoomScale();
     this.g.selectAll('.node')
       .each(function() {
         const group = d3.select(this);
         const textNode = group.select('text').node() as SVGTextElement;
+        
+        group.select('text').
+        attr('font-size', (d) => .8/scale + 'rem'); // Dynamic size so it is always readable
         const bgRect = group.select('.label-background');
         if (textNode && !bgRect.empty()) {
           const bbox = textNode.getBBox();

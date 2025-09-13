@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NbAccordionModule, NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbLayoutModule, NbListModule, NbSelectModule, NbTabsetModule, NbThemeModule, NbUserModule } from '@nebular/theme';
 import { SearchResultComponent } from './search-result/search-result.component';
 import { ForceGraphComponent } from './search-result/graph-result/graph-result.component';
-import { GraphListBridgeService } from './graph-list-bridge.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../../shared/shared.module';
 import { SearcherRoutingModule } from './searcher-routing.module';
 import { SearcherComponent } from './searcher.component';
@@ -30,9 +29,9 @@ import { AuthorListComponent } from './search-result/author-list/author-list.com
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
 
     SearcherRoutingModule,
-
 
     NbIconModule,
     NbButtonModule,
@@ -51,6 +50,6 @@ import { AuthorListComponent } from './search-result/author-list/author-list.com
     
   ],
 
-  providers: [GraphListBridgeService],
+  providers: [],
 })
 export class SearcherModule { }

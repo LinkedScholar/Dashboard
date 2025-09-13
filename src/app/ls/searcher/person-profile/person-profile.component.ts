@@ -67,6 +67,8 @@ export class PersonProfileComponent implements OnInit{
   affiliations = [];
 
   chartData:any = [];
+  researchAreas: string[] = [];
+  mostImportantTopics = [];
   coAuthors:any;
 
   gIndex = 0;
@@ -111,6 +113,7 @@ export class PersonProfileComponent implements OnInit{
 
       this.backendBridge.getPersonResearchInteres(this.personId).subscribe(data => {
         this.chartData = data;
+        this.researchAreas = Object.keys(data[0]);
       })
 
       this.backendBridge.getCoAuthors(this.personId).subscribe(data => {
@@ -198,6 +201,7 @@ export class PersonProfileComponent implements OnInit{
   handleNewPage(page) {
     this.loadingPages = true;
     this.currentPage = page;
+
     this.backendBridge.getPersonPapers(this.personId, (this.currentPage - 1)*10).subscribe(
       (data: PaperData[]) => {
         this.papers = data;

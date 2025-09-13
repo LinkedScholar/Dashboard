@@ -5,6 +5,7 @@ import { BackendBridgeService } from '../../shared/backend-bridge.service';
 import { Observable } from 'rxjs';
 import { FormControl } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap, map, tap } from 'rxjs/operators';
+import { levenshteinDistance } from '../../shared/search-autocomplete-result/search-autocomplete-result.component';
 
 @Component({
   selector: 'ls-dashboard',
@@ -45,11 +46,34 @@ export class DashboardComponent implements OnInit{
   }
 
   onFormSubmit() {
-    this.searchElement = {
-      name: this.searchTerm,
-      type: 'person'
+    this.backendBridge.getBestType(this.searchTerm).subscribe(data => {
+      console.log(data);
+      console.log(this.findClosestKey(data, this.searchTerm));
+      this.searchElement = {
+        name: this.searchTerm,
+        type: this.findClosestKey(data, this.searchTerm)
+      }
+      this.submitSearch();
+    })
+  }
+
+  findClosestKey(data, query): string | null {
+    let minDistance = Infinity;
+    let foundKey: string | null = null;
+
+    for (const key in data) {
+      if (data.hasOwnProperty(key)) {
+        const value = data[key];
+        // Use the injected pipe to calculate the distance
+        const distance = levenshteinDistance(query, value);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          foundKey = key;
+        }
+      }
     }
-    this.submitSearch();
+    return foundKey;
   }
 
   handleResultSelection(selectedItem: any): void {
