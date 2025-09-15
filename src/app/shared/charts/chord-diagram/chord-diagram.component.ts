@@ -56,6 +56,7 @@ export class ChordDiagramComponent implements OnInit, OnChanges{
     const sum = d3.sum(Object.assign(this.matrix).flat());
     const tickStep = d3.tickStep(0, sum, 50);
 
+
     this.svg.append('g')
       .attr('class', 'ribbon')
       .selectAll('path')
@@ -75,12 +76,13 @@ export class ChordDiagramComponent implements OnInit, OnChanges{
       .join('g')
       .attr('stroke', 'var(--text-basic-color)')
       .attr('stroke-width', 1);
-
+      
     group.append('path')
       .attr('fill', d => color(d.index))
       .attr('d', arc as any)
       .append('title')
       .text(d => `${this.labels[d.index]}: ${d.value}`);
+
 
     const groupTick = group.append("g")
       .selectAll()
@@ -91,6 +93,20 @@ export class ChordDiagramComponent implements OnInit, OnChanges{
     groupTick.append("line")
       .attr("stroke", "var(--text-basic-color)")
       .attr("x2", 6);
+
+    groupTick.append("text")
+      .attr("x", 8)
+      .attr("dy", "0.35em")
+      .attr("transform", d => d.angle > Math.PI ? "rotate(180) translate(-16)" : null)
+      .attr("text-anchor", d => d.angle > Math.PI ? "end" : null)
+
+    
+    group.select("text")
+      .attr("fill", "var(--text-basic-color)")
+      .attr('stroke-width', '0')
+      .attr("transform", "rotate(80) translate(0, -20)")
+      .attr("text-anchor", null)
+      .text(d=> this.labels[d.index]);
   }
 }
 
