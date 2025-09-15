@@ -3,11 +3,11 @@
       <a class="linked-header" routerLink = "/ls" >Linked<span class = "header-scholar">Scholar</span></a>
     </div>
     
-    <!-- div class="links-container">
+    <div class="links-container">
         <div *ngFor="let link of links; let i = index" [routerLink]="link.url" routerLinkActive="active">
             <p>{{link.title}}</p>
         </div>
-    </div-->
+    </div>
     
     <div style="display: flex; flex-direction: row; gap: 20px; align-items: center; justify-content: center;">
         <div style="gap: 10px;">
@@ -17,14 +17,13 @@
         </div>
         <nb-actions size="small">
             <nb-action class="user-action">
-                <nb-user [nbContextMenu]="userMenu"
+                <nb-user
                 size="large"
                 name="John Doe"
                 title="EULiST member"
                 badgeText="user"
                 badgeStatus="info"
-                badgePosition="bottom right"
-                nbContextMenuTag="user-context-menu"/>
+                badgePosition="bottom right"/>
             </nb-action>
         </nb-actions>
         

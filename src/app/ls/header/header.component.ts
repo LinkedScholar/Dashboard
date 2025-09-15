@@ -23,29 +23,14 @@ export class HeaderComponent implements OnInit{
   constructor(
     private themeService: NbThemeService,
     private authService: NbAuthService,
-    private router: Router,
-    private menuService: NbMenuService) {}
+    private router: Router) {}
 
-  userMenu = [ { title: 'Profile' }, { title: 'Log out' } ];
 
 
   ngOnInit(): void {
     this.themeService.getJsTheme().subscribe(theme => {
       this.currentTheme = theme.name
     })
-
-    this.menuService.onItemClick()
-      .pipe(
-        filter(({ tag }) => tag === 'user-context-menu'),
-        map(({ item: { title } }) => title),
-      ).subscribe(title => {
-        if (title === 'Log out') {
-          this.logout();
-        }
-        else if (title === 'Profile') {
-          this.router.navigate(['/ls/profile']);
-        }
-      });
   }
 
   links: HeaderLink[] = [
@@ -58,8 +43,8 @@ export class HeaderComponent implements OnInit{
       url: '/ls/searcher',
     },
     {
-      title: 'Reports',
-      url: '/ls/report',
+      title: 'Funding',
+      url: '/ls/funding',
     },
   ];
 

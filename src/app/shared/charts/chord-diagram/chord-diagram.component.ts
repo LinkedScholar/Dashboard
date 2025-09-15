@@ -15,8 +15,8 @@ export class ChordDiagramComponent implements OnInit, OnChanges{
 
   private svg: d3.Selection<SVGSVGElement, unknown, null, undefined> | undefined;
   private readonly viewBoxSize = 600;
-  private readonly innerRadius = (this.viewBoxSize / 2) - 70;
-  private readonly outerRadius = this.innerRadius + 30;
+  private readonly innerRadius = (this.viewBoxSize / 3);
+  private readonly outerRadius = this.innerRadius + 10;
 
   ngOnInit(): void {
     this.createChart();
@@ -53,6 +53,9 @@ export class ChordDiagramComponent implements OnInit, OnChanges{
 
     // Ribbons
     const ribbon = d3.ribbon().radius(this.innerRadius);
+    const sum = d3.sum(Object.assign(this.matrix).flat());
+    const tickStep = d3.tickStep(0, sum, 50);
+
     this.svg.append('g')
       .attr('class', 'ribbon')
       .selectAll('path')
@@ -61,7 +64,7 @@ export class ChordDiagramComponent implements OnInit, OnChanges{
       .attr('d', ribbon as any)
       .attr('fill', d => color(d.source.index))
       .attr('fill-opacity', 0.5)
-      .attr('stroke', d => d3.rgb(color(d.source.index)).darker())
+      .attr('stroke', 'var(--text-basic-color)')
       .attr('stroke-width', 1);
     // Arcs
     const arc = d3.arc().innerRadius(this.innerRadius).outerRadius(this.outerRadius);
@@ -69,7 +72,9 @@ export class ChordDiagramComponent implements OnInit, OnChanges{
       .attr('class', 'group')
       .selectAll('g')
       .data(chord.groups)
-      .join('g');
+      .join('g')
+      .attr('stroke', 'var(--text-basic-color)')
+      .attr('stroke-width', 1);
 
     group.append('path')
       .attr('fill', d => color(d.index))
@@ -77,18 +82,22 @@ export class ChordDiagramComponent implements OnInit, OnChanges{
       .append('title')
       .text(d => `${this.labels[d.index]}: ${d.value}`);
 
-    // Labels
-    group.append('text')
-      .each(d => { (d as any).angle = (d.startAngle + d.endAngle) / 2; })
-      .attr('dy', '.35em')
-      .attr('class', 'group-label')
-      .attr('transform', d => `
-        rotate(${((d as any).angle * 180 / Math.PI - 90)})
-        translate(${this.outerRadius + 10})
-        ${(d as any).angle > Math.PI ? 'rotate(180)' : ''}
-      `)
-      .attr('text-anchor', d => (d as any).angle > Math.PI ? 'end' : 'start')
-      .text(d => this.labels[d.index]);
+    const groupTick = group.append("g")
+      .selectAll()
+      .data(d => groupTicks(d, tickStep))
+      .join("g")
+        .attr("transform", d => `rotate(${d.angle * 180 / Math.PI - 90}) translate(${this.outerRadius},0)`);
+
+    groupTick.append("line")
+      .attr("stroke", "var(--text-basic-color)")
+      .attr("x2", 6);
   }
+}
+
+function groupTicks(d, step) {
+  const k = (d.endAngle - d.startAngle) / d.value;
+  return d3.range(0, d.value, step).map(value => {
+    return {value: value, angle: value * k + d.startAngle};
+  });
 }
 

@@ -1,28 +1,28 @@
 <div class="row">
 	<div class="col">
-		<nb-card style="height: 33vh; margin: 0;">
-			<nb-card-body style="display: flex; flex-direction: column; align-items: center; overflow: visible;">
-				<div style="max-width: 35rem; margin: auto; width: 100%; gap: 3rem; display: flex; flex-direction: column;">
-					<div></div>
-					<div style="display: flex; align-items: end; justify-content: center;">
-						<h1 style="margin: 0;">Linked<span style="color: var(--text-primary-color);">Scholar</span></h1>
-						<h5 style="margin: 0; font-weight: 200; font-style: italic; font-family: serif; transform: translate(0, 0.5rem);">Searcher</h5>
-					</div>
-					<form (ngSubmit)="onFormSubmit()">
-						<nb-form-field >
-							<input nbInput type="text" fullWidth placeholder="Search for..." shape="round" size="large" (focus)="onInputFocus()" 
-								(blur)="onInputBlur()" [formControl]="searchControl" >
-						</nb-form-field>
-					</form>
-					<div style="position: relative;" >
-						<ls-search-autocomplete-result style="position: absolute; top: -3rem; width: 100%; margin: 1rem;"
-						[results]="searchResults"
-						[query]="searchTerm"
-						(resultSelected)="handleResultSelection($event)" *ngIf="isInputFocused"></ls-search-autocomplete-result>
-					</div>
-				</div>
+		<nb-card>
+			<nb-card-body style="display: flex; flex-direction: column; align-items: center; overflow: hidden;">
+				<ls-search-bar (searchEvent)="submitSearch($event)" (selectEvent)="handleResultSelection($event)">
+				</ls-search-bar>
 			</nb-card-body>
 		</nb-card>
 	</div>
-	<ls-projects> </ls-projects>
+</div>
+<div class="row">
+    <div class="col-6">
+        <nb-card>
+            <nb-card-body>
+				<ls-funding-prompt (outPrompt)="prompt($event)">
+				</ls-funding-prompt>
+            </nb-card-body>
+        </nb-card>
+    </div>
+    <div class="col-6">
+		<nb-card>
+            <nb-card-body>
+				<ls-projects>
+				</ls-projects>
+            </nb-card-body>
+        </nb-card>
+	</div>
 </div>

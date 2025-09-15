@@ -3,9 +3,12 @@ import { CommonModule } from '@angular/common';
 import { SafeHtmlPipe } from './safe-html.pipe';
 import { RangePipe } from './range.pipe';
 import { SearchAutocompleteResultComponent } from './search-autocomplete-result/search-autocomplete-result.component';
-import { NbIconModule } from '@nebular/theme';
+import { NbAccordionModule, NbButtonModule, NbFormFieldModule, NbIconModule, NbInputModule, NbPopoverModule, NbListModule, NbPopoverDirective } from '@nebular/theme';
 import { StackedBarComponent } from './charts/stacked-bar/stacked-bar.component';
 import { ChordDiagramComponent } from './charts/chord-diagram/chord-diagram.component';
+import { FundingPromptComponent } from './funding/funding-prompt/funding-prompt.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TagComponent } from './funding/tag/tag.component';
 
 
 
@@ -15,12 +18,22 @@ import { ChordDiagramComponent } from './charts/chord-diagram/chord-diagram.comp
     RangePipe,
     SearchAutocompleteResultComponent,
     StackedBarComponent,
-    ChordDiagramComponent
+    ChordDiagramComponent,
+    FundingPromptComponent,
+    TagComponent
   ],
   imports: [
     CommonModule,
-
-    NbIconModule
+    FormsModule,
+    ReactiveFormsModule,
+    
+    NbIconModule,
+    NbPopoverModule,
+    NbButtonModule,
+    NbInputModule,
+    NbFormFieldModule,
+    NbAccordionModule,
+    NbListModule
   ],
   exports: [
     SafeHtmlPipe,
@@ -28,6 +41,7 @@ import { ChordDiagramComponent } from './charts/chord-diagram/chord-diagram.comp
     SearchAutocompleteResultComponent,
     StackedBarComponent,
     ChordDiagramComponent,
-  ]
+    FundingPromptComponent
+  ],
 })
 export class SharedModule { }

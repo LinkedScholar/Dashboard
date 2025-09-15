@@ -4,6 +4,8 @@ import { LsComponent } from './ls.component';
 import { LandingNotFoundComponent } from '../landing/landing-not-found/not-found.component';
 import { PersonProfileComponent } from './searcher/person-profile/person-profile.component';
 import { InstitutionProfileComponent } from './searcher/institution-profile/institution-profile.component';
+import { MatchedFundingsComponent } from './dashboard/matched-fundings/matched-fundings.component';
+import { SearcherPageComponent } from './searcher-page/searcher-page.component';
 const routes: Routes = [{
   path: '',
   component: LsComponent,
@@ -12,6 +14,14 @@ const routes: Routes = [{
       path: 'dashboard',
       loadChildren: () => import('./dashboard/dashboard.module')
         .then(m => m.DashboardModule)
+    },
+    {
+      path: 'searcher',
+      component: SearcherPageComponent,
+    },
+    {
+      path: 'funding',
+      component: MatchedFundingsComponent,
     },
     {
       path: 'person/:id',

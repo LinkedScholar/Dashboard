@@ -5,6 +5,7 @@ import { NbActionsModule, NbButtonModule, NbContextMenuModule, NbFormFieldModule
 import { LsRoutingModule } from './ls-routing.module';
 import { HeaderComponent } from './header/header.component';
 import { DesktopExperienceRequiredComponent } from './desktop-experience-required/desktop-experience-required.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { DesktopExperienceRequiredComponent } from './desktop-experience-require
 
   imports: [
     CommonModule,
+    ReactiveFormsModule,
 
     LsRoutingModule,
     
@@ -27,6 +29,6 @@ import { DesktopExperienceRequiredComponent } from './desktop-experience-require
     NbButtonModule,
     NbContextMenuModule,
     NbActionsModule
-  ]
+  ],
 })
 export class LsModule { }

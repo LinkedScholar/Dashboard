@@ -1,0 +1,18 @@
+<div style="margin: auto; width: 100%; gap: 3rem; display: flex; flex-direction: column;">
+    <div style="display: flex; align-items: end; justify-content: center;">
+        <h1 style="margin: 0;">Linked<span style="color: var(--text-primary-color);">Scholar</span></h1>
+        <h5 style="margin: 0; font-weight: 200; font-style: italic; font-family: serif; transform: translate(0, 0.5rem);">Searcher</h5>
+    </div>
+    <form (ngSubmit)="onFormSubmit()" style="display: flex;">
+        <nb-form-field style="margin: auto;">
+            <input nbInput type="text" fullWidth placeholder="Search for..." shape="round" size="large" (focus)="onInputFocus()" 
+                (blur)="onInputBlur()" [formControl]="searchControl" style="width: 50rem;">
+        </nb-form-field>
+    </form>
+    <div style="position: relative;" >
+        <ls-search-autocomplete-result style="overflow: hidden; overflow-y: auto; position: absolute; top: -3rem; width: 100%; margin: 1rem; max-height: 35vh; z-index: 1000;"
+        [results]="searchResults"
+        [query]="searchTerm"
+        (resultSelected)="handleResultSelection($event)" *ngIf="isInputFocused"></ls-search-autocomplete-result>
+    </div>
+</div>
