@@ -78,7 +78,7 @@
         <app-force-graph [data]="graphData" [width]="graphWidth" [height]="graphHeight"></app-force-graph>
         <div style="position: absolute; top: -1rem; right: 1rem; display: flex; align-items: center" class="group-by">
             <span style="padding-right: 1rem;"> Group by: </span>
-            <nb-select placeholder="Grouped by" [(selected)]="groupByOption" style="width: 9rem;">
+            <nb-select placeholder="Grouped by" [(selected)]="groupByOption" style="width: 9rem;" (selectedChange)="onGroupByChange()">
                 <nb-option *ngFor="let item of groupByOptions; let i = index" [value]="i">
                     {{ item }}
                 </nb-option>

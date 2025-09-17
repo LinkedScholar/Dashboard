@@ -11,7 +11,7 @@ import {
   EventEmitter
 } from '@angular/core';
 import * as d3 from 'd3';
-
+import * as d3_sampled from 'd3-force-sampled';
 export interface GraphNode extends d3.SimulationNodeDatum {
   x: any;
   y: any;
@@ -51,7 +51,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   @Input() width: number = 800;
   @Input() height: number = 600;
   @Input() nodeRadius: number = 20;
-  @Input() linkDistance: number = 200;
+  @Input() linkDistance: number = 50;
   @Input() chargeStrength: number = -100;
   @Input() enableDrag: boolean = true;
   @Input() enableZoom: boolean = true;
@@ -130,14 +130,14 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     this.simulation = d3.forceSimulation<GraphNode>(this.internalNodes)
       .force('link', d3.forceLink<GraphNode, GraphLink>(this.internalLinks)
         .id(d => d.id)
-        .distance(d => d.type === 'category' ? 0 : this.linkDistance))
+        .distance(d => d.type === 'category' ? 10 : this.linkDistance))
       
-      .force('charge', d3.forceManyBody().strength(d => d.type === 'category' ? 0 : this.chargeStrength))
+      .force('charge', d3_sampled.forceManyBodySampled().strength(d => d.type === 'category' ? 0 : this.chargeStrength))
       .force('collision', d3.forceCollide().radius(d => {
-        if (d.type === 'category') return 0; // No collision for category nodes
+        if (d.type === 'category') return this.nodeRadius/2; // No collision for category nodes
         return this.nodeRadius + 2;
-      })).force('x', d3.forceX())
-      .force('y', d3.forceY());
+      })).force('x', d3.forceX().strength(0.005))
+      .force('y', d3.forceY().strength(0.005));
 
 
     this.simulation.on('tick', () => this.ticked());
@@ -186,7 +186,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     const linkEnter = this.linkElements.enter()
       .append('line')
       .attr('class', (d: GraphLink) => `link ${d.type}`)
-      .attr('stroke-width', (d: GraphLink) => Math.sqrt(d.value))
+      .attr('stroke-width', (d: GraphLink) => Math.pow(d.value, 0.8)* 2)
       .on('click', (event: MouseEvent, d: GraphLink) => {
         event.stopPropagation();
         this.linkClick.emit(d);

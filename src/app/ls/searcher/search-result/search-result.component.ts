@@ -1,12 +1,10 @@
 
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MockResultsService } from '../../../shared/mock-results.service';
 import { BackendBridgeService } from '../../../shared/backend-bridge.service';
-import { group } from 'console';
-import { link } from 'fs';
 import { FormControl } from '@angular/forms';
 import { tap } from 'rxjs/operators';
+import { GraphData } from './graph-result/graph-result.component';
 
 
 
@@ -73,6 +71,7 @@ export class SearchResultComponent implements OnInit {
 
   loadingPage = true;
   authors = [];
+  articles = [];
 
   toggleFilters() {
     this.showFilters = !this.showFilters;
@@ -128,7 +127,11 @@ export class SearchResultComponent implements OnInit {
 
   searchAuthors(){
     this.loadingPage = true;
-    this.backendBridge.searchResult(this.searchTerm, this.searchOptions[this.selectedItem], this.sortOptions[this.sortOption],this.currentPage).subscribe(data => {
+    this.backendBridge.searchResult(
+        this.searchTerm,
+        this.searchOptions[this.selectedItem],
+        this.sortOptions[this.sortOption],
+        this.currentPage).subscribe(data => {
       this.maxPage = Math.ceil(data["total_count"] / this.pageSize);
       this.authors = data["authors"];
 
@@ -150,76 +153,57 @@ export class SearchResultComponent implements OnInit {
       let nodes = [];
       let category_nodes = [];
 
-      if (Array.isArray(data)) {
-        for (let i = 0; i < data.length; i++) {
-          let link = data[i];
-          links.push({
-            source: link[0],
-            target: link[1],
-            value: link[2]
-          })
-        }
-      } else {
-        console.error('Expected data to be an array, but it was not.');
+
+      for (let i = 0; i < data["links"].length; i++) {
+        let link = data["links"][i];
+        console.log(link)
+        links.push({
+          source: link['source'],
+          target: link['target'],
+          value: 1
+        })
       }
+
+      for (let i = 0; i < data["articles"].length; i++) {
+        let link = data["articles"][i];
+
+        nodes.push({
+          id: link,
+          name: '',
+          group: 0,
+          size: 1
+        })
+      }
+
+      this.articles = data["articles"];
 
       for (let i = 0; i < this.authors.length; i++) {
         let author = this.authors[i];
         let hash = 10;
-          if (author.affiliations != null) {
-            hash = this.simpleHash(author.affiliations[0].name, 10);
+        if (author.affiliations != null) {
+          hash = this.simpleHash(author.affiliations[0].name, 10);
         }
+        
         nodes.push({
           id: author.id,
           name: author.name,
           group: hash,
           size: author.paper_count
         })
-
-
-        if (this.groupByOption == 1) {
-          
-          if (author.affiliations != null){
-            let cat_name = author.affiliations[0].name;
-            let found = false;
-            hash = this.simpleHash(cat_name, 10);
-
-            for (let i = 0; i < category_nodes.length; i++) {
-              if (category_nodes[i].name == cat_name) {
-                found = true;
-                links.push({
-                  source: author.id,
-                  target: category_nodes[i].id,
-                  value: 1,
-                  type: 'category'
-                })
-              }
-            } 
-            if (!found && cat_name != null) {
-              category_nodes.push({
-                name: cat_name,
-                size: 200,
-                id: cat_name,
-                type: 'category',
-                group: hash
-              })
-
-              links.push({
-                source: author.id,
-                target: cat_name,
-                value: 1,
-                type: 'category'
-              })
-            }
-          }
-        }
       }
-
       
       this.graphData = {
         nodes: nodes,
         links: links,
         category_nodes: category_nodes
+      }
+
+      if (this.groupByOption == 1) {
+        this.graphData = this.getInstitutionGraphData();
+      }
+
+      if (this.groupByOption == 2) {
+        this.graphData = this.getTopicsGraphData();
       }
     })
   }
@@ -275,5 +259,166 @@ export class SearchResultComponent implements OnInit {
       s: this.sortOptions[this.sortOption].toLowerCase()
     }
     return queryParams;
+  }
+
+  onGroupByChange() {
+    console.log(this.groupByOption);
+    if (this.groupByOption == 0) { // Un-Grouped
+      // delete links that have type category
+      let nodes = this.graphData.nodes;
+      let links = this.graphData.links.filter(link => {
+        return link.type != 'category';
+      })
+      this.graphData = {
+        nodes: nodes,
+        links: links,
+        category_nodes: []
+      }
+    }
+
+    if (this.groupByOption == 1) { // Grouped by Affiliation
+      this.graphData = this.getInstitutionGraphData();
+    }
+
+    if (this.groupByOption == 2) { // Grouped by Topic
+      this.graphData = this.getTopicsGraphData();
+    }
+
+    
+  }
+
+  getInstitutionGraphData() : GraphData {
+      let co_author_links = this.graphData.links.filter(link => {
+        return link.type  != 'category';
+      });
+      let links = [];
+      let category_nodes = [];
+      let nodes = [];
+      for (let i = 0; i < this.authors.length; i++) {
+        let author = this.authors[i];
+        let hash = 10;
+        if (author.affiliations != null) {
+          hash = this.simpleHash(author.affiliations[0].name, 10);
+        }
+        nodes.push({
+          id: author.id,
+          name: author.name,
+          group: hash,
+          size: author.paper_count
+        })
+        if (author.affiliations != null){
+          let cat_name = author.affiliations[0].name;
+          let found = false;
+          hash = this.simpleHash(cat_name, 10);
+  
+          for (let i = 0; i < category_nodes.length; i++) {
+            if (category_nodes[i].name == cat_name) {
+              found = true;
+              links.push({
+                source: author.id,
+                target: category_nodes[i].id,
+                value: 1,
+                type: 'category'
+              })
+            }
+          } 
+          if (!found && cat_name != null) {
+            category_nodes.push({
+              name: cat_name,
+              size: 200,
+              id: cat_name,
+              type: 'category',
+              group: hash
+            })
+  
+            links.push({
+              source: author.id,
+              target: cat_name,
+              value: 1,
+              type: 'category'
+            })
+          }
+        }
+      }
+
+      for (let i = 0; i < this.articles.length; i++) {
+        const article = this.articles[i];
+        nodes.push({
+          id: article,
+          name: '',
+          group: 0,
+          size: 1
+        })
+      }
+    return {
+      nodes: nodes,
+      links: links.concat(co_author_links),
+      category_nodes: category_nodes
+    }
+  }
+
+  getTopicsGraphData() : GraphData {
+    let links = this.graphData.links.filter(link => {
+      return link.type != 'category';
+    });
+    let category_nodes = [];
+    let nodes = this.graphData.nodes;
+
+    let topics = [];
+
+    for (let i = 0; i < this.authors.length; i++) {
+      let author = this.authors[i];
+      let research_areas = author.research_areas;
+      for (let j = 0; j < research_areas.length; j++) {
+        let topic = research_areas[j];
+        let found = false;
+        for (let k = 0; k < topics.length; k++) {
+          if (topics[k] == topic) {
+            found = true;
+          }
+        }
+        if (!found) {
+          topics.push(topic);
+        }
+      }
+    }
+
+
+    for (let i = 0; i < topics.length; i++) {
+      let topic = topics[i];
+      let hash = this.simpleHash(topic, 10);
+      category_nodes.push({
+        name: topic,
+        size: 200,
+        id: topic,
+        type: 'category',
+        group: hash
+      })
+    }
+
+    for (let i = 0; i < category_nodes.length; i++) {
+      let cat_node = category_nodes[i];
+      for (let j = 0; j < this.authors.length; j++) {
+        let author = this.authors[j];
+        for (let k = 0; k < author.research_areas.length; k++) {
+          let topic = author.research_areas[k];
+          if (topic == cat_node.name) {
+            links.push({
+              source: author.id,
+              target: cat_node.id,
+              value: 1,
+              type: 'category'
+            })
+          }
+        }
+      }
+    }
+
+    return {
+      nodes: nodes,
+      links: links,
+      category_nodes: category_nodes
+    }
+
   }
 }
