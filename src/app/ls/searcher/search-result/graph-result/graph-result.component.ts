@@ -13,6 +13,8 @@ import {
 import * as d3 from 'd3';
 import * as d3_sampled from 'd3-force-sampled';
 export interface GraphNode extends d3.SimulationNodeDatum {
+  fx: null;
+  fy: null;
   x: any;
   y: any;
   id: string;
@@ -109,18 +111,72 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     // Create main group for zoom/pan
     this.g = this.svg.append('g');
 
+    const defs = this.svg.append("defs");
+    const pattern = defs.append("pattern")
+      .attr("id", "grid")
+      .attr("width", 50)
+      .attr("height", 50)
+      .attr("patternUnits", "userSpaceOnUse");
+
+    pattern.append("path")
+      .attr("d", "M 50 0 L 0 0 0 50")
+      .attr("fill", "none")
+      .attr("stroke", "var(--color-primary-transparent-200)")
+      .attr("stroke-width", 3);
+
+    // Apply grid as background to the zoomable group (not the SVG)
+    this.g.append("rect")
+      .attr("x", -this.width * 2)  // Extend beyond visible area
+      .attr("y", -this.height * 2)
+      .attr("width", this.width * 4)  // Make it larger than viewport
+      .attr("height", this.height * 4)
+      .attr("fill", "url(#grid)")
+      .attr("class", "grid-background");
+
+    const radialGradient = defs.append("radialGradient")
+      .attr("id", "radialFade")
+      .attr("cx", "50%")  // Center X
+      .attr("cy", "50%")  // Center Y
+      .attr("r", "70%");  // Radius of the gradient
+
+    // Add gradient stops
+    radialGradient.append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "var(--background-basic-color-2)")
+      .attr("stop-opacity", "0");  // Fully transparent at center
+    radialGradient.append("stop")
+      .attr("offset", "70%")
+      .attr("stop-color", "var(--background-basic-color-2)")
+      .attr("stop-opacity", "0.2");  // Opaque at edges
+    radialGradient.append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "var(--background-basic-color-2)")
+      .attr("stop-opacity", ".9");  // Opaque at edges
+
+    // Add the overlay rectangle AFTER the zoom group
+    // so it appears on top
+    this.svg.append("rect")
+      .attr("class", "radial-overlay")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", this.width)
+      .attr("height", this.height)
+      .attr("fill", "url(#radialFade)")
+      .attr("pointer-events", "none");
+
     // Setup zoom if enabled
     if (this.enableZoom) {
       this.zoom = d3.zoom()
-        .scaleExtent([0.1, 4])
+        .scaleExtent([0.33, 3])
         .on('zoom', (event) => {
           this.g.attr('transform', event.transform);
-          this.updateLabelBackgrounds();
           this.updateLabelsVisibility(this.getCurrentZoomScale());
+          this.updateLabelBackgrounds();
         });
       
       this.svg.call(this.zoom);
     }
+
 
     // Create groups for links and nodes (order matters for layering)
     this.g.append('g').attr('class', 'links');
@@ -128,22 +184,20 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     // Initialize simulation
     this.simulation = d3.forceSimulation<GraphNode>(this.internalNodes)
-      .force('link', d3.forceLink<GraphNode, GraphLink>(this.internalLinks)
-        .id(d => d.id)
-        .distance(d => d.type === 'category' ? 10 : this.linkDistance))
-      
-      .force('charge', d3_sampled.forceManyBodySampled().strength(d => d.type === 'category' ? 0 : this.chargeStrength))
+      .force('charge', d3_sampled.forceManyBodySampled().strength(this.chargeStrength))
       .force('collision', d3.forceCollide().radius(d => {
-        if (d.type === 'category') return this.nodeRadius/2; // No collision for category nodes
-        return this.nodeRadius + 2;
-      })).force('x', d3.forceX().strength(0.005))
-      .force('y', d3.forceY().strength(0.005));
+        return d.size/2 + 2;
+      }))
+      .force("x",  d3.forceX().strength(0.01))
+      .force("y",  d3.forceY().strength(0.01));
 
 
     this.simulation.on('tick', () => this.ticked());
 
     // Initial data load
     this.updateData();
+
+
   }
 
   private updateData(): void {
@@ -166,8 +220,8 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     this.simulation.nodes(this.internalNodes);
     this.simulation.force('link', d3.forceLink<GraphNode, GraphLink>(this.internalLinks)
       .id(d => d.id)
-      .distance(d => d.type === 'category' ? 0 : this.linkDistance))
-    
+      .distance(d => d.type === 'category' ? 150 : this.linkDistance));
+      
     // Restart simulation
     this.simulation.alpha(1).restart();
     this.updateLabelBackgrounds();
@@ -234,6 +288,8 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
       })
       .on('dblclick', (event: MouseEvent, d: GraphNode) => {
         event.stopPropagation();
+        d.fx = null;
+        d.fy = null;
         this.nodeDoubleClick.emit(d);
       });
 
@@ -282,6 +338,13 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
       .attr('width', this.width)
       .attr('height', this.height)
       .attr('viewBox', `${-this.width / 2} ${-this.height / 2} ${this.width} ${this.height}`)
+    
+    this.svg.select('.radial-overlay')
+      .attr('width', this.width)
+      .attr('height', this.height)
+      .attr('x', -this.width / 2)
+      .attr('y', -this.height / 2);
+
 
     this.simulation
       .alpha(1)
@@ -330,7 +393,6 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.nodeElements) return;
 
     const shouldShowLabels = scale >= this.labelVisibilityThreshold;
-    const opacity = shouldShowLabels ? 1 : 0;
     
     this.g.select('.nodes')
     .selectAll('text')
@@ -351,13 +413,17 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
         group.select('text').
         attr('font-size', (d) => .8/scale + 'rem'); // Dynamic size so it is always readable
         const bgRect = group.select('.label-background');
-        if (textNode && !bgRect.empty()) {
+        if (textNode && !bgRect.empty() && group.select('text').data()[0].name != "") {
           const bbox = textNode.getBBox();
           bgRect
             .attr('x', bbox.x - 4)
             .attr('y', bbox.y - 2)
             .attr('width', bbox.width + 8)
             .attr('height', bbox.height + 4);
+        }
+        else {
+          bgRect
+            .attr('visibility', 'hidden');
         }
       });
   }

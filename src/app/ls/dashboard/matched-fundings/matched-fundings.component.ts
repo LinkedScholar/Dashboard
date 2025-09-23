@@ -146,7 +146,6 @@ export class MatchedFundingsComponent implements OnInit{
         this.fundings.push(parsedFunding)
       }
 
-      console.log(this.fundings);
     })
   }
 

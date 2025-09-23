@@ -97,7 +97,6 @@ export class ProjectsComponent implements OnInit {
   ngOnInit(): void {
     this.fundingBackend.getSampleProjects().subscribe((data: ProjectsResponse) => {
       this.projects = data.data.projects;
-      console.log(this.projects);
     });
 
   }

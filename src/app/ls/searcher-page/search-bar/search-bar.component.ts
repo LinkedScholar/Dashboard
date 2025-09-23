@@ -55,8 +55,6 @@ export class SearchBarComponent implements OnInit{
       event.preventDefault(); // Crucially, prevent the default form submission
     }
     this.backendBridge.getBestType(this.searchTerm).subscribe(data => {
-      console.log(data);
-      console.log(this.findClosestKey(data, this.searchTerm));
       const searchElement = {
         name: this.searchTerm,
         type: this.findClosestKey(data, this.searchTerm)

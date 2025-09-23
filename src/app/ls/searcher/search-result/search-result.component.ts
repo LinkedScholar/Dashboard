@@ -91,7 +91,6 @@ export class SearchResultComponent implements OnInit {
     this.graphData = null;
 
     this.resizeObserver = new ResizeObserver(entries => {
-      console.log(entries);
       for (const entry of entries) {
         this.graphWidth = entry.contentRect.width;
         this.graphHeight = entry.contentRect.height;
@@ -156,7 +155,6 @@ export class SearchResultComponent implements OnInit {
 
       for (let i = 0; i < data["links"].length; i++) {
         let link = data["links"][i];
-        console.log(link)
         links.push({
           source: link['source'],
           target: link['target'],
@@ -262,7 +260,6 @@ export class SearchResultComponent implements OnInit {
   }
 
   onGroupByChange() {
-    console.log(this.groupByOption);
     if (this.groupByOption == 0) { // Un-Grouped
       // delete links that have type category
       let nodes = this.graphData.nodes;
