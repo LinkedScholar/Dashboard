@@ -44,8 +44,9 @@ export class PersonPublicationsGraphComponent implements OnChanges{
       nodes.push({
         id: paper.id,
         name: paper.title,
+        group: 10,
         size: 10,
-        kind: 'article'
+        type: 'article'
       })
     }
 
