@@ -95,9 +95,7 @@
                                         </ls-chord-diagram>
                                     </div>
                                     <div class="col">
-                                        <nb-list nbInfiniteList
-                                            [threshold]="100"
-                                            (bottomThreshold)="loadNext()"
+                                        <nb-list
                                             style="max-height: 50vh;">
                                             <nb-list-item *ngFor="let coAuthor of coAuthors">
                                                 <div (click)="navigateToPerson(coAuthor[0])" style="cursor: pointer;">

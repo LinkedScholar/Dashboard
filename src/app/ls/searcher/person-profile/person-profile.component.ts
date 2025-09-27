@@ -88,8 +88,8 @@ export class PersonProfileComponent implements OnInit{
 
   resizeObserver: ResizeObserver;
 
-  graphWidth = 0;
-  graphHeight = 0;
+  graphWidth = 800;
+  graphHeight = 600;
   
   constructor(
     private router: Router,
