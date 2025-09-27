@@ -54,7 +54,7 @@ export class ChordDiagramComponent implements OnInit, OnChanges{
     // Ribbons
     const ribbon = d3.ribbon().radius(this.innerRadius);
     const sum = d3.sum(Object.assign(this.matrix).flat());
-    const tickStep = d3.tickStep(0, sum, 50);
+    const tickStep = d3.tickStep(0, sum/2, sum/2); // DONT KNOW WHY
 
 
     this.svg.append('g')

@@ -1,10 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MockResultsService } from '../../../shared/mock-results.service';
 import { BackendBridgeService } from '../../../shared/backend-bridge.service';
 import { Title } from '@angular/platform-browser';
-import { map } from 'leaflet';
-
 function simpleHash(inputString, maxValue = 10000) {
   // Initialize the hash value
   let hash = 0;
@@ -58,6 +56,8 @@ export interface PaperData {
 })
 export class PersonProfileComponent implements OnInit{
 
+  @ViewChild('personGraphContainer', { static: true }) graphContainer: ElementRef;
+
   personId: string;
   personName: string = "...";
   personPicture: string; // TODO: FIXME
@@ -85,6 +85,11 @@ export class PersonProfileComponent implements OnInit{
   coAuthorsPlaceholers = [];
   currentPage = 1;
   loadingPages = true;
+
+  resizeObserver: ResizeObserver;
+
+  graphWidth = 0;
+  graphHeight = 0;
   
   constructor(
     private router: Router,
@@ -145,6 +150,14 @@ export class PersonProfileComponent implements OnInit{
     this.hIndex = simpleHash(this.personId + "hIndex", 100);
     this.i10Index = simpleHash(this.personId + "i10Index", 100);
     this.sociabilityIndex = simpleHash(this.personId + "sociabilityIndex", 100);
+
+    this.resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        this.graphWidth = entry.contentRect.width;
+        this.graphHeight = entry.contentRect.height;
+      }
+    });
+    this.resizeObserver.observe(this.graphContainer.nativeElement);
   }
 
   restartVariables() {

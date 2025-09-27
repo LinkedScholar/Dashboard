@@ -10,6 +10,7 @@ import {
   Output,
   EventEmitter
 } from '@angular/core';
+
 import * as d3 from 'd3';
 import * as d3_sampled from 'd3-force-sampled';
 export interface GraphNode extends d3.SimulationNodeDatum {
@@ -49,12 +50,13 @@ export interface GraphData {
 export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('container', { static: true }) containerRef!: ElementRef;
 
+
   @Input() data: GraphData = { nodes: [], links: [], category_nodes: [] };
   @Input() width: number = 800;
   @Input() height: number = 600;
   @Input() nodeRadius: number = 20;
   @Input() linkDistance: number = 50;
-  @Input() chargeStrength: number = -100;
+  @Input() chargeStrength: number = -300;
   @Input() enableDrag: boolean = true;
   @Input() enableZoom: boolean = true;
 
@@ -186,10 +188,10 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     this.simulation = d3.forceSimulation<GraphNode>(this.internalNodes)
       .force('charge', d3_sampled.forceManyBodySampled().strength(this.chargeStrength))
       .force('collision', d3.forceCollide().radius(d => {
-        return d.size/2 + 2;
+        return d.size/2 + 5;
       }))
-      .force("x",  d3.forceX().strength(0.01))
-      .force("y",  d3.forceY().strength(0.01));
+      .force("x",  d3.forceX().strength(0.004))
+      .force("y",  d3.forceY().strength(0.015));
 
 
     this.simulation.on('tick', () => this.ticked());
@@ -220,7 +222,8 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     this.simulation.nodes(this.internalNodes);
     this.simulation.force('link', d3.forceLink<GraphNode, GraphLink>(this.internalLinks)
       .id(d => d.id)
-      .distance(d => d.type === 'category' ? 150 : this.linkDistance));
+      .distance(d => d.type === 'category' ? 100 : this.linkDistance)
+      .strength(0.1));
       
     // Restart simulation
     this.simulation.alpha(1).restart();
@@ -264,9 +267,12 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     // Add circles
     nodeEnter.append('circle')
-      .attr('r', (d: GraphNode) => 5* Math.sqrt(d.size) || this.nodeRadius)
-      .attr('fill', (d: GraphNode) => d.color || d3.schemeCategory10[d.group % 10])
-      .attr('opacity', (d: GraphNode) => d.type === 'category' ? 0.3 : 1);
+      .attr('r', (d: GraphNode) => 3* Math.sqrt(d.size) || this.nodeRadius)
+      .attr('fill', (d: GraphNode) => {
+        if (d.type ==='article') return "var(--background-basic-color-4)";
+        return d.color || d3.schemeCategory10[d.group % 10]
+      })
+      .attr('opacity', (d: GraphNode) => d.type === 'category' ? 0.8 : 1);
 
     nodeEnter.append('rect')
       .attr('width', 0)
@@ -432,5 +438,20 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.enableZoom || !this.svg) return 1;
     const transform = d3.zoomTransform(this.svg.node());
     return transform.k;
+  }
+
+  public goToNode(id : string) {
+    
+    let node = this.internalNodes.find(n => n.id === id);
+    let targetX = node.x;
+    let targetY = node.y;
+
+    const targetScale = 4;
+
+    this.svg.transition()
+    .duration(750)
+    .call(this.zoom.transform, d3.zoomIdentity.translate(-targetScale*targetX, -targetScale*targetY).scale(targetScale));
+
+
   }
 }

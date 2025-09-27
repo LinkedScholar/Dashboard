@@ -1,10 +1,10 @@
 
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BackendBridgeService } from '../../../shared/backend-bridge.service';
 import { FormControl } from '@angular/forms';
 import { tap } from 'rxjs/operators';
-import { GraphData } from './graph-result/graph-result.component';
+import { ForceGraphComponent, GraphData } from './graph-result/graph-result.component';
 
 
 
@@ -13,9 +13,10 @@ import { GraphData } from './graph-result/graph-result.component';
   templateUrl: './search-result.component.html',
   styleUrls: ['./search-result.component.scss']
 })
-export class SearchResultComponent implements OnInit {
+export class SearchResultComponent implements OnInit, AfterViewInit {
 
   @ViewChild('graphContainer', { static: true }) private graphContainer!: ElementRef;
+  @ViewChild(ForceGraphComponent, { static: true }) private graphComponent!: ForceGraphComponent;
   private resizeObserver!: ResizeObserver;
 
   constructor(
@@ -85,6 +86,11 @@ export class SearchResultComponent implements OnInit {
     }
     return 0;
   }
+
+  ngAfterViewInit() {
+    // This lifecycle hook ensures the child component is initialized
+  }
+
   ngOnInit() {
 
     this.authors = [];
@@ -125,6 +131,7 @@ export class SearchResultComponent implements OnInit {
   }
 
   searchAuthors(){
+    this.authors = [];
     this.loadingPage = true;
     this.backendBridge.searchResult(
         this.searchTerm,
@@ -147,33 +154,46 @@ export class SearchResultComponent implements OnInit {
   }
 
   getNodesFromAuthors(author_ids) {
+
+    let links = [];
+    let nodes = [];
+    let category_nodes = [];
+
+    for (let i = 0; i < this.authors.length; i++) {
+      let author = this.authors[i];
+      let hash = 10;
+      if (author.affiliations != null) {
+        hash = this.simpleHash(author.affiliations[0].name, 10);
+      }
+      
+      nodes.push({
+        id: author.id,
+        name: author.name,
+        group: hash,
+        size: author.paper_count
+      })
+    }
+    
+    this.graphData = {
+      nodes: nodes,
+      links: links,
+      category_nodes: category_nodes
+    }
+
+    if (this.groupByOption == 1) {
+      this.graphData = this.getInstitutionGraphData();
+    }
+
+    if (this.groupByOption == 2) {
+      this.graphData = this.getTopicsGraphData();
+    }
+
+    /*
     this.backendBridge.getConnectivity(author_ids).subscribe(data => {
+
       let links = [];
       let nodes = [];
       let category_nodes = [];
-
-
-      for (let i = 0; i < data["links"].length; i++) {
-        let link = data["links"][i];
-        links.push({
-          source: link['source'],
-          target: link['target'],
-          value: 1
-        })
-      }
-
-      for (let i = 0; i < data["articles"].length; i++) {
-        let link = data["articles"][i];
-
-        nodes.push({
-          id: link,
-          name: '',
-          group: 0,
-          size: 1
-        })
-      }
-
-      this.articles = data["articles"];
 
       for (let i = 0; i < this.authors.length; i++) {
         let author = this.authors[i];
@@ -203,7 +223,40 @@ export class SearchResultComponent implements OnInit {
       if (this.groupByOption == 2) {
         this.graphData = this.getTopicsGraphData();
       }
+
+      for (let i = 0; i < data["links"].length; i++) {
+        let link = data["links"][i];
+        links.push({
+          source: link['source'],
+          target: link['target'],
+          value: 1
+        })
+      }
+
+      for (let i = 0; i < data["articles"].length; i++) {
+        let link = data["articles"][i];
+
+        nodes.push({
+          id: link,
+          name: '',
+          group: 0,
+          size: 1,
+          type: 'article',
+        })
+      }
+
+      this.articles = data["articles"];
+      
+      const pre_cat = this.graphData.category_nodes;
+      const pre_links = this.graphData.links;
+      
+      this.graphData = {
+        nodes: nodes,
+        links: pre_links,
+        category_nodes: pre_cat
+      }
     })
+    */
   }
 
   simpleHash(inputString, maxValue = 10000) {
@@ -295,6 +348,7 @@ export class SearchResultComponent implements OnInit {
         let author = this.authors[i];
         let hash = 10;
         if (author.affiliations != null) {
+          // We use first affiliation as siyrce if color
           hash = this.simpleHash(author.affiliations[0].name, 10);
         }
         nodes.push({
@@ -304,37 +358,40 @@ export class SearchResultComponent implements OnInit {
           size: author.paper_count
         })
         if (author.affiliations != null){
-          let cat_name = author.affiliations[0].name;
-          let found = false;
-          hash = this.simpleHash(cat_name, 10);
-  
-          for (let i = 0; i < category_nodes.length; i++) {
-            if (category_nodes[i].name == cat_name) {
-              found = true;
+          for (let i = 0; i < Math.min(3 ,author.affiliations.length); i++) {
+            let cat_name = author.affiliations[i].name;
+            let found = false;
+            hash = this.simpleHash(cat_name, 10);
+    
+            for (let i = 0; i < category_nodes.length; i++) {
+              if (category_nodes[i].name == cat_name) {
+                found = true;
+                links.push({
+                  source: author.id,
+                  target: category_nodes[i].id,
+                  value: 1,
+                  type: 'category'
+                })
+              }
+            } 
+            if (!found && cat_name != null) {
+              category_nodes.push({
+                name: cat_name,
+                size: 200,
+                id: cat_name,
+                type: 'category',
+                group: hash
+              })
+    
               links.push({
                 source: author.id,
-                target: category_nodes[i].id,
+                target: cat_name,
                 value: 1,
                 type: 'category'
               })
             }
-          } 
-          if (!found && cat_name != null) {
-            category_nodes.push({
-              name: cat_name,
-              size: 200,
-              id: cat_name,
-              type: 'category',
-              group: hash
-            })
-  
-            links.push({
-              source: author.id,
-              target: cat_name,
-              value: 1,
-              type: 'category'
-            })
           }
+          
         }
       }
 
@@ -344,7 +401,8 @@ export class SearchResultComponent implements OnInit {
           id: article,
           name: '',
           group: 0,
-          size: 1
+          size: 1,
+          type: 'article'
         })
       }
     return {
@@ -417,5 +475,9 @@ export class SearchResultComponent implements OnInit {
       category_nodes: category_nodes
     }
 
+  }
+
+  goToGraph(id: string, kind: string) {
+    this.graphComponent.goToNode(id);
   }
 }

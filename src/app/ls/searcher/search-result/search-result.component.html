@@ -56,7 +56,8 @@
                             </nb-list-item>
                             <nb-list-item style="margin: 0; padding: 0;">
                                 <ls-author-list
-                                    [authors] = "authors">
+                                    [authors] = "authors"
+                                    (search)="goToGraph($event.id, $event.kind)">
                                     
                                 </ls-author-list>
                             </nb-list-item>

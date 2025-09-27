@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NbAccordionModule, NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbLayoutModule, NbListModule, NbSelectModule, NbTabsetModule, NbThemeModule, NbUserModule } from '@nebular/theme';
+import { NbAccordionModule, NbButtonModule, NbCardModule, NbFormFieldModule, NbIconModule, NbInputModule, NbLayoutModule, NbListModule, NbPopoverModule, NbSelectModule, NbTabsetModule, NbThemeModule, NbUserModule } from '@nebular/theme';
 import { SearchResultComponent } from './search-result/search-result.component';
 import { ForceGraphComponent } from './search-result/graph-result/graph-result.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -12,6 +12,7 @@ import { InstitutionProfileComponent } from './institution-profile/institution-p
 import { UserPlaceHolderComponent } from './user-place-holder/user-place-holder.component';
 import { PagingFooterComponent } from './paging-footer/paging-footer.component';
 import { AuthorListComponent } from './search-result/author-list/author-list.component';
+import { PersonPublicationsGraphComponent } from './person-profile/person-publications-graph/person-publications-graph.component';
 
 
 
@@ -24,7 +25,8 @@ import { AuthorListComponent } from './search-result/author-list/author-list.com
     InstitutionProfileComponent,
     UserPlaceHolderComponent,
     PagingFooterComponent,
-    AuthorListComponent
+    AuthorListComponent,
+    PersonPublicationsGraphComponent,
   ],
   imports: [
     CommonModule,
@@ -45,6 +47,7 @@ import { AuthorListComponent } from './search-result/author-list/author-list.com
     NbAccordionModule,
     NbTabsetModule,
     NbLayoutModule,
+    NbPopoverModule,
 
     SharedModule
     

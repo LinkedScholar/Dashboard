@@ -3,13 +3,44 @@
         <div style="display: flex; flex-direction: row; gap: 1rem;">
             <nb-user onlyPicture [name]="result.name" size="large"></nb-user>
             <div class="info">
+                <a style="cursor: pointer;"
+                    [nbPopover]="namePopOver"
+                    nbPopoverPlacement="right">{{result.name}}</a>
+                <ng-template #namePopOver>
+                    <nb-list>
+                        <nb-list-item (click)="goToProfile(result.id)" style="cursor: pointer;">
+                            Show profile
+                        </nb-list-item>
+                        <nb-list-item (click)="goToGraph(result.id, 'person')" style="cursor: pointer;">
+                            Show in graph
+                        </nb-list-item>
+                    </nb-list>
+                </ng-template>
+                <div  *ngFor="let university of result.affiliations">
+                    <a style="cursor: pointer; font-style: italic; font-size: smaller;"
+                    *ngIf="university.name"
+                    [nbPopover]="instPopOver"
+                    nbPopoverPlacement="right">{{university.name}} - Professor</a>
+                    <ng-template #instPopOver>
+                        <nb-list>
+                            <nb-list-item (click)="goToInstitution(university.id)" style="cursor: pointer;">
+                                Show institution
+                            </nb-list-item>
+                            <nb-list-item (click)="goToGraph(university.id, 'institution')" style="cursor: pointer;">
+                                Show in graph
+                            </nb-list-item>
+                        </nb-list>
+                    </ng-template>
+                </div>
+                <!--
                 <a style="cursor: pointer;" (click)="goToProfile(result.id)">{{result.name}}</a>
                 <div  *ngFor="let university of result.affiliations">
                     <a style="cursor: pointer;" (click)="goToProfile(result.id)">{{university.name}} - Professor</a>
                 </div>
+                -->
             </div>
         </div>
-        <div style="display: flex; flex-direction: column; gap: 0.1rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.1rem; width: 6rem;">
             <span class="stat">#Citations: {{result.citation_count}}</span> 
             <span class="stat">#Papers: {{result.paper_count}}</span>
         </div>

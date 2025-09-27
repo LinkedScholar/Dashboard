@@ -13,7 +13,7 @@
         </nb-form-field>
     </form>
     <div style="position: relative;" >
-        <ls-search-autocomplete-result style="overflow: hidden; overflow-y: auto; position: absolute; top: -3rem; width: 100%; margin: 1rem; max-height: 35vh; z-index: 1000;"
+        <ls-search-autocomplete-result style="overflow: hidden; overflow-y: auto; position: absolute; top: 0; width: 100%; margin: 1rem; max-height: 35vh; z-index: 1000;"
         [results]="searchResults"
         [query]="searchTerm"
         (resultSelected)="handleResultSelection($event)" *ngIf="isInputFocused"></ls-search-autocomplete-result>

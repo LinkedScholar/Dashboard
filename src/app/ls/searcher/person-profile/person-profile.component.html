@@ -121,7 +121,37 @@
                 </div>
             </nb-tab>
             <nb-tab tabTitle="Publications" style="padding: 0;">
-                
+                <div class="row">
+                    <div class="col-4">
+                        <nb-card>
+                            <nb-card-body>
+                                <h5>Publications</h5>
+                                <nb-list style="max-height: 75vh;">
+                                    <nb-list-item *ngIf="nPages > 1">
+                                        <ls-paging-footer
+                                            [currentPage]="currentPage" [maxPage]="nPages" (search)="handleNewPage($event)" [disabled]="loadingPages"></ls-paging-footer>
+                                    </nb-list-item>
+                                    <nb-list-item *ngFor="let paper of papers" style="display: flex; flex-direction: column; align-items: start;">
+                                        <p><strong>{{paper.title}}</strong></p>
+                                        <p><strong>Citations: </strong>{{paper.citations}} <strong>Year: </strong> {{paper.year}}</p>
+                                        <p style="font-size: smaller;"><strong>Authors: </strong><a style="cursor: pointer;" *ngFor="let author of paper.co_authors" (click)='navigateToPerson(author.id)'>{{author.name}}, </a></p>
+                                        <p style="font-size: smaller;" *ngIf="(paper.keywords.length > 0)"><strong>Keywords: </strong><span *ngFor="let keyword of paper.keywords">{{keyword}}, </span></p>
+                                        <p style="font-size: smaller;" *ngIf="paper.venue"><strong>Venue: </strong><a style="cursor: pointer;" (click)="navigateToVenue(paper.venue.name)">{{paper.venue.name}}</a></p>
+                                    </nb-list-item>
+                                    <nb-list-item *ngIf="nPages > 1">
+                                        <ls-paging-footer
+                                            [currentPage]="currentPage" [maxPage]="nPages" (search)="handleNewPage($event)" [disabled]="loadingPages"></ls-paging-footer>
+                                    </nb-list-item>
+                                </nb-list>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                    <div #personGraphContainer class="col-8" style="position: relative; height: calc(100vh - 9.5rem); display: flex; border-radius: var(--border-radius); box-shadow: var(--shadow); padding: 0;">
+                        <ls-person-publications-graph [graphWidth]="graphWidth" [graphHeight]="graphHeight" [papers]="papers">
+
+                        </ls-person-publications-graph>
+                    </div>
+                </div>
             </nb-tab>
             <nb-tab tabTitle="Network" style="padding: 0;">
 
