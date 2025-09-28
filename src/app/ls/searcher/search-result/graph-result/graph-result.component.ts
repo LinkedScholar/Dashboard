@@ -56,7 +56,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   @Input() height: number = 600;
   @Input() nodeRadius: number = 10;
   @Input() linkDistance: number = 50;
-  @Input() chargeStrength: number = -300;
+  @Input() chargeStrength: number = -100;
   @Input() enableDrag: boolean = true;
   @Input() enableZoom: boolean = true;
 
@@ -75,7 +75,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   // Internal data copies
   private internalNodes: GraphNode[] = [];
   private internalLinks: GraphLink[] = [];
-  labelVisibilityThreshold: number = 4;
+  labelVisibilityThreshold: number = 3;
 
   ngOnInit(): void {
     this.initializeGraph();
