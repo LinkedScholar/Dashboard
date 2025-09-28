@@ -48,6 +48,22 @@ export interface PaperData {
   co_authors: Person[];
 }
 
+interface Article  {
+  id: string;
+  name: string;
+}
+
+interface CoAuthor {
+  aff_name: string | null;
+  id: string;
+  name: string;
+}
+
+export interface NetworkResponse {
+  article : Article
+  co_authors : CoAuthor[]
+}
+
 
 @Component({
   selector: 'ls-person-profile',
@@ -90,6 +106,8 @@ export class PersonProfileComponent implements OnInit{
 
   graphWidth = 800;
   graphHeight = 600;
+
+  network : NetworkResponse[] = [];
   
   constructor(
     private router: Router,
@@ -143,6 +161,10 @@ export class PersonProfileComponent implements OnInit{
           console.error('Error fetching data:', error);
         }
       );
+
+      this.backendBridge.getPersonNetwork(this.personId).subscribe((data: NetworkResponse[]) => {
+        this.network = data;
+      })
     });
 
     // RANDOM VALUES for gIndex and others

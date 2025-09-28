@@ -23,7 +23,7 @@
 
 :host ::ng-deep .node .category-label{
   fill: var(--text-basic-color);
-  transform: translateY(4rem);
+  transform: translateY(2rem);
 }
 
 :host ::ng-deep .node .label-background{
@@ -36,7 +36,7 @@
 
 :host ::ng-deep .node .category-label-background{
   fill: var(--background-basic-color-1);
-  transform: translateY(4rem);
+  transform: translateY(2rem);
   opacity: 0.9;
   rx: 5;
   ry: 5;

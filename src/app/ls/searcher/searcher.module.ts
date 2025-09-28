@@ -13,6 +13,7 @@ import { UserPlaceHolderComponent } from './user-place-holder/user-place-holder.
 import { PagingFooterComponent } from './paging-footer/paging-footer.component';
 import { AuthorListComponent } from './search-result/author-list/author-list.component';
 import { PersonPublicationsGraphComponent } from './person-profile/person-publications-graph/person-publications-graph.component';
+import { PersonNetworkGraphComponent } from './person-profile/person-network-graph/person-network-graph.component';
 
 
 
@@ -27,6 +28,7 @@ import { PersonPublicationsGraphComponent } from './person-profile/person-public
     PagingFooterComponent,
     AuthorListComponent,
     PersonPublicationsGraphComponent,
+    PersonNetworkGraphComponent,
   ],
   imports: [
     CommonModule,

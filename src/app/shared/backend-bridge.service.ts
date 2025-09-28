@@ -40,6 +40,10 @@ export class BackendBridgeService {
     );
   }
 
+  getPersonNetwork(personId: string) {
+    return this.http.get(`/api/getPersonNetwork/${personId}`);
+  }
+
   getCoAuthors(personId: string, skip: number = 0) {
     const obj = {skip: skip};
     const httpParams = new HttpParams({ fromObject: obj });

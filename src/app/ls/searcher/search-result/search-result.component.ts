@@ -377,7 +377,7 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
             if (!found && cat_name != null) {
               category_nodes.push({
                 name: cat_name,
-                size: 200,
+                size: 50,
                 id: cat_name,
                 type: 'category',
                 group: hash
@@ -444,7 +444,7 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
       let hash = this.simpleHash(topic, 10);
       category_nodes.push({
         name: topic,
-        size: 200,
+        size: 50,
         id: topic,
         type: 'category',
         group: hash

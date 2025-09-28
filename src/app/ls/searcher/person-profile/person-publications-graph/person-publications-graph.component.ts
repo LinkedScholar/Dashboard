@@ -1,5 +1,5 @@
 
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { GraphData } from '../../search-result/graph-result/graph-result.component';
 
 @Component({
@@ -75,7 +75,7 @@ export class PersonPublicationsGraphComponent implements OnChanges{
       let hash = this.simpleHash(topic, 10);
       category_nodes.push({
         name: topic,
-        size: 200,
+        size: 35,
         id: topic,
         type: 'category',
         group: hash

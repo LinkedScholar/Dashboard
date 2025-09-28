@@ -54,9 +54,9 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   @Input() data: GraphData = { nodes: [], links: [], category_nodes: [] };
   @Input() width: number = 800;
   @Input() height: number = 600;
-  @Input() nodeRadius: number = 20;
+  @Input() nodeRadius: number = 10;
   @Input() linkDistance: number = 50;
-  @Input() chargeStrength: number = -300;
+  @Input() chargeStrength: number = -500;
   @Input() enableDrag: boolean = true;
   @Input() enableZoom: boolean = true;
 
@@ -75,7 +75,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   // Internal data copies
   private internalNodes: GraphNode[] = [];
   private internalLinks: GraphLink[] = [];
-  labelVisibilityThreshold: number = 0.5;
+  labelVisibilityThreshold: number = 1;
 
   ngOnInit(): void {
     this.initializeGraph();
@@ -187,11 +187,8 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     // Initialize simulation
     this.simulation = d3.forceSimulation<GraphNode>(this.internalNodes)
       .force('charge', d3_sampled.forceManyBodySampled().strength(this.chargeStrength))
-      .force('collision', d3.forceCollide().radius(d => {
-        return d.size/2 + 5;
-      }))
-      .force("x",  d3.forceX().strength(0.004))
-      .force("y",  d3.forceY().strength(0.015));
+      .force("x",  d3.forceX())
+      .force("y",  d3.forceY());
 
 
     this.simulation.on('tick', () => this.ticked());
@@ -221,9 +218,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     // Update simulation
     this.simulation.nodes(this.internalNodes);
     this.simulation.force('link', d3.forceLink<GraphNode, GraphLink>(this.internalLinks)
-      .id(d => d.id)
-      .distance(d => d.type === 'category' ? 100 : this.linkDistance)
-      .strength(0.1));
+      .id(d => d.id).distance(0).strength(1));
       
     // Restart simulation
     this.simulation.alpha(1).restart();
@@ -267,12 +262,12 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     // Add circles
     nodeEnter.append('circle')
-      .attr('r', (d: GraphNode) => 3* Math.sqrt(d.size) || this.nodeRadius)
+      .attr('r', (d: GraphNode) => d.size/3 ||  this.nodeRadius)
       .attr('fill', (d: GraphNode) => {
         if (d.type ==='article') return "var(--background-basic-color-4)";
         return d.color || d3.schemeCategory10[d.group % 10]
       })
-      .attr('opacity', (d: GraphNode) => d.type === 'category' ? 0.8 : 1);
+      .attr('opacity', (d: GraphNode) => d.type === 'category' ? 0.1 : 1);
 
     nodeEnter.append('rect')
       .attr('width', 0)
