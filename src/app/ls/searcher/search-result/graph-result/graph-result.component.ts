@@ -56,7 +56,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   @Input() height: number = 600;
   @Input() nodeRadius: number = 10;
   @Input() linkDistance: number = 50;
-  @Input() chargeStrength: number = -500;
+  @Input() chargeStrength: number = -300;
   @Input() enableDrag: boolean = true;
   @Input() enableZoom: boolean = true;
 
@@ -75,7 +75,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   // Internal data copies
   private internalNodes: GraphNode[] = [];
   private internalLinks: GraphLink[] = [];
-  labelVisibilityThreshold: number = 1;
+  labelVisibilityThreshold: number = 4;
 
   ngOnInit(): void {
     this.initializeGraph();
@@ -126,12 +126,13 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
       .attr("stroke", "var(--color-primary-transparent-200)")
       .attr("stroke-width", 3);
 
+    let size = 5000;
     // Apply grid as background to the zoomable group (not the SVG)
     this.g.append("rect")
-      .attr("x", -this.width * 2)  // Extend beyond visible area
-      .attr("y", -this.height * 2)
-      .attr("width", this.width * 4)  // Make it larger than viewport
-      .attr("height", this.height * 4)
+      .attr("x", -size)  // Extend beyond visible area
+      .attr("y", -size)
+      .attr("width",  size * 2 )  // Make it larger than viewport
+      .attr("height", size * 2)
       .attr("fill", "url(#grid)")
       .attr("class", "grid-background");
 
@@ -169,16 +170,15 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     // Setup zoom if enabled
     if (this.enableZoom) {
       this.zoom = d3.zoom()
-        .scaleExtent([0.33, 3])
+        .scaleExtent([0.33, 8])
         .on('zoom', (event) => {
           this.g.attr('transform', event.transform);
           this.updateLabelsVisibility(this.getCurrentZoomScale());
-          this.updateLabelBackgrounds();
+          this.updateTextSize();
         });
       
       this.svg.call(this.zoom);
     }
-
 
     // Create groups for links and nodes (order matters for layering)
     this.g.append('g').attr('class', 'links');
@@ -186,9 +186,10 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     // Initialize simulation
     this.simulation = d3.forceSimulation<GraphNode>(this.internalNodes)
+      .velocityDecay(.9) // low friction
       .force('charge', d3_sampled.forceManyBodySampled().strength(this.chargeStrength))
       .force("x",  d3.forceX())
-      .force("y",  d3.forceY());
+      .force("y",  d3.forceY().strength(0.1));
 
 
     this.simulation.on('tick', () => this.ticked());
@@ -222,7 +223,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
       
     // Restart simulation
     this.simulation.alpha(1).restart();
-    this.updateLabelBackgrounds();
+    this.updateTextSize();
   }
 
   private updateLinks(): void {
@@ -262,24 +263,20 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     // Add circles
     nodeEnter.append('circle')
-      .attr('r', (d: GraphNode) => d.size/3 ||  this.nodeRadius)
+      .attr('r', (d: GraphNode) => d.size ||  this.nodeRadius)
       .attr('fill', (d: GraphNode) => {
         if (d.type ==='article') return "var(--background-basic-color-4)";
         return d.color || d3.schemeCategory10[d.group % 10]
       })
-      .attr('opacity', (d: GraphNode) => d.type === 'category' ? 0.1 : 1);
-
-    nodeEnter.append('rect')
-      .attr('width', 0)
-      .attr('height', 0)
-      .attr('class', (d: GraphNode) => d.type === 'category' ? 'category-label-background label-background' : 'label-background');
+      .attr('opacity', (d: GraphNode) => d.type === 'category' ? 0.33 : 1);
 
     // Add labels
     nodeEnter.append('text')
       .attr('text-anchor', 'middle')
       .attr('font-weight', 'bold')
       .text((d: GraphNode) => d.name)
-      .attr('class', (d: GraphNode) => d.type === 'category' ? 'category-label' : 'node-label');
+      .attr('class', (d: GraphNode) => d.type === 'category' ? 'category-label' : 'node-label')
+      .attr('opacity', 0);
 
     // Add event listeners
     nodeEnter
@@ -397,35 +394,17 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     
     this.g.select('.nodes')
     .selectAll('text')
-    .attr('visibility', shouldShowLabels ? 'visible' : 'hidden')
-    this.g.select('.nodes')
-    .selectAll('.label-background')
-    .attr('visibility', shouldShowLabels ? 'visible' : 'hidden')
+    .attr('opacity', shouldShowLabels ? 1 : 0);
   }
 
-  private updateLabelBackgrounds(): void {
+  private updateTextSize(): void {
     // Update background rectangles for existing labels
     let scale = this.getCurrentZoomScale();
     this.g.selectAll('.node')
       .each(function() {
         const group = d3.select(this);
-        const textNode = group.select('text').node() as SVGTextElement;
-        
         group.select('text').
         attr('font-size', (d) => .8/scale + 'rem'); // Dynamic size so it is always readable
-        const bgRect = group.select('.label-background');
-        if (textNode && !bgRect.empty() && group.select('text').data()[0].name != "") {
-          const bbox = textNode.getBBox();
-          bgRect
-            .attr('x', bbox.x - 4)
-            .attr('y', bbox.y - 2)
-            .attr('width', bbox.width + 8)
-            .attr('height', bbox.height + 4);
-        }
-        else {
-          bgRect
-            .attr('visibility', 'hidden');
-        }
       });
   }
 

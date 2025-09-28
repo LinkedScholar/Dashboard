@@ -18,12 +18,14 @@
 }
 :host ::ng-deep .node text{
   fill: var(--text-basic-color);
-  transform: translateY(1rem);
+  transform: translateY(.5rem);
+
+  transition: opacity .75s ease;
 }
 
 :host ::ng-deep .node .category-label{
   fill: var(--text-basic-color);
-  transform: translateY(2rem);
+  transform: translateY(.75rem);
 }
 
 :host ::ng-deep .node .label-background{
@@ -36,7 +38,7 @@
 
 :host ::ng-deep .node .category-label-background{
   fill: var(--background-basic-color-1);
-  transform: translateY(2rem);
+  transform: translateY(1rem);
   opacity: 0.9;
   rx: 5;
   ry: 5;

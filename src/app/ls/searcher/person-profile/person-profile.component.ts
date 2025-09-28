@@ -3,6 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MockResultsService } from '../../../shared/mock-results.service';
 import { BackendBridgeService } from '../../../shared/backend-bridge.service';
 import { Title } from '@angular/platform-browser';
+import { GraphData } from '../search-result/graph-result/graph-result.component';
+import { group } from 'console';
 function simpleHash(inputString, maxValue = 10000) {
   // Initialize the hash value
   let hash = 0;
@@ -73,6 +75,7 @@ export interface NetworkResponse {
 export class PersonProfileComponent implements OnInit{
 
   @ViewChild('personGraphContainer', { static: true }) graphContainer: ElementRef;
+  @ViewChild('networkGraphContainer', { static: true }) networkGraphContainer: ElementRef;
 
   personId: string;
   personName: string = "...";
@@ -103,11 +106,20 @@ export class PersonProfileComponent implements OnInit{
   loadingPages = true;
 
   resizeObserver: ResizeObserver;
+  networkResizeObserver: ResizeObserver;
 
   graphWidth = 800;
   graphHeight = 600;
 
+  networkGraphWidth = 800;
+  networkGraphHeight = 600;
+
   network : NetworkResponse[] = [];
+  networkGraphData: GraphData = {
+    nodes: [],
+    category_nodes: [],
+    links: []
+  }
   
   constructor(
     private router: Router,
@@ -164,6 +176,7 @@ export class PersonProfileComponent implements OnInit{
 
       this.backendBridge.getPersonNetwork(this.personId).subscribe((data: NetworkResponse[]) => {
         this.network = data;
+        this.createNetwork();
       })
     });
 
@@ -180,6 +193,14 @@ export class PersonProfileComponent implements OnInit{
       }
     });
     this.resizeObserver.observe(this.graphContainer.nativeElement);
+
+    this.networkResizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        this.networkGraphWidth = entry.contentRect.width;
+        this.networkGraphHeight = entry.contentRect.height;
+      }
+    });
+    this.networkResizeObserver.observe(this.networkGraphContainer.nativeElement);
   }
 
   restartVariables() {
@@ -247,5 +268,87 @@ export class PersonProfileComponent implements OnInit{
         this.loadingPages = false;
       }
     );
+  }
+
+  createNetwork() {
+    console.log(this.network);
+    let nodes = [];
+    let links = [];
+    let category_nodes = [];
+    let author_ids = new Set();
+    let affiliation_names = new Set();
+
+    for (let i = 0; i < this.network.length; i++) {
+      let article = this.network[i].article;
+      /*
+      nodes.push({
+        id: article.id,
+        name: "",
+        size: 3,
+        type: 'article'
+      })
+
+      links.push({
+        source: article.id,
+        target: this.personId,
+        value: 1
+      })
+      */
+
+      let co_authors = this.network[i].co_authors;
+      for (let j = 0; j < co_authors.length; j++) {
+        let co_author = co_authors[j];
+        if (!author_ids.has(co_author.id)) {
+          author_ids.add(co_author.id);
+          nodes.push({
+            id: co_author.id,
+            name: co_author.name,
+            group: 10,
+            size: 3,
+            type: 'author'
+          })
+        }
+        /*
+        links.push({
+          source: co_author.id,
+          target: article.id,
+          value: 1
+        });
+        */
+
+        for (let k = 0; k < co_author.aff_name.length; k++) {
+          let affiliation = co_author.aff_name[k];
+          if (!affiliation_names.has(affiliation)) {
+            affiliation_names.add(affiliation);
+            category_nodes.push({
+              id: affiliation,
+              name: affiliation,
+              group: 3,
+              size: 5,
+              type: 'category'
+            })
+          }
+          links.push({
+            source: affiliation,
+            target: co_author.id,
+            value: 1,
+            type: 'category'
+          });
+        }
+      }
+    }
+
+    nodes.push({
+      id: this.personId,
+      name: this.personName,
+      group: 0,
+      size: 5,
+    })
+
+    this.networkGraphData = {
+      nodes: nodes,
+      links: links,
+      category_nodes: category_nodes
+    }
   }
 }

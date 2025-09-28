@@ -45,7 +45,7 @@ export class PersonPublicationsGraphComponent implements OnChanges{
         id: paper.id,
         name: paper.title,
         group: 10,
-        size: 10,
+        size: 3,
         type: 'article'
       })
     }
@@ -75,7 +75,7 @@ export class PersonPublicationsGraphComponent implements OnChanges{
       let hash = this.simpleHash(topic, 10);
       category_nodes.push({
         name: topic,
-        size: 35,
+        size: 15,
         id: topic,
         type: 'category',
         group: hash
