@@ -18,7 +18,7 @@
         <div class="col">
             <ul class="features">
                 <li class="feature" *ngFor="let detail of data.fetureDetails; let i = index"
-                (mouseover)="highlightDetail(i)" [ngClass]="{'active-detail': selected_detail == i}">
+                (mouseover)="highlightDetail(i)" [ngClass]="{'active-detail': selected_detail === i}">
                     <nb-icon icon="{{detail.icon}}" class="feature-icon"></nb-icon>
                     <div class="feature-content">
                         <span class="feature-title">{{detail.title}}</span><br>
@@ -57,7 +57,7 @@
                    </div>
                    <div class="feature-indicators">
                       <div *ngFor="let _ of data.fetureDetails; let i = index" 
-                        class="indicator" [ngClass]="{'active-indicator': selected_detail == i}"
+                        class="indicator" [ngClass]="{'active-indicator': selected_detail === i}"
                         (click)="highlightDetail(i)"></div>
                    </div>
                 </div>
