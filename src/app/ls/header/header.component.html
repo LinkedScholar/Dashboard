@@ -12,7 +12,7 @@
     <div style="display: flex; flex-direction: row; gap: 20px; align-items: center; justify-content: center;">
         <div style="gap: 10px;">
             <button nbButton class="theme-toggle" (click)="toggleTheme()" status = "primary" ghost>
-                <nb-icon [icon]="currentTheme == 'dark' ? 'sun-outline' : 'moon-outline'"></nb-icon>
+                <nb-icon [icon]="currentTheme === 'dark' ? 'sun-outline' : 'moon-outline'"></nb-icon>
             </button>
         </div>
         <nb-actions size="small">

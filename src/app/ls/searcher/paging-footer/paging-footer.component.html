@@ -13,7 +13,7 @@
     </button>
     
     <button style="padding: 0.25rem; margin: 0.5rem" nbButton 
-        *ngIf="currentPage != 1"
+        *ngIf="currentPage !== 1"
         (click) = "setCurrentPage(currentPage - 1)"
         [disabled]="disabled">
         {{currentPage - 1}}
@@ -27,7 +27,7 @@
 
     <button style="padding: 0.25rem; margin: 0.5rem" nbButton
         status="basic"
-        *ngIf="currentPage != maxPage"
+        *ngIf="currentPage !== maxPage"
         (click) = "setCurrentPage(currentPage + 1)"
         [disabled]="disabled">
         {{currentPage + 1}}

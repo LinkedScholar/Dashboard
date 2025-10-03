@@ -8,14 +8,10 @@ import { FundingBridgeService } from '../../shared/funding-bridge.service';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit{
+export class DashboardComponent{
   constructor(
     private router: Router,
     private fundingBackend: FundingBridgeService) {}
-
-  ngOnInit(): void {
-    
-  }
 
   handleResultSelection(selectedItem: any): void {
     if (selectedItem.type == 'person'){

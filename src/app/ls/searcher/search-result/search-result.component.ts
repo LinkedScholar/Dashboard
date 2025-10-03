@@ -1,4 +1,3 @@
-
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BackendBridgeService } from '../../../shared/backend-bridge.service';
