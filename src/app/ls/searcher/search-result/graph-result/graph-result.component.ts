@@ -40,7 +40,7 @@ export interface GraphData {
 }
 
 @Component({
-  selector: 'app-force-graph',
+  selector: 'ls-app-force-graph',
   template: `
     <div #container class="graph-container" [style.width.px]="width" [style.height.px]="height">
     </div>

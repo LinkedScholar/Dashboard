@@ -12,7 +12,7 @@ import { ForceGraphComponent, GraphData } from './graph-result/graph-result.comp
   templateUrl: './search-result.component.html',
   styleUrls: ['./search-result.component.scss']
 })
-export class SearchResultComponent implements OnInit, AfterViewInit {
+export class SearchResultComponent implements OnInit {
 
   @ViewChild('graphContainer', { static: true }) private graphContainer!: ElementRef;
   @ViewChild(ForceGraphComponent, { static: true }) private graphComponent!: ForceGraphComponent;
@@ -86,9 +86,6 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
     return 0;
   }
 
-  ngAfterViewInit() {
-    // This lifecycle hook ensures the child component is initialized
-  }
 
   ngOnInit() {
 

@@ -76,7 +76,7 @@
         </nb-card>
     </div>
     <div class = "col-8" #graphContainer style="position: relative; height: calc(100vh - 8.5rem); display: flex; border-radius: var(--border-radius); box-shadow: var(--shadow); padding: 0;"> <!-- GRAPH -->
-        <app-force-graph [data]="graphData" [width]="graphWidth" [height]="graphHeight"></app-force-graph>
+        <ls-app-force-graph [data]="graphData" [width]="graphWidth" [height]="graphHeight"></ls-app-force-graph>
         <div style="position: absolute; top: -1rem; right: 1rem; display: flex; align-items: center" class="group-by">
             <span style="padding-right: 1rem;"> Group by: </span>
             <nb-select placeholder="Grouped by" [(selected)]="groupByOption" style="width: 9rem;" (selectedChange)="onGroupByChange()">
