@@ -1,0 +1,59 @@
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { LsComponent } from './ls.component';
+import { LandingNotFoundComponent } from '../landing/landing-not-found/not-found.component';
+import { PersonProfileComponent } from './searcher/person-profile/person-profile.component';
+import { InstitutionProfileComponent } from './searcher/institution-profile/institution-profile.component';
+import { MatchedFundingsComponent } from './dashboard/matched-fundings/matched-fundings.component';
+import { SearcherPageComponent } from './searcher-page/searcher-page.component';
+const routes: Routes = [{
+  path: '',
+  component: LsComponent,
+  children: [
+    {
+      path: 'dashboard',
+      loadChildren: () => import('./dashboard/dashboard.module')
+        .then(m => m.DashboardModule)
+    },
+    {
+      path: 'searcher',
+      component: SearcherPageComponent,
+    },
+    {
+      path: 'funding',
+      component: MatchedFundingsComponent,
+    },
+    {
+      path: 'person/:id',
+      component: PersonProfileComponent,
+    },
+    {
+      path: 'institution/:id',
+      component: InstitutionProfileComponent,
+    },
+    {
+      path: 'search',
+      loadChildren: () => import('./searcher/searcher.module')
+        .then(m => m.SearcherModule)
+    },
+    { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+    {
+      path: '**',
+      component: LandingNotFoundComponent,
+    },
+  ]},
+  
+];
+
+
+@NgModule({
+  imports: [
+    RouterModule.forChild(routes),
+  ],
+  exports: [
+    RouterModule,
+  ],
+})
+export class LsRoutingModule {
+}
+

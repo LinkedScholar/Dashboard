@@ -1,0 +1,66 @@
+.graph-container {
+  border-radius: 4px;
+  overflow: hidden;
+  background: transparent;
+}
+
+:host ::ng-deep .node {
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+}
+
+:host ::ng-deep .node circle{
+  cursor: pointer;
+
+  stroke: var(--text-info-color);
+  stroke-width: 1px;
+  transition: all 0.3s ease;
+}
+:host ::ng-deep .node text{
+  fill: var(--text-basic-color);
+  transform: translateY(.5rem);
+
+  transition: opacity .75s ease;
+}
+
+:host ::ng-deep .node .category-label{
+  fill: var(--text-basic-color);
+  transform: translateY(.75rem);
+}
+
+:host ::ng-deep .node .label-background{
+  fill: var(--background-basic-color-1);
+  transform: translateY(1rem);
+  opacity: 0.9;
+  rx: 5;
+  ry: 5;
+}
+
+:host ::ng-deep .node .category-label-background{
+  fill: var(--background-basic-color-1);
+  transform: translateY(1rem);
+  opacity: 0.9;
+  rx: 5;
+  ry: 5;
+}
+
+:host ::ng-deep .node:hover circle {
+  stroke: var(--text-basic-color);
+  stroke-width: 2px;
+}
+
+:host ::ng-deep .link {
+  stroke: #999;
+  opacity: 0.6;
+
+  &.category {
+    stroke: var(--text-info-color);
+    stroke-dasharray: 5,5; 
+
+  }
+}
+
+:host ::ng-deep .node text {
+  pointer-events: none;
+  user-select: none;
+}

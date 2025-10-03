@@ -1,0 +1,11 @@
+<div style="display: flex;
+    padding: 0 0 0 1rem;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100rem;
+    gap: 0.75rem;
+    color:black;
+    user-select: none;" [ngStyle]="{'background-color': color}">
+    {{text}}
+    <button nbButton (click)="removeTag()" shape="round" ghost><nb-icon icon="close-circle-outline"></nb-icon></button>
+</div>

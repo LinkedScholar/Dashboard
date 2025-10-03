@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-4">
+        <nb-card>
+            <nb-card-body>
+                <ls-funding-prompt [initialPrompt]="initialProject" (outPrompt)="prompt($event)">
+                </ls-funding-prompt>
+            </nb-card-body>
+        </nb-card>
+    </div>
+    <div class="col-8">
+        <nb-card>
+            <nb-card-body>
+                <nb-list *ngIf="fundings" style="max-height: calc(100vh - 11rem); overflow: hidden; overflow-y: auto;">
+                    <nb-list-item *ngFor="let matchedFunding of fundings" style="display: block; position: relative;">
+                        <h5>{{matchedFunding.title}}</h5>
+                        <div>
+                            <p style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; text-overflow: ellipsis;">{{matchedFunding.description}}</p>
+                        </div>
+                        <p *ngIf="matchedFunding.budget_max">Budget: {{matchedFunding.budget_min}} - {{matchedFunding.budget_max}} €</p>
+                        <p *ngIf="matchedFunding.consortium_size_max">Consortium size: {{matchedFunding.consortium_size_min}} - {{matchedFunding.consortium_size_max}}</p>
+                        <p *ngIf="matchedFunding.trl_max">TRL: {{matchedFunding.trl_min}} - {{matchedFunding.trl_max}}</p>
+                        <nb-progress-bar [value]="matchedFunding.combined_score" displayValue="true" [status]="status(matchedFunding.combined_score)"></nb-progress-bar>
+                        <a href="{{matchedFunding.detail_url}}" 
+                            target="_blank" 
+                            style="position: absolute; top: 0; right: 1rem;"><nb-icon icon="globe"></nb-icon></a>
+                    </nb-list-item>
+                </nb-list>
+                <h5 *ngIf="fundings.length == 0">No matched fundings found.</h5>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

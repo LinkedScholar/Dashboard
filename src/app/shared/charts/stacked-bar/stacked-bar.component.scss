@@ -1,0 +1,64 @@
+.chart-container {
+  width: 100%;
+  font-family: Arial, sans-serif;
+  min-width: 300px;
+}
+
+svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+::ng-deep .bar-segment {
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+::ng-deep .bar-segment:hover {
+  opacity: 0.8;
+}
+
+::ng-deep .axis {
+  font-size: 12px;
+}
+
+::ng-deep .axis-label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+::ng-deep .legend {
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--text-color-basic)
+}
+
+::ng-deep .legend-item {
+  transition: opacity 0.3s ease;
+  fill: var(--text-basic-color);
+}
+
+::ng-deep .legend-item:hover {
+  opacity: 0.7;
+}
+
+::ng-deep .legend-item.hidden {
+  opacity: 0.3;
+}
+
+::ng-deep .legend-item.hidden text {
+  text-decoration: line-through;
+}
+
+::ng-deep .tooltip {
+  position: absolute;
+  background: var(--color-primary-transparent-600);
+  color: var(--text-control-color);
+  padding: 8px 12px;
+  border-radius: 4px;
+  pointer-events: none;
+  font-size: 12px;
+  box-shadow: var(--shadow);
+}

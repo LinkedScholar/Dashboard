@@ -1,0 +1,16 @@
+<nb-list style="max-height: 55vh;">
+    <nb-list-item *ngFor="let project of projects" style="display: block; position: relative;">
+        <div style="display: inline;">
+            <h3> {{project.acronym}} </h3>
+            <h5 style="white-space: nowrap; text-overflow: ellipsis; overflow: hidden;"> {{project.title}}</h5>
+        </div>
+        <div>
+            <p style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; text-overflow: ellipsis;"> {{project.description}} </p>
+        </div>
+        <div style="position: absolute; top: 1rem; right: 1rem;">
+            <button nbButton outline>
+                <nb-icon icon="edit-2-outline"></nb-icon>
+            </button>
+        </div>
+    </nb-list-item>
+</nb-list>

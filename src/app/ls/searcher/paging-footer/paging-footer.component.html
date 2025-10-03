@@ -1,0 +1,51 @@
+<div style="display: flex; justify-content: center;">              
+    <button style="padding: 0.25rem; margin: 0.5rem" nbButton
+        *ngIf="currentPage > 2"
+        (click) = "setCurrentPage(1)"
+        [disabled]="disabled">
+        1
+    </button>
+
+    <button style="padding: 0.25rem; margin: 0.5rem" nbButton status="control"
+        *ngIf="currentPage > 3"
+        [disabled]="disabled">
+        ...
+    </button>
+    
+    <button style="padding: 0.25rem; margin: 0.5rem" nbButton 
+        *ngIf="currentPage != 1"
+        (click) = "setCurrentPage(currentPage - 1)"
+        [disabled]="disabled">
+        {{currentPage - 1}}
+    </button>
+
+    <button style="padding: 0.25rem; margin: 0.5rem" nbButton
+        status="primary"
+        disabled>
+        {{currentPage}}
+    </button>
+
+    <button style="padding: 0.25rem; margin: 0.5rem" nbButton
+        status="basic"
+        *ngIf="currentPage != maxPage"
+        (click) = "setCurrentPage(currentPage + 1)"
+        [disabled]="disabled">
+        {{currentPage + 1}}
+    </button>
+
+
+    <button style="padding: 0.25rem; margin: 0.5rem" nbButton
+        status="control"
+        *ngIf="currentPage < maxPage - 2"
+        [disabled]="disabled">
+        ...
+    </button>
+
+    <button style="padding: 0.25rem; margin: 0.5rem" nbButton
+        status="basic"
+        *ngIf="currentPage < maxPage - 1"
+        (click) = "setCurrentPage(maxPage)"
+        [disabled]="disabled">
+        {{maxPage}}
+    </button>
+</div>

@@ -1,0 +1,28 @@
+<div class="row">
+	<div class="col">
+		<nb-card>
+			<nb-card-body style="display: flex; flex-direction: column; align-items: center; overflow: visible; padding: 3rem;">
+				<ls-search-bar (searchEvent)="submitSearch($event)" (selectEvent)="handleResultSelection($event)">
+				</ls-search-bar>
+			</nb-card-body>
+		</nb-card>
+	</div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <nb-card>
+            <nb-card-body>
+				<ls-funding-prompt (outPrompt)="prompt($event)">
+				</ls-funding-prompt>
+            </nb-card-body>
+        </nb-card>
+    </div>
+    <div class="col-6">
+		<nb-card>
+            <nb-card-body>
+				<ls-projects>
+				</ls-projects>
+            </nb-card-body>
+        </nb-card>
+	</div>
+</div>

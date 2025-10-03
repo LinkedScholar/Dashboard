@@ -1,0 +1,354 @@
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MockResultsService } from '../../../shared/mock-results.service';
+import { BackendBridgeService } from '../../../shared/backend-bridge.service';
+import { Title } from '@angular/platform-browser';
+import { GraphData } from '../search-result/graph-result/graph-result.component';
+import { group } from 'console';
+function simpleHash(inputString, maxValue = 10000) {
+  // Initialize the hash value
+  let hash = 0;
+
+  // Check if the input is a valid string
+  if (typeof inputString !== 'string' || inputString.length === 0) {
+    return 0; // Return 0 or handle error for invalid input
+  }
+
+  // Iterate over each character of the string
+  for (let i = 0; i < inputString.length; i++) {
+    const char = inputString.charCodeAt(i);
+    // Use a bitwise OR to keep the hash an integer and perform a simple calculation
+    hash = ((hash << 5) - hash) + char;
+    // Convert to a 32bit integer
+    hash |= 0;
+  }
+
+  // Use the modulo operator to constrain the hash to a number between 0 and 9999
+  const constrainedHash = Math.abs(hash) % maxValue;
+
+  // Add 1 to the result to make the range 1 to 10000
+  return constrainedHash + 1;
+}
+
+interface Venue {
+  name: string;
+  id: string;
+}
+
+interface Person {
+  name: string;
+  id: string;
+}
+
+export interface PaperData {
+  id: string;
+  title: string;
+  year: number,
+  keywords: string[],
+  venue: Venue;
+  citations: number;
+  co_authors: Person[];
+}
+
+interface Article  {
+  id: string;
+  name: string;
+}
+
+interface CoAuthor {
+  aff_name: string | null;
+  id: string;
+  name: string;
+}
+
+export interface NetworkResponse {
+  article : Article
+  co_authors : CoAuthor[]
+}
+
+
+@Component({
+  selector: 'ls-person-profile',
+  templateUrl: './person-profile.component.html',
+  styleUrls: ['./person-profile.component.scss']
+})
+export class PersonProfileComponent implements OnInit{
+
+  @ViewChild('personGraphContainer', { static: true }) graphContainer: ElementRef;
+  @ViewChild('networkGraphContainer', { static: true }) networkGraphContainer: ElementRef;
+
+  personId: string;
+  personName: string = "...";
+  personPicture: string; // TODO: FIXME
+  paperCount = 0;
+  citationCount = 0;
+  nPages = 1;
+  affiliations = [];
+
+  chartData:any = [];
+  researchAreas: string[] = [];
+  mostImportantTopics = [];
+  coAuthors:any;
+
+  gIndex = 0;
+  hIndex = 0;
+  i10Index = 0;
+  sociabilityIndex = 0;
+  
+  matrix : any;
+  labels : any;
+
+  loading = true;
+  papers : any = [];
+
+  coAuthorsPlaceholers = [];
+  currentPage = 1;
+  loadingPages = true;
+
+  resizeObserver: ResizeObserver;
+  networkResizeObserver: ResizeObserver;
+
+  graphWidth = 800;
+  graphHeight = 600;
+
+  networkGraphWidth = 800;
+  networkGraphHeight = 600;
+
+  network : NetworkResponse[] = [];
+  networkGraphData: GraphData = {
+    nodes: [],
+    category_nodes: [],
+    links: []
+  }
+  
+  constructor(
+    private router: Router,
+    private route : ActivatedRoute,
+    private mockData : MockResultsService,
+    private backendBridge: BackendBridgeService,
+    private titleService: Title) {}
+
+  ngOnInit(): void {
+    this.route.params.subscribe(params => {
+
+      this.restartVariables();
+
+      this.personId = params['id']; 
+      this.personPicture = this.getFakePicture(this.personId);
+
+      this.backendBridge.getPersonBasicData(this.personId).subscribe(data => {
+        data = data[0];
+        this.personName = data[0];
+        this.citationCount = data[1];
+        this.paperCount = data[2];
+        this.nPages = Math.ceil(this.paperCount / 10);
+        this.affiliations = data[3];
+        this.titleService.setTitle(`Linked Scholar - ${this.personName}`);
+      });
+
+      this.backendBridge.getPersonResearchInteres(this.personId).subscribe(data => {
+        this.chartData = data;
+        this.researchAreas = Object.keys(data[0]);
+      })
+
+      this.backendBridge.getCoAuthors(this.personId).subscribe(data => {
+        this.coAuthors = data;
+        this.loading = false;
+        this.coAuthorsPlaceholers = [];
+        
+      }).add(() => {
+        this.backendBridge.getCoAuthorMatrix(this.personId).subscribe(data => {
+          this.matrix = data;
+          // concat only 6 names
+          this.labels = [this.personName] .concat(this.coAuthors.slice(0, 6).map(coAuthor => coAuthor[2]));
+        })
+      });
+
+      this.backendBridge.getPersonPapers(this.personId).subscribe(
+        (data: PaperData[]) => {
+          this.papers = data;
+          this.loadingPages = false;
+        },
+        (error) => {
+          console.error('Error fetching data:', error);
+        }
+      );
+
+      this.backendBridge.getPersonNetwork(this.personId).subscribe((data: NetworkResponse[]) => {
+        this.network = data;
+        this.createNetwork();
+      })
+    });
+
+    // RANDOM VALUES for gIndex and others
+    this.gIndex = simpleHash(this.personId + "gIndex", 100);
+    this.hIndex = simpleHash(this.personId + "hIndex", 100);
+    this.i10Index = simpleHash(this.personId + "i10Index", 100);
+    this.sociabilityIndex = simpleHash(this.personId + "sociabilityIndex", 100);
+
+    this.resizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        this.graphWidth = entry.contentRect.width;
+        this.graphHeight = entry.contentRect.height;
+      }
+    });
+    this.resizeObserver.observe(this.graphContainer.nativeElement);
+
+    this.networkResizeObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        this.networkGraphWidth = entry.contentRect.width;
+        this.networkGraphHeight = entry.contentRect.height;
+      }
+    });
+    this.networkResizeObserver.observe(this.networkGraphContainer.nativeElement);
+  }
+
+  restartVariables() {
+    this.personName = "...";
+    this.citationCount = 0;
+    this.paperCount = 0;
+    this.affiliations = [];
+
+    this.chartData = [];
+    this.coAuthors = [];
+    this.loading = true;
+
+    this.coAuthorsPlaceholers = new Array(3);
+
+    this.matrix = [];
+    this.labels = [];
+
+    this.papers = [];
+    this.nPages = 1;
+
+  }
+
+  navigateToInstitution(id: number) {
+    this.router.navigate(['/ls/institution', this.affiliations[id][0]]);
+  }
+
+  navigateToPerson(id: number) {
+    this.router.navigate(['/ls/person', id]);
+  }
+
+  navigateToVenue(name: string) {
+    this.router.navigate(['/ls/search'], { queryParams: { q: name , t: 'venue' } });
+  }
+
+  getFakePicture(id) {
+    return "https://avatars.githubusercontent.com/u/" + simpleHash(id) // TODO: FIXME
+  }
+
+  loadNext() {
+    if (this.loading) { return }
+    this.loading = true;
+    this.coAuthorsPlaceholers = new Array(3);
+    this.backendBridge.getCoAuthors(this.personId, this.coAuthors.length).subscribe(data => {
+      let f:any = data
+      if (f)
+      {
+        this.coAuthors.push(...f);
+        this.loading = false;
+      }
+      this.coAuthorsPlaceholers = [];
+    })
+  }
+
+  handleNewPage(page) {
+    this.loadingPages = true;
+    this.currentPage = page;
+
+    this.backendBridge.getPersonPapers(this.personId, (this.currentPage - 1)*10).subscribe(
+      (data: PaperData[]) => {
+        this.papers = data;
+        this.loadingPages = false;
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+        this.loadingPages = false;
+      }
+    );
+  }
+
+  createNetwork() {
+    console.log(this.network);
+    let nodes = [];
+    let links = [];
+    let category_nodes = [];
+    let author_ids = new Set();
+    let affiliation_names = new Set();
+
+    for (let i = 0; i < this.network.length; i++) {
+      let article = this.network[i].article;
+      /*
+      nodes.push({
+        id: article.id,
+        name: "",
+        size: 3,
+        type: 'article'
+      })
+
+      links.push({
+        source: article.id,
+        target: this.personId,
+        value: 1
+      })
+      */
+
+      let co_authors = this.network[i].co_authors;
+      for (let j = 0; j < co_authors.length; j++) {
+        let co_author = co_authors[j];
+        if (!author_ids.has(co_author.id)) {
+          author_ids.add(co_author.id);
+          nodes.push({
+            id: co_author.id,
+            name: co_author.name,
+            group: 10,
+            size: 3,
+            type: 'author'
+          })
+        }
+        /*
+        links.push({
+          source: co_author.id,
+          target: article.id,
+          value: 1
+        });
+        */
+
+        for (let k = 0; k < co_author.aff_name.length; k++) {
+          let affiliation = co_author.aff_name[k];
+          if (!affiliation_names.has(affiliation)) {
+            affiliation_names.add(affiliation);
+            category_nodes.push({
+              id: affiliation,
+              name: affiliation,
+              group: 3,
+              size: 5,
+              type: 'category'
+            })
+          }
+          links.push({
+            source: affiliation,
+            target: co_author.id,
+            value: 1,
+            type: 'category'
+          });
+        }
+      }
+    }
+
+    nodes.push({
+      id: this.personId,
+      name: this.personName,
+      group: 0,
+      size: 5,
+    })
+
+    this.networkGraphData = {
+      nodes: nodes,
+      links: links,
+      category_nodes: category_nodes
+    }
+  }
+}

@@ -1,0 +1,91 @@
+<div class = "row" style="height: 87vh;"><!--THE WHOLE THING-->
+    <div class = "col-4"> <!-- SIDEBAR -->
+        <nb-card>
+            <nb-card-body style="display: flex; flex-direction: row; gap : 1rem">
+                    <nb-select placeholder="Hint" [(selected)]="selectedItem" style="width: 9rem;">
+                        <nb-option *ngFor="let item of searchOptions; let i = index" [value]="i">
+                            {{ item }}
+                        </nb-option>
+                    </nb-select>
+                    <form (ngSubmit)="onSearchSubmit()" style="flex: 1; display: flex;">
+                        <nb-form-field style="flex: 1">
+                            <input nbInput type="text" fullWidth placeholder="Search for..." shape="square" name="scholarlySearch" [formControl]="searchControl" [ngModel]="searchTerm">
+                        </nb-form-field>
+                    </form>
+            </nb-card-body>
+        </nb-card>
+        <nb-card style="height: calc(100vh - 15rem);">
+            <nb-card-body style="padding: 0; position: relative; overflow: visible;">
+                <div style="display: flex; flex-direction: row; gap: 1rem; position: absolute; top: -1rem; z-index: 10; left: 1rem;" > <!-- FILTERS -->
+                    <div>
+                        <button nbButton hero (click)="toggleFilters()" status="primary">
+                            <nb-icon icon="funnel-outline"/>
+                        </button>
+                    </div>
+                    <div style="width: 15rem;">
+                        <nb-accordion *ngIf="showFilters">
+                            <nb-accordion-item>
+                             <nb-accordion-item-header>Product Details</nb-accordion-item-header>
+                             <nb-accordion-item-body>
+                               Item Content
+                             </nb-accordion-item-body>
+                            </nb-accordion-item>
+                        </nb-accordion>
+                    </div>
+                </div>
+                <div class="sort-by"> <!-- SORT -->
+                    <div style="display: flex; align-items: center;" class = "sort-by-label">
+                        <span style="padding-right: 1rem; padding-left: 1rem;"> Sort by: </span>
+                    </div>
+                    <nb-select placeholder="Sorted by" [(selected)]="sortOption" style="flex: 1;" (selectedChange)="onSearchSubmit()">
+                        <nb-option *ngFor="let item of sortOptions; let i = index" [value]="i">
+                            {{ item }}
+                        </nb-option>
+                    </nb-select>
+                </div>
+                <nb-card style="height: calc(100vh - 15rem);overflow: hidden;">
+                    <nb-card-body style="padding: 0;">
+                        <nb-list>
+                            <nb-list-item style="display: flex; justify-content: center;" *ngIf="maxPage > 1">
+                                <ls-paging-footer
+                                    [currentPage]="currentPage"
+                                    [maxPage]="maxPage"
+                                    (search)="setCurrentPage($event)"
+                                    [disabled] = loadingPage>
+                                </ls-paging-footer>
+                            </nb-list-item>
+                            <nb-list-item style="margin: 0; padding: 0;">
+                                <ls-author-list
+                                    [authors] = "authors"
+                                    (search)="goToGraph($event.id, $event.kind)">
+                                    
+                                </ls-author-list>
+                            </nb-list-item>
+                            <nb-list-item style="display: flex; justify-content: center;" *ngIf="maxPage > 1">
+                                <ls-paging-footer
+                                    [currentPage]="currentPage"
+                                    [maxPage]="maxPage"
+                                    (search)="setCurrentPage($event)"
+                                    [disabled] = loadingPage>
+                                </ls-paging-footer>
+                            </nb-list-item>
+                        </nb-list>
+                    </nb-card-body>
+                </nb-card>
+            </nb-card-body>
+        </nb-card>
+    </div>
+    <div class = "col-8" #graphContainer style="position: relative; height: calc(100vh - 8.5rem); display: flex; border-radius: var(--border-radius); box-shadow: var(--shadow); padding: 0;"> <!-- GRAPH -->
+        <app-force-graph [data]="graphData" [width]="graphWidth" [height]="graphHeight"></app-force-graph>
+        <div style="position: absolute; top: -1rem; right: 1rem; display: flex; align-items: center" class="group-by">
+            <span style="padding-right: 1rem;"> Group by: </span>
+            <nb-select placeholder="Grouped by" [(selected)]="groupByOption" style="width: 9rem;" (selectedChange)="onGroupByChange()">
+                <nb-option *ngFor="let item of groupByOptions; let i = index" [value]="i">
+                    {{ item }}
+                </nb-option>
+            </nb-select>
+        </div>
+    </div>
+</div>
+
+
