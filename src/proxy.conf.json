@@ -1,10 +1,20 @@
 {
   "/api": {
-    "target": "http://localhost:3000",
-    "secure": false
+    "target": "http://35.159.132.142",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "headers": {
+      "x-api-key": "YOUR_SECRET_API_KEY"
+    }
   },
   "/funding-api": {
-    "target": "http://localhost:5010",
-    "secure": false
+    "target": "http://35.159.132.142",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug",
+    "headers": {
+      "x-api-key": "YOUR_SECRET_API_KEY"
+    }
   }
 }
