@@ -84,6 +84,8 @@ export class SearchAutocompleteResultComponent {
         return 'home-outline';
       case 'venue':
         return 'navigation-outline';
+      case 'keyword':
+        return 'pricetags-outline';
       default:
         return 'question-mark-outline';
     }

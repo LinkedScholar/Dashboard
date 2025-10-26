@@ -1,18 +1,6 @@
 <h3>Prompt your project</h3>
 <h5>Description:</h5>
 <textarea rows="5" nbInput fullWidth placeholder="Description" [(ngModel)]="description" shape="round" style="resize: none;"></textarea>
-<div style="display: inline-flex; gap: 1rem;">
-    <h5>Keywords:</h5>
-    <button nbButton shape="round" status="info" outline [nbPopover]="templateRef" nbPopoverPlacement="end">+</button>
-</div>
-<div style="display: flex; flex-wrap: wrap; gap: 0.5rem">
-    <ls-tag *ngFor="let tag of promptKeywords" [text]="tag.text" [uuid]="tag.uuid" (remove)="removeTag($event)"></ls-tag>
-    <ng-template #templateRef>
-        <form (ngSubmit)="onAddKeyword()">
-            <input nbInput [(ngModel)]="newKeyword" type="text" placeholder="Keyword" [formControl]="keywordControl">
-            </form>
-    </ng-template>
-</div>
 <div style="display: inline-flex; gap: 1rem">
     <h5>Research areas:</h5>
     <button nbButton shape="round" status="info" outline [nbPopover]="researchAreasRef" nbPopoverPlacement="end">+</button>

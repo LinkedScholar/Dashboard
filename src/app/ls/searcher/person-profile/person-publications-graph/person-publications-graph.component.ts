@@ -9,8 +9,6 @@ import { GraphData } from '../../search-result/graph-result/graph-result.compone
 })
 export class PersonPublicationsGraphComponent implements OnChanges{
 
-  @Input() graphWidth: number = 800;
-  @Input() graphHeight: number = 600;
   @Input() papers: any[] = [];
 
   graphData: GraphData = {
