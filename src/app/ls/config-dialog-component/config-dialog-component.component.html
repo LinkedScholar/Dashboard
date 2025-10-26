@@ -7,18 +7,18 @@
         <nb-button-group (valueChange)="updateTheme($event)">
             <button nbButtonToggle value="default" [pressed]="themeValue[0] === 'default'">Light</button>
             <button nbButtonToggle value="dark" [pressed]="themeValue[0] === 'dark'">Dark</button>
-          </nb-button-group>
+        </nb-button-group>
         <h5>Units</h5>
         <nb-button-group (valueChange)="updateUnits($event)">
             <button nbButtonToggle value="Imperial" [pressed]="unitsValue[0] === 'Imperial'">Imperial</button>
             <button nbButtonToggle value="Metric" [pressed]="unitsValue[0] === 'Metric'">Metric</button>
-          </nb-button-group>
+        </nb-button-group>
         <h5>Scientific Vocabulary</h5>
         <nb-button-group (valueChange)="updateVocabulary($event)">
             <button nbButtonToggle value="EuroSciVoc" [pressed]="vocabularyValue[0] === 'EuroSciVoc'">EuroSciVoc</button>
             <button nbButtonToggle value="Scopus" [pressed]="vocabularyValue[0] === 'Scopus'">Scopus</button>
             <button nbButtonToggle value="Institutional" [pressed]="vocabularyValue[0] === 'Institutional'">Institutional</button>
-          </nb-button-group>
+        </nb-button-group>
         <h5>Accessibility</h5>
         <p> Work in progress</p>
     </nb-card-body>
