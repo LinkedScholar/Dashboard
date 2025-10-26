@@ -1,17 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LsComponent } from './ls.component';
-import { NbActionsModule, NbButtonModule, NbContextMenuModule, NbFormFieldModule, NbIconModule, NbInputModule, NbLayoutModule, NbThemeModule, NbUserModule } from '@nebular/theme';
+import { NbActionsModule, NbButtonGroupModule, NbButtonModule, NbCardModule, NbContextMenuModule, NbDialogModule, NbFormFieldModule, NbIconModule, NbInputModule, NbLayoutModule, NbThemeModule, NbUserModule } from '@nebular/theme';
 import { LsRoutingModule } from './ls-routing.module';
 import { HeaderComponent } from './header/header.component';
 import { DesktopExperienceRequiredComponent } from './desktop-experience-required/desktop-experience-required.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { ConfigDialogComponentComponent } from './config-dialog-component/config-dialog-component.component';
 
 @NgModule({
   declarations: [
     LsComponent,
     HeaderComponent,
     DesktopExperienceRequiredComponent,
+    ConfigDialogComponentComponent,
   ],
 
   imports: [
@@ -28,7 +30,10 @@ import { ReactiveFormsModule } from '@angular/forms';
     NbThemeModule,
     NbButtonModule,
     NbContextMenuModule,
-    NbActionsModule
+    NbActionsModule,
+    NbCardModule,
+    NbButtonGroupModule,
+    NbDialogModule.forChild(),
   ],
 })
 export class LsModule { }

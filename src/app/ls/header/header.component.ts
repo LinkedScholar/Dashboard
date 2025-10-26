@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NbAuthService } from '@nebular/auth';
-import { NbMenuService, NbThemeService } from '@nebular/theme';
+import { NbDialogService, NbMenuService, NbThemeService } from '@nebular/theme';
 import { filter, map } from 'rxjs/operators';
+import { ConfigDialogComponentComponent } from '../config-dialog-component/config-dialog-component.component';
 
 type HeaderLink = {
   url: string;
@@ -23,6 +24,7 @@ export class HeaderComponent implements OnInit{
   constructor(
     private themeService: NbThemeService,
     private authService: NbAuthService,
+    private dialogService: NbDialogService,
     private router: Router) {}
 
 
@@ -68,6 +70,10 @@ export class HeaderComponent implements OnInit{
       this.router.navigate(['/']);
     });
     return false;
+  }
+
+  openDialog() {
+    this.dialogService.open(ConfigDialogComponentComponent);
   }
 
 }

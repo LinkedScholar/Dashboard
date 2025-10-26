@@ -14,18 +14,9 @@
             <button nbButton class="theme-toggle" (click)="toggleTheme()" status = "primary" ghost>
                 <nb-icon [icon]="currentTheme == 'dark' ? 'sun-outline' : 'moon-outline'"></nb-icon>
             </button>
-        </div>
-        <nb-actions size="small">
-            <nb-action class="user-action">
-                <nb-user
-                size="large"
-                name="John Doe"
-                title="EULiST member"
-                badgeText="user"
-                badgeStatus="info"
-                badgePosition="bottom right"/>
-            </nb-action>
-        </nb-actions>
-        
+            <button nbButton class="theme-toggle" (click)="openDialog()" status = "primary" ghost>
+                <nb-icon icon="settings-outline"></nb-icon>
+            </button>
+        </div>    
     </div>
 </div>
