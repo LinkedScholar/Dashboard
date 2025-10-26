@@ -343,8 +343,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
       .attr('height', this.height)
       .attr('x', -this.width / 2)
       .attr('y', -this.height / 2);
-
-
+  
     this.simulation
       .alpha(1)
       .restart();

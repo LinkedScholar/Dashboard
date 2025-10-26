@@ -1,5 +1,4 @@
-
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BackendBridgeService } from '../../../shared/backend-bridge.service';
 import { FormControl } from '@angular/forms';
@@ -13,8 +12,8 @@ import { ForceGraphComponent, GraphData } from './graph-result/graph-result.comp
   templateUrl: './search-result.component.html',
   styleUrls: ['./search-result.component.scss']
 })
-export class SearchResultComponent implements OnInit, AfterViewInit {
-
+export class SearchResultComponent implements OnInit {
+  
   @ViewChild('graphContainer', { static: true }) private graphContainer!: ElementRef;
   @ViewChild(ForceGraphComponent, { static: true }) private graphComponent!: ForceGraphComponent;
   private resizeObserver!: ResizeObserver;
@@ -85,10 +84,6 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
       }
     }
     return 0;
-  }
-
-  ngAfterViewInit() {
-    // This lifecycle hook ensures the child component is initialized
   }
 
   ngOnInit() {

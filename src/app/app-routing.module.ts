@@ -17,12 +17,6 @@ export const routes: Routes = [
       .then(m => m.LandingModule),
   },
   {
-    path: 'pages',
-    loadChildren: () => import('./pages/pages.module')
-      .then(m => m.PagesModule),
-    canActivate: [canActivateTeam],
-  },
-  {
     path: 'auth',
     component: NbAuthComponent,
     children: [

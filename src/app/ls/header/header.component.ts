@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NbAuthService } from '@nebular/auth';
-import { NbDialogService, NbMenuService, NbThemeService } from '@nebular/theme';
-import { filter, map } from 'rxjs/operators';
+import { NbDialogService, NbThemeService } from '@nebular/theme';
 import { ConfigDialogComponentComponent } from '../config-dialog-component/config-dialog-component.component';
 
 type HeaderLink = {
