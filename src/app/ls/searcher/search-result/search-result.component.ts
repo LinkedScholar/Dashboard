@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BackendBridgeService } from '../../../shared/backend-bridge.service';
 import { FormControl } from '@angular/forms';
 import { tap } from 'rxjs/operators';
-import { ForceGraphComponent, GraphData } from './graph-result/graph-result.component';
+import { ForceGraphComponent, GraphData, GraphNode } from './graph-result/graph-result.component';
 
 
 
@@ -474,5 +474,9 @@ export class SearchResultComponent implements OnInit {
 
   goToGraph(id: string, kind: string) {
     this.graphComponent.goToNode(id);
+  }
+
+  goToProfile(node: GraphNode) {
+    this.router.navigate(['/ls/person', node.id]);
   }
 }

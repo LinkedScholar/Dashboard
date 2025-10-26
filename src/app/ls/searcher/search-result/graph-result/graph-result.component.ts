@@ -178,9 +178,15 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
           this.updateLabelsVisibility(this.getCurrentZoomScale());
           this.updateTextSize();
         });
-      
+        
       this.svg.call(this.zoom);
     }
+
+    /*
+    this.svg.transition()
+      .duration(1500)
+      .call(this.zoom.transform, d3.zoomIdentity.scale(6));
+    */
 
     // Create groups for links and nodes (order matters for layering)
     this.g.append('g').attr('class', 'links');
@@ -334,9 +340,6 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private updateDimensions(): void {
-    this.svg
-      .attr('width', this.width)
-      .attr('height', this.height)
     
     this.svg.select('.radial-overlay')
       .attr('width', this.width)
@@ -404,7 +407,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
       .each(function() {
         const group = d3.select(this);
         group.select('text').
-        attr('font-size', (d) => .8/scale + 'rem'); // Dynamic size so it is always readable
+        attr('font-size', (d) => .9/scale + 'rem'); // Dynamic size so it is always readable
       });
   }
 
