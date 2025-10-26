@@ -170,7 +170,7 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
         id: author.id,
         name: author.name,
         group: hash,
-        size: author.paper_count
+        size: Math.sqrt(author.paper_count)
       })
     }
     
@@ -355,7 +355,7 @@ export class SearchResultComponent implements OnInit, AfterViewInit {
           id: author.id,
           name: author.name,
           group: hash,
-          size: author.paper_count
+          size: Math.sqrt(author.paper_count)
         })
         if (author.affiliations != null){
           for (let i = 0; i < Math.min(3 ,author.affiliations.length); i++) {

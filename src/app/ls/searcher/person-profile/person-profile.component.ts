@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MockResultsService } from '../../../shared/mock-results.service';
 import { BackendBridgeService } from '../../../shared/backend-bridge.service';
 import { Title } from '@angular/platform-browser';
-import { GraphData } from '../search-result/graph-result/graph-result.component';
+import { GraphData, GraphNode } from '../search-result/graph-result/graph-result.component';
 import { group } from 'console';
 function simpleHash(inputString, maxValue = 10000) {
   // Initialize the hash value
@@ -229,6 +229,9 @@ export class PersonProfileComponent implements OnInit{
 
   navigateToPerson(id: number) {
     this.router.navigate(['/ls/person', id]);
+  }
+  navigateToPersonFromNode(node: GraphNode) {
+    this.router.navigate(['/ls/person', node.id]);
   }
 
   navigateToVenue(name: string) {

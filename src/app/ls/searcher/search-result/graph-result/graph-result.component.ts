@@ -52,8 +52,8 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
 
 
   @Input() data: GraphData = { nodes: [], links: [], category_nodes: [] };
-  @Input() width: number = 800;
-  @Input() height: number = 600;
+  @Input() width: number = 4000;
+  @Input() height: number = 3000;
   @Input() nodeRadius: number = 10;
   @Input() linkDistance: number = 50;
   @Input() chargeStrength: number = -100;
@@ -108,7 +108,7 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
       .append('svg')
       .attr('width', this.width)
       .attr('height', this.height)
-      .attr("style", "max-width: 100%; height: auto;");
+      .attr('viewBox', `${-this.width / 2} ${-this.height / 2} ${this.width} ${this.height}`)
 
     // Create main group for zoom/pan
     this.g = this.svg.append('g');
@@ -158,14 +158,16 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
 
     // Add the overlay rectangle AFTER the zoom group
     // so it appears on top
+    /*
     this.svg.append("rect")
       .attr("class", "radial-overlay")
-      .attr("x", 0)
-      .attr("y", 0)
+      .attr("x", -this.width / 2)
+      .attr("y", -this.height / 2)
       .attr("width", this.width)
       .attr("height", this.height)
       .attr("fill", "url(#radialFade)")
       .attr("pointer-events", "none");
+    */
 
     // Setup zoom if enabled
     if (this.enableZoom) {
@@ -335,7 +337,6 @@ export class ForceGraphComponent implements OnInit, OnDestroy, OnChanges {
     this.svg
       .attr('width', this.width)
       .attr('height', this.height)
-      .attr('viewBox', `${-this.width / 2} ${-this.height / 2} ${this.width} ${this.height}`)
     
     this.svg.select('.radial-overlay')
       .attr('width', this.width)
