@@ -1,0 +1,45 @@
+.gbc-host {
+	position: relative;
+	width: 100%;
+	height: 360px; /* altura fija para evitar rebotes */
+	overflow: hidden; /* evita scroll que dispare resize */
+}
+
+.gbc-axis text {
+	font: 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+	fill: black;
+}
+.gbc-axis line,
+.gbc-axis path {
+	stroke: #e5e7eb;
+}
+
+.gbc-bar {
+	rx: 3;
+	ry: 3;
+	transition: fill-opacity 0.2s ease;
+}
+
+.gbc-legend-label {
+	font: 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+	fill: black;
+}
+
+/* Tooltip (está en <body>, pero el estilo aplica igual) */
+.gbc-tooltip {
+	position: fixed; /* clave para no afectar layout */
+	pointer-events: none;
+	padding: 8px 10px;
+	background: rgba(17, 24, 39, 0.92);
+	color: white;
+	border-radius: 6px;
+	font: 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Mensaje vacío */
+.gbc-empty {
+	padding: 12px;
+	color: black;
+	font: 13px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+}

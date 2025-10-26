@@ -9,6 +9,7 @@ import { ChordDiagramComponent } from './charts/chord-diagram/chord-diagram.comp
 import { FundingPromptComponent } from './funding/funding-prompt/funding-prompt.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagComponent } from './funding/tag/tag.component';
+import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
 
 
 
@@ -20,7 +21,8 @@ import { TagComponent } from './funding/tag/tag.component';
     StackedBarComponent,
     ChordDiagramComponent,
     FundingPromptComponent,
-    TagComponent
+    TagComponent,
+    BarChartComponent
   ],
   imports: [
     CommonModule,
@@ -41,7 +43,8 @@ import { TagComponent } from './funding/tag/tag.component';
     SearchAutocompleteResultComponent,
     StackedBarComponent,
     ChordDiagramComponent,
-    FundingPromptComponent
+    FundingPromptComponent,
+    BarChartComponent
   ],
 })
 export class SharedModule { }

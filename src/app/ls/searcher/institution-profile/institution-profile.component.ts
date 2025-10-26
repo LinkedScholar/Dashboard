@@ -1,6 +1,13 @@
-import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs/operators';
+import { BackendBridgeService } from './../../../shared/backend-bridge.service';
+import { Component, OnChanges, SimpleChanges } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { ActivatedRoute, Router } from '@angular/router';
 
+type researchArea = {
+  keyword: string,
+  count: number
+}
 @Component({
   selector: 'ls-institution-profile',
   templateUrl: './institution-profile.component.html',
@@ -8,14 +15,89 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class InstitutionProfileComponent {
   
-  institutionId: number;
-  
-  constructor(private route : ActivatedRoute) {}
+  institutionId: string;
+  institutionName: string;
+  researchAreas: string[] = [];
+  topResearchAreas = [];
+  selectedResearchArea: string;
 
+  coInstitutions: any;
+
+  matrix : any = [[]];
+  labels: any = [];
+
+  pubChart: any;
+  citChart: any;
+
+  topResearchers: any;
+  chartData : any = [];
+
+  constructor(
+    private router: Router,
+    private route : ActivatedRoute,
+    private backendBridge: BackendBridgeService,
+    private titleService: Title) {}
+  
+  
+
+  onAreaChange(area: string) {
+    this.selectedResearchArea = area;
+    this.backendBridge.getInstitutionTopResearchers(this.institutionId, this.selectedResearchArea).subscribe(data => {
+      this.topResearchers = data;
+    })
+  }
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.institutionId = +params['id']; // The '+' converts the string to a number
-      // Now you can use this.personId to fetch data, etc.
+
+      this.restartVariables();
+
+      this.institutionId = params['id']; 
+
+      this.backendBridge.getInstitutionBasicData(this.institutionId).subscribe(data => {
+        this.institutionName = data["name"];
+        this.titleService.setTitle(`Linked Scholar - ${this.institutionName}`);
+      });
+      
+      this.backendBridge.getInstitutionResearchInterest(this.institutionId).subscribe(data => {
+        this.researchAreas = (data as researchArea[]).slice(0, 3).map(area => area.keyword);
+        this.topResearchAreas = (data as researchArea[]).slice(0, 5);
+        this.chartData = this.topResearchAreas.map(area => { return {"id" : area.keyword, "count": area.count}});
+        console.log(this.chartData);
+      }).add(() => {
+        if (this.researchAreas.length == 0) { return; }
+        this.selectedResearchArea = this.researchAreas[0];
+        this.backendBridge.getInstitutionTopResearchers(this.institutionId, this.selectedResearchArea).subscribe(data => {
+          this.topResearchers = data;
+        })
+      })
+      /*
+      this.backendBridge.getCoInstitutions(this.institutionId).subscribe(data => {
+        this.coInstitutions = data;
+      }).add(() => {
+        this.backendBridge.getCoInstitutionMatrix(this.institutionId).subscribe(data => {
+          this.matrix = data;
+          // concat only 6 names
+          this.labels = [this.institutionName] .concat(this.coInstitutions.slice(0, 6).map(coAuthor => coAuthor[2]));
+        })
+      });
+
+      this.backendBridge.getInstitutionPubsOverTime(this.institutionId).subscribe(data => {
+        this.pubChart = data;
+      })
+
+      this.backendBridge.getInstitutionCitationsOverTime(this.institutionId).subscribe(data => {
+        this.citChart = data;
+      })
+      */
     });
+  }
+
+  restartVariables() {
+    this.institutionName = "...";
+
+  }
+
+  navigateToPerson(id: string) {
+    this.router.navigate(['/ls/person', id]);
   }
 }

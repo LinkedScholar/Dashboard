@@ -1,0 +1,31 @@
+.stat {
+    color: var(--text-primary-color);
+}
+
+.university-name{
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    max-width: 20rem;
+    overflow: hidden;
+}
+
+.result{
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    justify-content: space-between
+}
+.area{
+    color: var(--text-primary-color);
+    cursor: pointer;
+    background-color: var(--color-primary-transparent-100);
+    margin-left: 0.5rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    border-radius: 100vh;
+}
+
+.info{
+    display: flex;
+    align-items: center;
+}

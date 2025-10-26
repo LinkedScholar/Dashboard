@@ -124,7 +124,6 @@ export class PersonProfileComponent implements OnInit{
   constructor(
     private router: Router,
     private route : ActivatedRoute,
-    private mockData : MockResultsService,
     private backendBridge: BackendBridgeService,
     private titleService: Title) {}
 
@@ -148,6 +147,7 @@ export class PersonProfileComponent implements OnInit{
 
       this.backendBridge.getPersonResearchInteres(this.personId).subscribe(data => {
         this.chartData = data;
+        console.log(data);
         this.researchAreas = Object.keys(data[0]);
       })
 
