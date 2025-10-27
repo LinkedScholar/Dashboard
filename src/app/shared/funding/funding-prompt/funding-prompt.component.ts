@@ -23,18 +23,12 @@ export class FundingPromptComponent implements OnInit{
 
   @Output() outPrompt: EventEmitter<Prompt> = new EventEmitter<Prompt>();
 
-  description: string = 'Random'
+  description: string = ''
   
-  promptKeywords: Tag[] = [ {
-    text: 'Random',
-    uuid: uuidv4()
-  }]
+  promptKeywords: Tag[] = [];
   newKeyword : string;
 
-  promptResearchAreas: Tag[] = [ {
-    text: 'Random',
-    uuid: uuidv4()
-  }]
+  promptResearchAreas: Tag[] = [];
 
   researchAreas: NbMenuItem[] = [
     {
