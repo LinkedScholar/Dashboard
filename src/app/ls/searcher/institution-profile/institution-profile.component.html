@@ -150,7 +150,115 @@
             </nb-tab>
             <nb-tab tabTitle="Topic Explorer" style="padding: 0;">
                 <div class="row" *nbTabContent>
-                    
+                    <div class="col-12" style="display: flex;">
+                        <nb-select style="min-width: 10rem; max-width: 100%; flex: 1; padding-bottom: 1rem;" [(ngModel)]="selectedResearchAreaExtended" (ngModelChange)="onAreaChangeExtended($event)">
+                            <nb-option *ngFor="let option of moreResearchAreas" [value]="option.keyword">{{option.keyword}}</nb-option>
+                        </nb-select>
+                    </div>
+                    <div class="col-6">
+                        <nb-card>
+                            <nb-card-body>
+                                <h5>Publications</h5>
+                                <nb-list style="height: 94vh;">
+                                    <nb-list-item *ngIf="nPages > 1">
+                                        <ls-paging-footer
+                                            [currentPage]="currentPage" [maxPage]="nPages" (search)="handleNewPage($event)" [disabled]="loadingPagesFiltered"></ls-paging-footer>
+                                    </nb-list-item>
+                                    <nb-list-item *ngFor="let paper of papers" style="display: flex; flex-direction: column; align-items: start;">
+                                        <p><strong>{{paper.title}}</strong></p>
+                                        <p><strong>Citations: </strong>{{paper.citations}} <strong>Year: </strong> {{paper.year}}</p>
+                                        <p style="font-size: smaller;"><strong>Authors: </strong><a style="cursor: pointer;" *ngFor="let author of paper.co_authors" (click)='navigateToPerson(author.id)'>{{author.name}}, </a></p>
+                                        <p style="font-size: smaller;" *ngIf="(paper.keywords.length > 0)"><strong>Keywords: </strong><span *ngFor="let keyword of paper.keywords">{{keyword}}, </span></p>
+                                        <p style="font-size: smaller;" *ngIf="paper.venue"><strong>Venue: </strong><a style="cursor: pointer;" (click)="navigateToVenue(paper.venue.name)">{{paper.venue.name}}</a></p>
+                                    </nb-list-item>
+                                    <nb-list-item *ngIf="nPages > 1">
+                                        <ls-paging-footer
+                                            [currentPage]="currentPage" [maxPage]="nPages" (search)="handleNewPage($event)" [disabled]="loadingPagesFiltered"></ls-paging-footer>
+                                    </nb-list-item>
+                                </nb-list>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">
+                            <nb-card style="flex: 1;">
+                                <nb-card-body style="display: flex; flex-direction: column;">
+                                    <h5>Citations over time</h5>
+                                    <div style="display: flex; flex: 1; align-items: center;">
+                                        <ls-bar-chart style="flex: 1;"
+                                        [data]="citChartFiltered">
+                                        </ls-bar-chart>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                        <div class="row">
+                            <nb-card style="flex: 1;">
+                                <nb-card-body style="display: flex; flex-direction: column;">
+                                    <h5>Publications over time</h5>
+                                    <div style="display: flex; flex: 1; align-items: center;">
+                                        <ls-bar-chart style="flex: 1;"
+                                        [data]="pubChartFiltered">
+                                        </ls-bar-chart>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <nb-card>
+                            <nb-card-body>
+                                <div class="row">
+                                    <div class="col">
+                                            <h5>Collaborating institutions</h5>
+                                            <ls-chord-diagram
+                                                [matrix]="matrixFiltered" 
+                                                [labels]="labelsFiltered"
+                                                class="chord-diagram"
+                                                [ngClass]="(matrix.length > 0) ? '' : 'chord-diagram-empty'">
+                                            </ls-chord-diagram>
+                                    </div>
+                                    <div class="col">
+                                        <nb-list
+                                            style="max-height: 50vh; overflow: hidden;">
+                                            <nb-list-item *ngFor="let coAuthor of coInstitutionsFiltered">
+                                                <div (click)="navigateToInstitution(coAuthor.id)" style="cursor: pointer;">
+                                                    <nb-user 
+                                                        [name]="coAuthor.name"
+                                                        [badgeText]="coAuthor.count"
+                                                        badgePosition="bottom right">
+                                                    </nb-user>
+                                                </div>
+                                            </nb-list-item>
+                                        </nb-list>
+                                    </div>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                    <div class="col-6">
+                        <nb-card>
+                            <nb-card-body>
+                                <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                    <h5>Top Researchers</h5>
+                                </div>
+                                <nb-list-item *ngFor="let result of topResearchersExtended" style="align-items: baseline; gap: .25rem; flex-direction: column; position: relative;" class ="result-item">
+                                    <div class="result" style="width: 100%;">
+                                        <div style="display: flex; flex-direction: row; gap: 1rem;">
+                                            <nb-user onlyPicture [name]="result.name" size="large"></nb-user>
+                                            <div class="info">
+                                                <a style="cursor: pointer;" (click)="navigateToPerson(result.id)">{{result.name}}</a>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column; gap: 0.1rem; width: 6rem;">
+                                            <span class="stat">#Citations: {{result.citations}}</span> 
+                                            <span class="stat">#Papers: {{result.publications}}</span>
+                                        </div>
+                                    </div>
+                                </nb-list-item>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
                 </div>
             </nb-tab>
         </nb-tabset>

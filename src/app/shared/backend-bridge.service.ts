@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { PaperData } from '../ls/searcher/person-profile/person-profile.component';
-import { map } from 'rxjs/operators';
+import { map, filter } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +28,14 @@ export class BackendBridgeService {
     return this.http.get(`/api/institution/${institutionId}`);
   }
 
+  getInstitutionBasicDataFiltered(institutionId: string, filter: string) {
+    const obj = { query: filter };
+    const httpParams = new HttpParams({ fromObject: obj });
+    const queryString = httpParams.toString(); // 
+    const fullUrl = `/api/institution_filtered/${institutionId}?${queryString}`;
+    return this.http.get(fullUrl);
+  }
+
   getPersonResearchInteres(personId: string) {
     return this.http.get(`/api/person_interests/${personId}`);
   }
@@ -48,8 +56,25 @@ export class BackendBridgeService {
     return this.http.get(`/api/institution_coinstitutions/${institutionId}`);
   }
 
+  getCoInstitutionsFiltered(institutionId: string, filter: string) {
+
+    const obj = { query: filter };
+    const httpParams = new HttpParams({ fromObject: obj });
+    const queryString = httpParams.toString(); // 
+    const fullUrl = `/api/institution_coinstitutions_filtered/${institutionId}?${queryString}`;
+
+    return this.http.get(fullUrl);
+  }
+
   getCoInstitutionMatrix(institutionId: string) {
     return this.http.get(`/api/institution_matrix/${institutionId}`);
+  }
+  getCoInstitutionMatrixFiltered(institutionId: string, filter: string ) {
+    const obj = { query: filter };
+    const httpParams = new HttpParams({ fromObject: obj });
+    const queryString = httpParams.toString(); // 
+    const fullUrl = `/api/institution_matrix_filtered/${institutionId}?${queryString}`;
+    return this.http.get(fullUrl);
   }
 
   getInstitutionPubsOverTime(institutionId: string) {
@@ -58,6 +83,22 @@ export class BackendBridgeService {
 
   getInstitutionCitationsOverTime(institutionId: string) {
     return this.http.get(`/api/institution_citations_over_time/${institutionId}`);
+  }
+
+  getInstitutionPubsOverTimeFiltered(institutionId: string, filter: string) {
+    const obj = { query: filter };
+    const httpParams = new HttpParams({ fromObject: obj });
+    const queryString = httpParams.toString(); // 
+    const fullUrl = `/api/institution_pubs_over_time_filtered/${institutionId}?${queryString}`;
+    return this.http.get(fullUrl);
+  }
+
+  getInstitutionCitationsOverTimeFiltered(institutionId: string, filter: string) {
+    const obj = { query: filter };
+    const httpParams = new HttpParams({ fromObject: obj });
+    const queryString = httpParams.toString(); // 
+    const fullUrl = `/api/institution_citations_over_time_filtered/${institutionId}?${queryString}`;
+    return this.http.get(fullUrl);
   }
 
   getInstitutionOverview(institutionId: string) {
@@ -69,6 +110,20 @@ export class BackendBridgeService {
     const httpParams = new HttpParams({ fromObject: obj });
     const queryString = httpParams.toString(); // 
     const fullUrl = `/api/person_papers/${personId}?${queryString}`;  
+    return this.http.get(fullUrl).pipe(
+      map(response => {
+        return response as PaperData[];
+      })
+    );
+  }
+  getInstitutionPapers(personId: string, skip: number = 0, filter: string) : Observable<PaperData[]>{
+    const obj = {
+      skip: skip,
+      filter: filter
+    };
+    const httpParams = new HttpParams({ fromObject: obj });
+    const queryString = httpParams.toString(); // 
+    const fullUrl = `/api/institution_papers_filtered/${personId}?${queryString}`;  
     return this.http.get(fullUrl).pipe(
       map(response => {
         return response as PaperData[];

@@ -3,6 +3,7 @@ import { BackendBridgeService } from './../../../shared/backend-bridge.service';
 import { Component, OnChanges, SimpleChanges } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PaperData } from '../person-profile/person-profile.component';
 
 type researchArea = {
   keyword: string,
@@ -19,18 +20,33 @@ export class InstitutionProfileComponent {
   institutionName: string;
   researchAreas: string[] = [];
   topResearchAreas = [];
+  moreResearchAreas = [];
   selectedResearchArea: string;
+  selectedResearchAreaExtended: string;
 
   coInstitutions: any;
+  coInstitutionsFiltered: any;
 
   matrix : any = [[]];
+  matrixFiltered : any = [[]];
   labels: any = [];
+  labelsFiltered: any = [];
 
   pubChart: any;
   citChart: any;
 
+  pubChartFiltered: any;
+  citChartFiltered: any;
+
   topResearchers: any;
+  topResearchersExtended: any;
   chartData : any = [];
+
+  loadingPagesFiltered = false;
+
+  papers: any[] = [];
+  nPages: number = 1;
+  currentPage: number = 1;
 
   overview: any;
 
@@ -46,6 +62,57 @@ export class InstitutionProfileComponent {
     this.selectedResearchArea = area;
     this.backendBridge.getInstitutionTopResearchers(this.institutionId, this.selectedResearchArea).subscribe(data => {
       this.topResearchers = data;
+    })
+  }
+
+  onAreaChangeExtended(area: string) {
+    this.selectedResearchAreaExtended = area;
+
+    this.pubChartFiltered = [];
+    this.citChartFiltered = [];
+    this.topResearchersExtended = [];
+    this.coInstitutionsFiltered = [];
+    this.matrixFiltered = [];
+    this.labelsFiltered = [];
+    this.currentPage = 1;
+
+
+    this.backendBridge.getInstitutionTopResearchers(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
+      this.topResearchersExtended = data;
+    })
+
+    this.backendBridge.getCoInstitutionsFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
+      this.coInstitutionsFiltered = data;
+    }).add(() => {
+      this.backendBridge.getCoInstitutionMatrixFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
+        this.matrixFiltered = data;
+        // concat only 6 names
+        this.labelsFiltered = [this.institutionName] .concat(this.coInstitutions.slice(0, 6).map(coAuthor => coAuthor.name));
+      })
+    });
+
+    this.backendBridge.getInstitutionPubsOverTimeFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
+      this.pubChartFiltered = (data as any[]).map(item => {return {"id": item["year"], "count": item["count"]}});  
+    })
+
+    this.backendBridge.getInstitutionCitationsOverTimeFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
+      this.citChartFiltered = (data as any[]).map(item => {return {"id": item["year"], "count": item["count"]}});  
+    })
+
+    this.backendBridge.getInstitutionPapers(this.institutionId, (this.currentPage - 1)*10, this.selectedResearchAreaExtended).subscribe(
+      (data: PaperData[]) => {
+        this.papers = data;
+        this.loadingPagesFiltered = false;
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+        this.loadingPagesFiltered = false;
+      }
+    );
+
+    this.backendBridge.getInstitutionBasicDataFiltered(this.institutionId, this.selectedResearchArea).subscribe(data => {
+      let totalPubs = data["paperCount"];
+      this.nPages = Math.ceil(totalPubs / 10);
     })
   }
   ngOnInit(): void {
@@ -72,13 +139,50 @@ export class InstitutionProfileComponent {
       this.backendBridge.getInstitutionResearchInterest(this.institutionId).subscribe(data => {
         this.researchAreas = (data as researchArea[]).slice(0, 3).map(area => area.keyword);
         this.topResearchAreas = (data as researchArea[]).slice(0, 5);
+        this.moreResearchAreas = (data as researchArea[]).slice(0, 15);
         this.chartData = this.topResearchAreas.map(area => { return {"id" : area.keyword, "count": area.count}});
         console.log(this.chartData);
       }).add(() => {
         if (this.researchAreas.length == 0) { return; }
         this.selectedResearchArea = this.researchAreas[0];
+        this.selectedResearchAreaExtended = this.selectedResearchArea;
         this.backendBridge.getInstitutionTopResearchers(this.institutionId, this.selectedResearchArea).subscribe(data => {
           this.topResearchers = data;
+        });
+        this.backendBridge.getInstitutionTopResearchers(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
+          this.topResearchersExtended = data;
+        })
+
+        this.backendBridge.getCoInstitutionsFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
+          this.coInstitutionsFiltered = data;
+        }).add(() => {
+          this.backendBridge.getCoInstitutionMatrixFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
+            this.matrixFiltered = data;
+            // concat only 6 names
+            this.labelsFiltered = [this.institutionName] .concat(this.coInstitutions.slice(0, 6).map(coAuthor => coAuthor.name));
+          })
+        });
+
+        this.backendBridge.getInstitutionPubsOverTimeFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
+          this.pubChartFiltered = (data as any[]).map(item => {return {"id": item["year"], "count": item["count"]}});  
+        })
+  
+        this.backendBridge.getInstitutionCitationsOverTimeFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
+          this.citChartFiltered = (data as any[]).map(item => {return {"id": item["year"], "count": item["count"]}});  
+        })
+        this.backendBridge.getInstitutionPapers(this.institutionId, (this.currentPage - 1)*10, this.selectedResearchAreaExtended).subscribe(
+          (data: PaperData[]) => {
+            this.papers = data;
+            this.loadingPagesFiltered = false;
+          },
+          (error) => {
+            console.error('Error fetching data:', error);
+            this.loadingPagesFiltered = false;
+          }
+        );
+        this.backendBridge.getInstitutionBasicDataFiltered(this.institutionId, this.selectedResearchArea).subscribe(data => {
+          let totalPubs = data["paperCount"];
+          this.nPages = Math.ceil(totalPubs / 10);
         })
       })
       
@@ -91,7 +195,7 @@ export class InstitutionProfileComponent {
           this.labels = [this.institutionName] .concat(this.coInstitutions.slice(0, 6).map(coAuthor => coAuthor.name));
         })
       });
-      
+
       this.backendBridge.getInstitutionPubsOverTime(this.institutionId).subscribe(data => {
         this.pubChart = (data as any[]).map(item => {return {"id": item["year"], "count": item["count"]}});  
       })
@@ -99,9 +203,6 @@ export class InstitutionProfileComponent {
       this.backendBridge.getInstitutionCitationsOverTime(this.institutionId).subscribe(data => {
         this.citChart = (data as any[]).map(item => {return {"id": item["year"], "count": item["count"]}});  
       })
-
-      
-      
     });
   }
 
@@ -116,5 +217,21 @@ export class InstitutionProfileComponent {
 
   navigateToInstitution(id: string) {
     this.router.navigate(['/ls/institution', id]);
+  }
+
+  handleNewPage(page) {
+    this.loadingPagesFiltered = true;
+    this.currentPage = page;
+
+    this.backendBridge.getInstitutionPapers(this.institutionId, (this.currentPage - 1)*10, this.selectedResearchAreaExtended).subscribe(
+      (data: PaperData[]) => {
+        this.papers = data;
+        this.loadingPagesFiltered = false;
+      },
+      (error) => {
+        console.error('Error fetching data:', error);
+        this.loadingPagesFiltered = false;
+      }
+    );
   }
 }
