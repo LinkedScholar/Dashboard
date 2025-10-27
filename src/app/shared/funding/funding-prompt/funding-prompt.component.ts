@@ -19,6 +19,7 @@ export type Prompt = {
 })
 export class FundingPromptComponent implements OnInit{
   @Input() initialPrompt: Prompt
+  @Input() hiddenHeader: boolean = false;
 
   @Output() outPrompt: EventEmitter<Prompt> = new EventEmitter<Prompt>();
 

@@ -1,5 +1,7 @@
-<h3>Prompt your project</h3>
-<h5>Description:</h5>
+<div *ngIf="!hiddenHeader">
+    <h3>Prompt your project</h3>
+    <h5>Description:</h5>
+</div>
 <textarea rows="5" nbInput fullWidth placeholder="Description" [(ngModel)]="description" shape="round" style="resize: none;"></textarea>
 <div style="display: inline-flex; gap: 1rem">
     <h5>Research areas:</h5>
