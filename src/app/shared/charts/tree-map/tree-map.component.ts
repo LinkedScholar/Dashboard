@@ -36,8 +36,8 @@ export class TreeMapComponent implements AfterViewInit, OnDestroy, OnChanges {
   ngAfterViewInit(): void {
     const host = this.hostRef.nativeElement;
 		const rect = host.getBoundingClientRect();
-		this.lastW = Math.max(420, Math.round(rect.width || 600));
-		this.lastH = Math.round(rect.height || 420);
+		this.lastW = Math.max(420, Math.round(rect.width || 800));
+		this.lastH = Math.round(rect.height || 600);
 
 		this.draw();
 
@@ -90,66 +90,95 @@ export class TreeMapComponent implements AfterViewInit, OnDestroy, OnChanges {
 		const innerW = width - margin.left - margin.right;
 		const innerH = height - margin.top - margin.bottom;
 
-    const color = d3.scaleOrdinal(this.data.children.map(d => d.name), d3.schemeTableau10);
-    
-    const root = d3.treemap()
-      .tile( d3.treemapSquarify) 
-      .size([width, height])
-      .padding(1)
-      .round(true)
-        (d3.hierarchy(this.data)
-            .sum(d => d.value)
-            .sort((a, b) => b.value - a.value));
+    const color = d3.scaleSequential([8, 0], d3.interpolateMagma);
+        
+    const treemap = data => cascade(
+    d3.treemap()
+        .size([width, height])
+        .paddingOuter(3)
+        .paddingTop(19)
+        .paddingInner(1)
+        .round(true)
+    (d3.hierarchy(data)
+        .sum(d => d.value)
+        .sort((a, b) => b.value - a.value)),
+    3 // treemap.paddingOuter
+  );
 
-    // Create the SVG container.
-    const svg = d3.select(host).
-      append("svg")
-      .attr("viewBox",  `0 0 ${width} ${height}`)
-      .attr("width", '100%')
-      .attr("height", '100%')
-      .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;");
+  function cascade(root, offset) {
+    const x = new Map();
+    const y = new Map();
+    return root.eachAfter(d => {
+      if (d.children) {
+        x.set(d, 1 + d3.max(d.children, c => c.x1 === d.x1 - offset ? x.get(c) : NaN));
+        y.set(d, 1 + d3.max(d.children, c => c.y1 === d.y1 - offset ? y.get(c) : NaN));
+      } else {
+        x.set(d, 0);
+        y.set(d, 0);
+      }
+    }).eachBefore(d => {
+      d.x1 -= 2 * offset * x.get(d);
+      d.y1 -= 2 * offset * y.get(d);
+    });
+  }
+  const root = treemap(this.data);
 
-    // Add a cell for each leaf of the hierarchy.
-    const leaf = svg.selectAll("g")
-      .data(root.leaves())
-      .join("g")
-        .attr("transform", d => `translate(${d.x0},${d.y0})`);
+  // Create the SVG container.
+  const svg = d3.select(host).append("svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", [0, 0, width, height])
+      .attr("style", "max-width: 100%; height: auto; overflow: hidden; font: 10px sans-serif;");
 
-    // Append a tooltip.
-    const format = d3.format(",d");
-    leaf.append("title")
-        .text(d => `${d.ancestors().reverse().map(d => d.data.name).join(".")}\n${format(d.value)}`);
+  // Create the drop shadow.
+  const shadow = uuidv4();
+  svg.append("filter")
+      .attr("id", shadow)
+    .append("feDropShadow")
+      .attr("flood-opacity", 0.9)
+      .attr("dx", 0)
+      .attr("stdDeviation", 3);
 
-    // Append a color rectangle. 
-    leaf.append("rect")
-        .attr("id", d => (d.leafUid = uuidv4()))
-        .attr("fill", d => { while (d.depth > 1) d = d.parent; return color(d.data.name); })
-        .attr("fill-opacity", 0.6)
-        .attr("width", d => d.x1 - d.x0)
-        .attr("height", d => d.y1 - d.y0);
+  // Add nodes (with a color rect and a text label).
+  const node = svg.selectAll("g")
+    .data(d3.group(root, d => d.height))
+    .join("g")
+      .attr("filter", shadow)
+    .selectAll("g")
+    .data(d => d[1])
+    .join("g")
+      .attr("transform", d => `translate(${d.x0},${d.y0})`);
 
-    // Append a clipPath to ensure text does not overflow.
-    leaf.append("clipPath")
-        .attr("id", d => (d.clipUid = uuidv4()))
-      .append("use")
-        .attr("xlink:href", d => d.leafUid.href);
+  const format = d3.format(",d");
+  node.append("title")
+      .text(d => `${d.ancestors().reverse().map(d => d.data.name).join("/")}\n${format(d.value)}`);
 
-    // Append multiline text. The last line shows the value and has a specific formatting.
-    leaf.append("text")
-        .attr("clip-path", d => d.clipUid)
-      .selectAll("tspan")
-      .data(d => d.data.name.split(/(?=[A-Z][a-z])|\s+/g).concat(format(d.value)))
-      .join("tspan")
-        .attr("x", 3)
-        .attr("y", (d, i, nodes) => {
-          if (i === nodes.length - 1) {
-            return `${0.3 + 1 + i * 0.9}em`;
-          } else {
-            return `${1 + i * 0.9}em`;
-          }
-        })
-        .attr("fill-opacity", (d, i, nodes) => i === nodes.length - 1 ? 0.7 : null)
-        .text(d => d);
-	}
+  node.append("rect")
+      .attr("id", d => (d.nodeUid = uuidv4()))
+      .attr("fill", d => color(d.height))
+      .attr("width", d => d.x1 - d.x0)
+      .attr("height", d => d.y1 - d.y0);
+
+  node.append("clipPath")
+      .attr("id", d => (d.clipUid = uuidv4))
+    .append("use")
+      .attr("xlink:href", d => d.nodeUid.href);
+
+  node.append("text")
+      .attr("clip-path", d => d.clipUid)
+    .selectAll("tspan")
+    .data(d => d.data.name.split(/(?=[A-Z][^A-Z])/g).concat(format(d.value)))
+    .join("tspan")
+      .attr("fill-opacity", (d, i, nodes) => i === nodes.length - 1 ? 0.7 : null)
+      .text(d => d);
+
+  node.filter(d => d.children).selectAll("tspan")
+      .attr("dx", 3)
+      .attr("y", 13);
+
+  node.filter(d => !d.children).selectAll("tspan")
+      .attr("x", 3)
+      .attr("y", (d, i, nodes) => `${(i < nodes.length - 1) ? i * 0.9 + 1.1 : (nodes.length - 1) * 0.3 + 3.1}em`);
+    }
 
 }

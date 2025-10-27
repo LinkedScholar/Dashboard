@@ -85,12 +85,11 @@ export class InstitutionProfileComponent {
       this.backendBridge.getCoInstitutions(this.institutionId).subscribe(data => {
         this.coInstitutions = data;
       }).add(() => {
-        /*this.backendBridge.getCoInstitutionMatrix(this.institutionId).subscribe(data => {
+        this.backendBridge.getCoInstitutionMatrix(this.institutionId).subscribe(data => {
           this.matrix = data;
           // concat only 6 names
           this.labels = [this.institutionName] .concat(this.coInstitutions.slice(0, 6).map(coAuthor => coAuthor.name));
         })
-          */
       });
       
       this.backendBridge.getInstitutionPubsOverTime(this.institutionId).subscribe(data => {
