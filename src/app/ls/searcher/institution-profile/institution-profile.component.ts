@@ -130,7 +130,7 @@ export class InstitutionProfileComponent {
           
           this.overview = {
             name: this.institutionName,
-            children: data
+            children: data,
           }
           console.log(this.overview);
         })
