@@ -49,7 +49,7 @@ export class BackendBridgeService {
   }
 
   getCoInstitutionMatrix(institutionId: string) {
-    return this.http.get(`/api/institution_coinstitution_matrix/${institutionId}`);
+    return this.http.get(`/api/institution_matrix/${institutionId}`);
   }
 
   getInstitutionPubsOverTime(institutionId: string) {
@@ -58,6 +58,10 @@ export class BackendBridgeService {
 
   getInstitutionCitationsOverTime(institutionId: string) {
     return this.http.get(`/api/institution_citations_over_time/${institutionId}`);
+  }
+
+  getInstitutionOverview(institutionId: string) {
+    return this.http.get(`/api/institution_overview/${institutionId}`);
   }
 
   getPersonPapers(personId: string, skip: number = 0) : Observable<PaperData[]>{

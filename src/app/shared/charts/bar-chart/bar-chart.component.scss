@@ -7,7 +7,7 @@
 
 .gbc-axis text {
 	font: 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-	fill: black;
+	fill: var(--text-basic-color);
 }
 .gbc-axis line,
 .gbc-axis path {
@@ -22,7 +22,7 @@
 
 .gbc-legend-label {
 	font: 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-	fill: black;
+	fill: var(--text-basic-color);
 }
 
 /* Tooltip (está en <body>, pero el estilo aplica igual) */
@@ -31,7 +31,7 @@
 	pointer-events: none;
 	padding: 8px 10px;
 	background: rgba(17, 24, 39, 0.92);
-	color: white;
+	color: whitesmoke;
 	border-radius: 6px;
 	font: 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
@@ -40,6 +40,6 @@
 /* Mensaje vacío */
 .gbc-empty {
 	padding: 12px;
-	color: black;
+	color: var(--text-basic-color);
 	font: 13px system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }

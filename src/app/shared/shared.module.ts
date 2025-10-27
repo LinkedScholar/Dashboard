@@ -10,6 +10,7 @@ import { FundingPromptComponent } from './funding/funding-prompt/funding-prompt.
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TagComponent } from './funding/tag/tag.component';
 import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
+import { TreeMapComponent } from './charts/tree-map/tree-map.component';
 
 
 
@@ -22,7 +23,8 @@ import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
     ChordDiagramComponent,
     FundingPromptComponent,
     TagComponent,
-    BarChartComponent
+    BarChartComponent,
+    TreeMapComponent
   ],
   imports: [
     CommonModule,
@@ -44,7 +46,8 @@ import { BarChartComponent } from './charts/bar-chart/bar-chart.component';
     StackedBarComponent,
     ChordDiagramComponent,
     FundingPromptComponent,
-    BarChartComponent
+    BarChartComponent,
+    TreeMapComponent
   ],
 })
 export class SharedModule { }

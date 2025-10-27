@@ -34,9 +34,33 @@
                 <div class="row" *nbTabContent>
                     <div class="col-6">
                         <nb-card>
-                            <nb-card-body>
+                            <nb-card-body style="display: flex; flex-direction: column;">
+                                <h5>Publications over time</h5>
+                                <div style="display: flex; flex: 1; align-items: center;">
+                                    <ls-bar-chart style="flex: 1;"
+                                    [data]="pubChart">
+                                    </ls-bar-chart>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                    <div class="col-6">
+                        <nb-card>
+                            <nb-card-body style="display: flex; flex-direction: column;">
+                                <h5>Citations over time</h5>
+                                <div style="display: flex; flex: 1; align-items: center;">
+                                    <ls-bar-chart style="flex: 1;"
+                                    [data]="citChart">
+                                    </ls-bar-chart>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                    <div class="col-6">
+                        <nb-card style="height: 67vh;">
+                            <nb-card-body style="display: flex; flex-direction: column;">
                                 <h5>Top Resarch fields</h5>
-                                <div style="display: flex; flex: 1;">
+                                <div style="display: flex; flex: 1; align-items: center;">
                                     <ls-bar-chart style="flex: 1;"
                                     [data]="chartData">
                                     </ls-bar-chart>
@@ -75,52 +99,41 @@
                             <nb-card-body>
                                 <div class="row">
                                     <div class="col">
-                                    <h5>Researcher Metrics</h5>
-                                        <strong>Publications:</strong> {{paperCount}}<br>
-                                        <strong>Citations:</strong> {{citationCount}}<br>
-                                        <strong>G-index:</strong> {{gIndex}}<br>
-                                        <strong>h-index:</strong> {{hIndex}}<br>
-                                        <strong>i10-index:</strong> {{i10Index}}<br>
-                                        <strong>Impact:</strong> {{sociabilityIndex}}<br>
-                                    </div>
-                                    <div class="col">
-                                        <!--ls-stacked-bar 
-                                            [data]="chartData" 
-                                            [title]="'Research areas'">
-                                        </ls-stacked-bar-->
-                                    </div>
-                                </div>
-                            </nb-card-body>
-                        </nb-card>
-                        <nb-card>
-                            <nb-card-body>
-                                <div class="row">
-                                    <div class="col">
-                                        <h5>Co-Authorhsip</h5>
-                                        <ls-chord-diagram
-                                            [matrix]="matrix" 
-                                            [labels]="labels"
-                                            class="chord-diagram"
-                                            [ngClass]="(matrix.length > 0) ? '' : 'chord-diagram-empty'">
-                                        </ls-chord-diagram>
+                                            <h5>Co-Authorhsip</h5>
+                                            <ls-chord-diagram
+                                                [matrix]="matrix" 
+                                                [labels]="labels"
+                                                class="chord-diagram"
+                                                [ngClass]="(matrix.length > 0) ? '' : 'chord-diagram-empty'">
+                                            </ls-chord-diagram>
                                     </div>
                                     <div class="col">
                                         <nb-list
-                                            style="max-height: 50vh;">
-                                            <nb-list-item *ngFor="let coAuthor of coAuthors">
-                                                <div (click)="navigateToPerson(coAuthor[0])" style="cursor: pointer;">
+                                            style="max-height: 50vh; overflow: hidden;">
+                                            <nb-list-item *ngFor="let coAuthor of coInstitutions">
+                                                <div (click)="navigateToInstitution(coAuthor.id)" style="cursor: pointer;">
                                                     <nb-user 
-                                                        [name]="coAuthor[2]"
-                                                        [picture]="getFakePicture(coAuthor[0])"
-                                                        [badgeText]="coAuthor[1]"
+                                                        [name]="coAuthor.name"
+                                                        [badgeText]="coAuthor.count"
                                                         badgePosition="bottom right">
                                                     </nb-user>
                                                 </div>
                                             </nb-list-item>
-                                            <nb-list-item *ngFor="let _ of coAuthorsPlaceholers">
-                                                <ls-user-place-holder></ls-user-place-holder>
-                                            </nb-list-item>
                                         </nb-list>
+                                    </div>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                    <div class="col-6">
+                        <nb-card>
+                            <nb-card-body>
+                                <div class="row">
+                                    <div class="col">
+                                            <h5>Organization overview</h5>
+                                            <ls-tree-map
+                                                [data]="overview">
+                                            </ls-tree-map>
                                     </div>
                                 </div>
                             </nb-card-body>

@@ -53,7 +53,10 @@ export class ChordDiagramComponent implements OnInit, OnChanges{
 
     // Ribbons
     const ribbon = d3.ribbon().radius(this.innerRadius);
-    const sum = d3.sum(Object.assign(this.matrix).flat());
+    let sum = d3.sum(Object.assign(this.matrix).flat());
+    if (sum > 1000) {
+      sum = sum/ 1000;
+    }
     const tickStep = d3.tickStep(0, sum/2, sum/2); // DONT KNOW WHY
 
 
@@ -83,16 +86,12 @@ export class ChordDiagramComponent implements OnInit, OnChanges{
       .append('title')
       .text(d => `${this.labels[d.index]}: ${d.value}`);
 
-
+    
     const groupTick = group.append("g")
       .selectAll()
       .data(d => groupTicks(d, tickStep))
       .join("g")
         .attr("transform", d => `rotate(${d.angle * 180 / Math.PI - 90}) translate(${this.outerRadius},0)`);
-
-    groupTick.append("line")
-      .attr("stroke", "var(--text-basic-color)")
-      .attr("x2", 6);
 
     groupTick.append("text")
       .attr("x", 8)

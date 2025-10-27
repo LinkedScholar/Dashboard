@@ -32,6 +32,8 @@ export class InstitutionProfileComponent {
   topResearchers: any;
   chartData : any = [];
 
+  overview: any;
+
   constructor(
     private router: Router,
     private route : ActivatedRoute,
@@ -56,6 +58,15 @@ export class InstitutionProfileComponent {
       this.backendBridge.getInstitutionBasicData(this.institutionId).subscribe(data => {
         this.institutionName = data["name"];
         this.titleService.setTitle(`Linked Scholar - ${this.institutionName}`);
+      }).add(() => {
+        this.backendBridge.getInstitutionOverview(this.institutionId).subscribe(data => {
+          
+          this.overview = {
+            name: this.institutionName,
+            children: data
+          }
+          console.log(this.overview);
+        })
       });
       
       this.backendBridge.getInstitutionResearchInterest(this.institutionId).subscribe(data => {
@@ -70,25 +81,28 @@ export class InstitutionProfileComponent {
           this.topResearchers = data;
         })
       })
-      /*
+      
       this.backendBridge.getCoInstitutions(this.institutionId).subscribe(data => {
         this.coInstitutions = data;
       }).add(() => {
-        this.backendBridge.getCoInstitutionMatrix(this.institutionId).subscribe(data => {
+        /*this.backendBridge.getCoInstitutionMatrix(this.institutionId).subscribe(data => {
           this.matrix = data;
           // concat only 6 names
-          this.labels = [this.institutionName] .concat(this.coInstitutions.slice(0, 6).map(coAuthor => coAuthor[2]));
+          this.labels = [this.institutionName] .concat(this.coInstitutions.slice(0, 6).map(coAuthor => coAuthor.name));
         })
+          */
       });
-
+      
       this.backendBridge.getInstitutionPubsOverTime(this.institutionId).subscribe(data => {
-        this.pubChart = data;
+        this.pubChart = (data as any[]).map(item => {return {"id": item["year"], "count": item["count"]}});  
       })
 
       this.backendBridge.getInstitutionCitationsOverTime(this.institutionId).subscribe(data => {
-        this.citChart = data;
+        this.citChart = (data as any[]).map(item => {return {"id": item["year"], "count": item["count"]}});  
       })
-      */
+
+      
+      
     });
   }
 
@@ -99,5 +113,9 @@ export class InstitutionProfileComponent {
 
   navigateToPerson(id: string) {
     this.router.navigate(['/ls/person', id]);
+  }
+
+  navigateToInstitution(id: string) {
+    this.router.navigate(['/ls/institution', id]);
   }
 }
