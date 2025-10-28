@@ -161,16 +161,17 @@ export class TreeMapComponent implements AfterViewInit, OnDestroy, OnChanges {
 
   node.append("clipPath")
       .attr("id", d => (d.clipUid = uuidv4))
-    .append("use")
+      .append("use")
       .attr("xlink:href", d => d.nodeUid.href);
-
+  // clip text to 20 characters
   node.append("text")
       .attr("clip-path", d => d.clipUid)
     .selectAll("tspan")
-    .data(d => d.data.name.split(/(?=[A-Z][^A-Z])/g).concat(format(d.value)))
+    .data(d => ((d.data.name.length > 20 ? [d.data.name.slice(0, 20), d.data.name.slice(20)] : [d.data.name]).concat(format(d.value))))
     .join("tspan")
       .attr("fill-opacity", (d, i, nodes) => i === nodes.length - 1 ? 0.7 : null)
-      .text(d => d);
+      .text(d => d)
+      .attr("font-size", "7px");
 
   node.filter(d => d.children).selectAll("tspan")
       .attr("dx", 3)
