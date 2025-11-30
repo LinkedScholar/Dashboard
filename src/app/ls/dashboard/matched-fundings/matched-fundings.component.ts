@@ -3,6 +3,7 @@ import { FundingBridgeService, ProjectPrompt } from './../../../shared/funding-b
 import { Component, OnInit } from '@angular/core';
 import { Prompt } from '../../../shared/funding/funding-prompt/funding-prompt.component';
 import { NbDialogService } from '@nebular/theme';
+import { query } from '@angular/animations';
 
 type Date = {
   year: number;
@@ -102,19 +103,16 @@ export class MatchedFundingsComponent implements OnInit{
   ngOnInit(): void {
     let project = this.fundingBackend.getCurrentProject();
     this.initialProject = {
-      description : project.description,
-      keywords : project.keywords.split(', '),
-      research_areas : project.research_areas.split(', ')
+      query : project.query,
+      research_areas : project.research_areas
     }
     this.doRequest();
   }
 
   doRequest(){
     let obs = this.fundingBackend.getMatchedFundings()
-    if (!obs) this.router.navigate(['/ls']);
     obs.subscribe((data: FundingResponse) => {
       this.fundings = [];
-      if (!data.success) this.router.navigate(['/ls']);
       
       for (let funding of data.data.matches) {
         let parsedFunding :FundingData = {

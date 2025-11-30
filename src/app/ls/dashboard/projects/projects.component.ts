@@ -95,9 +95,9 @@ export class ProjectsComponent implements OnInit {
   constructor(private fundingBackend: FundingBridgeService, private router: Router) {}
 
   ngOnInit(): void {
-    this.fundingBackend.getSampleProjects().subscribe((data: ProjectsResponse) => {
-      this.projects = data.data.projects;
-    });
+    //this.fundingBackend.getSampleProjects().subscribe((data: ProjectsResponse) => {
+    //  this.projects = data.data.projects;
+    //});
 
   }
 

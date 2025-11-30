@@ -1,20 +1,23 @@
 {
   "/api": {
-    "target": "https://chat.linkedscholar.io", 
+    "target": "https://app.linkedscholar.io", 
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug",
     "pathRewrite": {
-      "^/api" : "/basic-api"
+      "^/api" : "/api/basic-api"
     },
     "headers": {
       "x-api-key": "YOUR_SECRET_API_KEY"
     }
   },
   "/funding-api": {
-    "target": "http://35.159.132.142",
+    "target": "https://app.linkedscholar.io",
     "secure": false,
     "changeOrigin": true,
+    "pathRewrite": {
+      "^/funding-api" : "/api/funding-api"
+    },
     "logLevel": "debug",
     "headers": {
       "x-api-key": "YOUR_SECRET_API_KEY"

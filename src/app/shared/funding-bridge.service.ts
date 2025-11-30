@@ -5,10 +5,8 @@ import { PaperData } from '../ls/searcher/person-profile/person-profile.componen
 import { map } from 'rxjs/operators';
 
 export type ProjectPrompt = {
-  title: string;
-  description: string;
-  keywords: string;
-  research_areas: string;
+  query: string;
+  research_areas: string[];
 };
 
 @Injectable({
@@ -63,10 +61,8 @@ export class FundingBridgeService {
 
   setPrompt(title: string, description: string, keywords: string[], research_areas: string[]) {
     this.currentProject = {
-      title: title,
-      description: description,
-      keywords: keywords.join(', '),
-      research_areas: research_areas.join(', ')
+      query: description,
+      research_areas: research_areas
     }
   }
 
