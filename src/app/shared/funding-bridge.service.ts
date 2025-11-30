@@ -71,7 +71,7 @@ export class FundingBridgeService {
       return;
     }
     const postData = this.currentProject;
-    return this.http.post('/funding-api/match/project?limit=10', postData);
+    return this.http.post('/funding-api/match/project', postData);
   }
 
   getCurrentProject() {

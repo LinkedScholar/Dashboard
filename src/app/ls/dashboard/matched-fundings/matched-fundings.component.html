@@ -22,9 +22,8 @@
                             <p style="overflow: hidden; display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; text-overflow: ellipsis;">{{matchedFunding.description}}</p>
                         </div>
                         <p *ngIf="matchedFunding.budget_max">Budget: {{matchedFunding.budget_min}} - {{matchedFunding.budget_max}} €</p>
-                        <p *ngIf="matchedFunding.consortium_size_max">Consortium size: {{matchedFunding.consortium_size_min}} - {{matchedFunding.consortium_size_max}}</p>
                         <p *ngIf="matchedFunding.trl_max">TRL: {{matchedFunding.trl_min}} - {{matchedFunding.trl_max}}</p>
-                        <nb-progress-bar [value]="matchedFunding.combined_score" displayValue="true" [status]="status(matchedFunding.combined_score)"></nb-progress-bar>
+                        <nb-progress-bar [value]="matchedFunding.semantic_score" displayValue="true" [status]="status(matchedFunding.semantic_score)"></nb-progress-bar>
                         <a href="{{matchedFunding.detail_url}}" 
                             target="_blank" 
                             style="position: absolute; top: 0; right: 1rem;"><nb-icon icon="globe"></nb-icon></a>

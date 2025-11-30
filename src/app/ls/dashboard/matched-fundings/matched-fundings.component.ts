@@ -11,42 +11,25 @@ type Date = {
   day: number
 }
 export type FundingData = {
+  title: string;
+  id: number;
+  description : string;
+  semantic_score: number;
   budget_max : number | null;
   budget_min : number | null;
-  consortium_size_max : number | null;
-  consortium_size_min : number | null;
   deadline: Date;
-  description : string;
-  detail_url : string;
-  id: number;
-  keywords: string[];
-  program: string;
-  research_areas: string[];
-  title: string;
-  topic_id: string;
   trl_max : number | null;
   trl_min : number | null;
-  combined_score: number;
-  constraints_details: any;
-  constraints_score: number;
-  semantic_score: number;
-  match_explanation: string
 }
 
 type FundingDTO = {
+  title: string;
+  id: number;
+  description : string;
+  semantic_score: number;
   budget_max : number | null;
   budget_min : number | null;
-  consortium_size_max : number | null;
-  consortium_size_min : number | null;
   deadline: string | null;
-  description : string;
-  detail_url : string;
-  id: number;
-  keywords: string;
-  program: string;
-  research_areas: string;
-  title: string;
-  topic_id: string;
   trl_max : number | null;
   trl_min : number | null;
 }
@@ -78,8 +61,10 @@ type FundingResponseData = {
 }
 
 type FundingResponse = {
-  data : FundingResponseData,
-  success: boolean
+  results : FundingDTO[],
+  total_matches: number,
+  page_number: number,
+  page_size: number
 }
 
 @Component({
@@ -113,33 +98,22 @@ export class MatchedFundingsComponent implements OnInit{
     let obs = this.fundingBackend.getMatchedFundings()
     obs.subscribe((data: FundingResponse) => {
       this.fundings = [];
-      
-      for (let funding of data.data.matches) {
+      for (let funding of data.results) {
+        console.log(funding)
         let parsedFunding :FundingData = {
-          budget_max : funding.funding.budget_max,
-          budget_min : funding.funding.budget_min,
-          consortium_size_max : funding.funding.consortium_size_max,
-          consortium_size_min : funding.funding.consortium_size_min,
+          budget_max : funding.budget_max,
+          budget_min : funding.budget_min,
           deadline: {
-            year:   funding.funding.deadline ? parseInt(funding.funding.deadline.split('-')[0]) : 0,
-            month:  funding.funding.deadline ? parseInt(funding.funding.deadline.split('-')[1]) : 0,
-            day:    funding.funding.deadline ? parseInt(funding.funding.deadline.split('-')[2]) : 0
+            year:   funding.deadline ? parseInt(funding.deadline.split('-')[0]) : 0,
+            month:  funding.deadline ? parseInt(funding.deadline.split('-')[1]) : 0,
+            day:    funding.deadline ? parseInt(funding.deadline.split('-')[2]) : 0
           },
-          description : funding.funding.description,
-          detail_url :  funding.funding.detail_url,
-          id:       funding.funding.id,
-          keywords: funding.funding.keywords ? funding.funding.keywords.split(',') : [],
-          program:  funding.funding.program,
-          research_areas: funding.funding.research_areas ? funding.funding.research_areas.split(',') : [],
-          title:    funding.funding.title,
-          topic_id: funding.funding.topic_id,
-          trl_max : funding.funding.trl_max,
-          trl_min : funding.funding.trl_min,
-          combined_score: Math.round(funding.combined_score * 100),
-          constraints_details: funding.constraints_details,
-          constraints_score: Math.round(funding.constraints_score * 100),
+          description : funding.description,
+          id:       funding.id,
+          title:    funding.title,
+          trl_max : funding.trl_max,
+          trl_min : funding.trl_min,
           semantic_score: Math.round(funding.semantic_score * 100),
-          match_explanation: funding.match_explanation
         }
         this.fundings.push(parsedFunding)
       }
