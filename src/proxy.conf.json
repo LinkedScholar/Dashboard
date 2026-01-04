@@ -1,22 +1,22 @@
 {
   "/api": {
-    "target": "https://app.linkedscholar.io", 
+    "target": "http://52.29.56.117:5421", 
     "secure": true,
     "changeOrigin": true,
     "logLevel": "debug",
     "pathRewrite": {
-      "^/api" : "/api/basic-api"
+      "^/api" : "/api"
     },
     "headers": {
       "x-api-key": "YOUR_SECRET_API_KEY"
     }
   },
   "/funding-api": {
-    "target": "https://app.linkedscholar.io",
+    "target": "http://52.29.56.117:5420",
     "secure": false,
     "changeOrigin": true,
     "pathRewrite": {
-      "^/funding-api" : "/api/funding-api"
+      "^/funding-api" : "/funding-api"
     },
     "logLevel": "debug",
     "headers": {

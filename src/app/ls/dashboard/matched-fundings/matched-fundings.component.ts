@@ -1,9 +1,11 @@
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { FundingBridgeService, ProjectPrompt } from './../../../shared/funding-bridge.service';
 import { Component, OnInit } from '@angular/core';
 import { Prompt } from '../../../shared/funding/funding-prompt/funding-prompt.component';
 import { NbDialogService } from '@nebular/theme';
 import { query } from '@angular/animations';
+import { get } from 'http';
 
 type Date = {
   year: number;
@@ -20,6 +22,7 @@ export type FundingData = {
   deadline: Date;
   trl_max : number | null;
   trl_min : number | null;
+  detail_url: string | null;
 }
 
 type FundingDTO = {
@@ -114,11 +117,16 @@ export class MatchedFundingsComponent implements OnInit{
           trl_max : funding.trl_max,
           trl_min : funding.trl_min,
           semantic_score: Math.round(funding.semantic_score * 100),
+          detail_url: this.get_url_from_title(funding.title)
         }
         this.fundings.push(parsedFunding)
       }
 
     })
+  }
+
+  get_url_from_title(title: string) {
+    return 'https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/calls-for-proposals?keywords=' + title;
   }
 
   status( value: number) {
