@@ -141,11 +141,429 @@
                     </div>
                 </div>
             </nb-tab>
-            <nb-tab tabTitle="Research Lines" style="padding: 0;">
-                <div class="row" *nbTabContent style="height: calc(100vh - 9.5rem);">
-                    <div class="col" style="display: flex; align-items: center; justify-content: center;">
-                        <h1 style="margin: auto;">Under construction!</h1>
+            <nb-tab tabTitle="Funding Match-Maker" style="padding: 0;">
+                <div class="funding-match-maker" *nbTabContent style="padding: 1rem;">
+
+                    <!-- Progress Indicator -->
+                    <div class="row" style="margin-bottom: 1.5rem;">
+                        <div class="col-12">
+                            <div style="display: flex; gap: 0.5rem; align-items: center; justify-content: space-between;">
+                                <div [class.active-step]="currentFundingStep === 'link_input'"
+                                    style="flex: 1; text-align: center; padding: 0.5rem; border-radius: 0.5rem; background: var(--color-primary-transparent-100);">
+                                    <span style="font-weight: bold;">1. Link Input</span>
+                                </div>
+                                <div [class.active-step]="currentFundingStep === 'summary'"
+                                    style="flex: 1; text-align: center; padding: 0.5rem; border-radius: 0.5rem; background: var(--color-primary-transparent-100);">
+                                    <span style="font-weight: bold;">2. Summary</span>
+                                </div>
+                                <div [class.active-step]="currentFundingStep === 'institutions'"
+                                    style="flex: 1; text-align: center; padding: 0.5rem; border-radius: 0.5rem; background: var(--color-primary-transparent-100);">
+                                    <span style="font-weight: bold;">3. Institutions</span>
+                                </div>
+                                <div [class.active-step]="currentFundingStep === 'team_building'"
+                                    style="flex: 1; text-align: center; padding: 0.5rem; border-radius: 0.5rem; background: var(--color-primary-transparent-100);">
+                                    <span style="font-weight: bold;">4. Team Building</span>
+                                </div>
+                                <div [class.active-step]="currentFundingStep === 'export'"
+                                    style="flex: 1; text-align: center; padding: 0.5rem; border-radius: 0.5rem; background: var(--color-primary-transparent-100);">
+                                    <span style="font-weight: bold;">5. Export</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- STEP 0: LINK INPUT -->
+                    <div *ngIf="currentFundingStep === 'link_input'" class="row">
+                        <div class="col-12">
+                            <nb-card>
+                                <nb-card-header>
+                                    <h4>Enter Funding Opportunity Link</h4>
+                                </nb-card-header>
+                                <nb-card-body>
+                                    <p>Paste the link to a funding opportunity (e.g., Horizon Europe, NSF, NIH) to analyze and build your consortium.</p>
+
+                                    <input nbInput
+                                           fullWidth
+                                           type="text"
+                                           placeholder="https://example.com/funding-opportunity"
+                                           [(ngModel)]="fundingLink"
+                                           [disabled]="loadingFunding"
+                                           style="margin-top: 1rem;">
+
+                                    <div style="margin-top: 1.5rem; display: flex; justify-content: flex-end;">
+                                        <button nbButton
+                                                status="primary"
+                                                size="large"
+                                                (click)="submitFundingLink()"
+                                                [disabled]="loadingFunding || !fundingLink">
+                                            <span *ngIf="!loadingFunding">Analyze Funding Opportunity</span>
+                                            <span *ngIf="loadingFunding">Analyzing...</span>
+                                        </button>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                    </div>
+
+                    <!-- STEP 1: FUNDING SUMMARY -->
+                    <div *ngIf="currentFundingStep === 'summary'" class="row">
+                        <div class="col-12">
+                            <nb-card>
+                                <nb-card-header>
+                                    <h4>Funding Opportunity</h4>
+                                </nb-card-header>
+                                <nb-card-body *ngIf="selectedFunding">
+                                    <h5>{{selectedFunding.title}}</h5>
+
+                                    <p style="margin-top: 1rem;"><strong>Abstract:</strong></p>
+                                    <p>{{selectedFunding.abstract}}</p>
+
+                                    <div style="margin-top: 1rem;">
+                                        <strong>Topics:</strong>
+                                        <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
+                                            <div *ngFor="let topic of selectedFunding.topics"
+                                                style="background: var(--color-primary-transparent-100); padding: 0.25rem 0.75rem; border-radius: 1rem; font-size: 0.9rem;">
+                                                {{topic}}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="margin-top: 1.5rem;">
+                                        <div class="col-4">
+                                            <nb-card accent="info">
+                                                <nb-card-body>
+                                                    <strong>TRL Level:</strong>
+                                                    <p>{{selectedFunding.trlMin}} - {{selectedFunding.trlMax}}</p>
+                                                </nb-card-body>
+                                            </nb-card>
+                                        </div>
+                                        <div class="col-4">
+                                            <nb-card accent="success">
+                                                <nb-card-body>
+                                                    <strong>Budget Range:</strong>
+                                                    <p>{{formatBudget(selectedFunding.budgetMin)}} - {{formatBudget(selectedFunding.budgetMax)}}</p>
+                                                </nb-card-body>
+                                            </nb-card>
+                                        </div>
+                                        <div class="col-4">
+                                            <nb-card accent="warning">
+                                                <nb-card-body>
+                                                    <strong>Consortium Size:</strong>
+                                                    <p>{{selectedFunding.consortiumSize}} institutions</p>
+                                                </nb-card-body>
+                                            </nb-card>
+                                        </div>
+                                    </div>
+
+                                    <div style="margin-top: 1.5rem; display: flex; justify-content: space-between;">
+                                        <button nbButton status="basic" (click)="goBackToLinkInput()">
+                                            Back to Link Input
+                                        </button>
+                                        <button nbButton status="primary" size="large" (click)="startInstitutionSelection()">
+                                            Start Institution Selection
+                                        </button>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                    </div>
+
+                    <!-- STEP 2: INSTITUTION SELECTION -->
+                    <div *ngIf="currentFundingStep === 'institutions'" class="row">
+                        <div class="col-12">
+                            <nb-card>
+                                <nb-card-header>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <h4>Select Partner Institutions ({{selectedInstitutions.length}}/3)</h4>
+                                        <nb-select placeholder="Sort by..."
+                                                [(ngModel)]="institutionSortBy"
+                                                (ngModelChange)="onInstitutionSortChange($event)"
+                                                style="min-width: 200px;">
+                                            <nb-option value="smartScore">Smart Score</nb-option>
+                                            <nb-option value="previousCollaborations">Previous Collaborations</nb-option>
+                                            <nb-option value="name">Name</nb-option>
+                                        </nb-select>
+                                    </div>
+                                </nb-card-header>
+                                <nb-card-body>
+                                    <input nbInput
+                                           fullWidth
+                                           type="text"
+                                           placeholder="Search institutions by name..."
+                                           [(ngModel)]="institutionSearchQuery"
+                                           (ngModelChange)="onInstitutionSearchChange()"
+                                           style="margin-bottom: 1rem;">
+
+                                    <nb-list *ngIf="!loadingInstitutions" style="max-height: 50vh; overflow-y: auto;">
+                                        <nb-list-item *ngFor="let institution of filteredInstitutions"
+                                                    style="display: block; position: relative; cursor: pointer;"
+                                                    [class.selected-item]="isInstitutionSelected(institution.id)"
+                                                    (click)="toggleInstitutionSelection(institution)">
+
+                                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                                <nb-user onlyPicture
+                                                        [name]="institution.name"
+                                                        size="large">
+                                                </nb-user>
+
+                                                <div style="flex: 1;">
+                                                    <p style="font-weight: bold; margin: 0;">
+                                                        {{institution.name}}
+                                                        <span *ngIf="institution.isLocked" style="color: var(--color-warning-500); margin-left: 0.5rem;">
+                                                            (Current Institution)
+                                                        </span>
+                                                    </p>
+
+                                                    <div style="display: flex; gap: 2rem; margin-top: 0.5rem;">
+                                                        <span class="stat">Previous Collaborations: {{institution.previousCollaborations}}</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Vertical Smart Score Gauge -->
+                                                <div class="smart-score-gauge">
+                                                    <div class="gauge-container">
+                                                        <div class="gauge-fill" [style.height.%]="institution.smartScore"
+                                                            [ngClass]="'gauge-' + getScoreStatus(institution.smartScore)">
+                                                        </div>
+                                                    </div>
+                                                    <div class="gauge-label">{{institution.smartScore}}</div>
+                                                </div>
+
+                                                <div *ngIf="isInstitutionSelected(institution.id)"
+                                                    style="color: var(--color-success-500); font-size: 1.5rem; margin-left: 0.5rem;">
+                                                    ✓
+                                                </div>
+                                            </div>
+                                        </nb-list-item>
+                                    </nb-list>
+
+                                    <div *ngIf="loadingInstitutions" style="text-align: center; padding: 2rem;">
+                                        <p>Loading institutions...</p>
+                                    </div>
+
+                                    <div style="margin-top: 1.5rem; display: flex; justify-content: space-between;">
+                                        <button nbButton status="basic" (click)="goBackToSummary()">
+                                            Back to Summary
+                                        </button>
+                                        <button nbButton status="primary" size="large"
+                                                [disabled]="selectedInstitutions.length < 2"
+                                                (click)="startTeamBuilding()">
+                                            Continue to Team Building
+                                        </button>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                    </div>
+
+                    <!-- STEP 3: TEAM BUILDING -->
+                    <div *ngIf="currentFundingStep === 'team_building'" class="row">
+                        <div class="col-12">
+                            <nb-card>
+                                <nb-card-header>
+                                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                                        <h4>Build Your Team ({{selectedTeamMembers.length}} selected)</h4>
+                                        <nb-select placeholder="Sort by..."
+                                                [(ngModel)]="researcherSortBy"
+                                                (ngModelChange)="onResearcherSortChange($event)"
+                                                style="min-width: 200px;">
+                                            <nb-option value="expertiseScore">Expertise Score</nb-option>
+                                            <nb-option value="publicationCount">Publications</nb-option>
+                                            <nb-option value="citationCount">Citations</nb-option>
+                                            <nb-option value="collaborationHistory">Collaboration History</nb-option>
+                                            <nb-option value="name">Name</nb-option>
+                                        </nb-select>
+                                    </div>
+                                </nb-card-header>
+                                <nb-card-body>
+                                    <input nbInput
+                                           fullWidth
+                                           type="text"
+                                           placeholder="Search researchers by name or institution..."
+                                           [(ngModel)]="researcherSearchQuery"
+                                           (ngModelChange)="onResearcherSearchChange()"
+                                           style="margin-bottom: 1rem;">
+
+                                    <nb-list *ngIf="!loadingResearchers" style="max-height: 50vh; overflow-y: auto;">
+                                        <nb-list-item *ngFor="let researcher of filteredResearchers"
+                                                    style="display: block; position: relative; cursor: pointer;"
+                                                    [class.selected-item]="isResearcherSelected(researcher.id)"
+                                                    (click)="toggleResearcherSelection(researcher)">
+
+                                            <div style="display: flex; align-items: center; gap: 1rem;">
+                                                <nb-user onlyPicture
+                                                        [name]="researcher.name"
+                                                        size="large">
+                                                </nb-user>
+
+                                                <div style="flex: 1;">
+                                                    <p style="font-weight: bold; margin: 0;">{{researcher.name}}</p>
+                                                    <p style="font-size: 0.85rem; color: var(--color-primary-500); margin: 0.25rem 0;">
+                                                        {{researcher.role}}
+                                                    </p>
+                                                    <p style="font-size: 0.9rem; color: var(--text-hint-color); margin: 0;">
+                                                        {{researcher.institutionName}}
+                                                    </p>
+
+                                                    <div style="display: flex; gap: 1.5rem; margin-top: 0.5rem; font-size: 0.9rem;">
+                                                        <span class="stat">Publications: {{researcher.publicationCount}}</span>
+                                                        <span class="stat">Citations: {{researcher.citationCount}}</span>
+                                                        <span class="stat">Collaborations: {{researcher.collaborationHistory}}</span>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Vertical Expertise Score Gauge -->
+                                                <div class="smart-score-gauge">
+                                                    <div class="gauge-container">
+                                                        <div class="gauge-fill" [style.height.%]="researcher.expertiseScore"
+                                                            [ngClass]="'gauge-' + getScoreStatus(researcher.expertiseScore)">
+                                                        </div>
+                                                    </div>
+                                                    <div class="gauge-label">{{researcher.expertiseScore}}</div>
+                                                </div>
+
+                                                <div *ngIf="isResearcherSelected(researcher.id)"
+                                                    style="color: var(--color-success-500); font-size: 1.5rem; margin-left: 0.5rem;">
+                                                    ✓
+                                                </div>
+                                            </div>
+                                        </nb-list-item>
+                                    </nb-list>
+
+                                    <div *ngIf="loadingResearchers" style="text-align: center; padding: 2rem;">
+                                        <p>Loading researchers...</p>
+                                    </div>
+
+                                    <div style="margin-top: 1.5rem; display: flex; justify-content: space-between;">
+                                        <button nbButton status="basic" (click)="goBackToInstitutions()">
+                                            Back to Institutions
+                                        </button>
+                                        <button nbButton status="primary" size="large"
+                                                [disabled]="selectedTeamMembers.length === 0"
+                                                (click)="moveToExport()">
+                                            Continue to Export
+                                        </button>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                    </div>
+
+                    <!-- STEP 4: EXPORT -->
+                    <div *ngIf="currentFundingStep === 'export'" class="row">
+                        <div class="col-12">
+                            <nb-card>
+                                <nb-card-header>
+                                    <h4>Review and Export Proposal Draft</h4>
+                                </nb-card-header>
+                                <nb-card-body>
+
+                                    <div style="margin-bottom: 2rem;">
+                                        <h5>Funding Opportunity</h5>
+                                        <p><strong>{{selectedFunding?.title}}</strong></p>
+                                    </div>
+
+                                    <div style="margin-bottom: 2rem;">
+                                        <h5>Selected Institutions ({{selectedInstitutions.length}})</h5>
+                                        <nb-list>
+                                            <nb-list-item *ngFor="let institution of selectedInstitutions">
+                                                <nb-user [name]="institution.name"
+                                                        badgeText="{{institution.smartScore}}"
+                                                        badgeStatus="success"
+                                                        badgePosition="bottom right">
+                                                </nb-user>
+                                            </nb-list-item>
+                                        </nb-list>
+                                    </div>
+
+                                    <div style="margin-bottom: 2rem;">
+                                        <h5>Team Members ({{selectedTeamMembers.length}})</h5>
+                                        <nb-list>
+                                            <nb-list-item *ngFor="let member of selectedTeamMembers">
+                                                <nb-user [name]="member.researcher.name"
+                                                        [title]="member.researcher.institutionName"
+                                                        badgeText="{{member.researcher.expertiseScore}}"
+                                                        badgeStatus="info"
+                                                        badgePosition="bottom right">
+                                                </nb-user>
+                                            </nb-list-item>
+                                        </nb-list>
+                                    </div>
+
+                                    <!-- Team Organigram -->
+                                    <div style="margin-bottom: 2rem;">
+                                        <h5>Team Structure</h5>
+                                        <div class="organigram-container">
+                                            <!-- Project Root -->
+                                            <div class="org-node org-root">
+                                                <div class="org-node-content">
+                                                    <strong>{{selectedFunding?.title}}</strong>
+                                                    <p style="font-size: 0.9rem; margin: 0.25rem 0 0 0;">Consortium Project</p>
+                                                </div>
+                                            </div>
+
+                                            <!-- Connector Line -->
+                                            <div class="org-connector-vertical"></div>
+                                            <div class="org-connector-horizontal"></div>
+
+                                            <!-- Partner Institutions -->
+                                            <div class="org-institutions">
+                                                <div *ngFor="let institution of selectedInstitutions; let i = index" class="org-branch">
+                                                    <div class="org-connector-branch"></div>
+                                                    <div class="org-node org-institution" [class.org-coordinator]="i === 0">
+                                                        <div class="org-node-content">
+                                                            <strong>{{institution.name}}</strong>
+                                                            <p style="font-size: 0.8rem; margin: 0.25rem 0 0 0;" *ngIf="i === 0">
+                                                                Lead Partner
+                                                            </p>
+                                                            <p style="font-size: 0.8rem; margin: 0.25rem 0 0 0;" *ngIf="i !== 0">
+                                                                Partner {{i + 1}}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Researchers for this institution -->
+                                                    <div class="org-researchers">
+                                                        <div *ngFor="let member of selectedTeamMembers" class="org-researcher">
+                                                            <div *ngIf="member.institutionId === institution.id" class="org-node org-member">
+                                                                <div class="org-node-content">
+                                                                    <strong>{{member.researcher.name}}</strong>
+                                                                    <p style="font-size: 0.8rem; color: var(--color-primary-500); margin: 0.25rem 0 0 0; font-weight: 500;">
+                                                                        {{member.researcher.role}}
+                                                                    </p>
+                                                                    <p style="font-size: 0.75rem; margin: 0.25rem 0 0 0;">
+                                                                        Expertise: {{member.researcher.expertiseScore}}/100
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div style="display: flex; gap: 1rem; justify-content: space-between;">
+                                        <button nbButton status="basic" (click)="goBackToTeamBuilding()">
+                                            Back to Team Building
+                                        </button>
+                                        <div style="display: flex; gap: 1rem;">
+                                            <button nbButton status="basic" (click)="goBackToSummary()">
+                                                Start Over
+                                            </button>
+                                            <button nbButton status="success" size="large" (click)="exportProposalCSV()">
+                                                Download CSV
+                                            </button>
+                                            <button nbButton status="success" size="large" (click)="exportProposalExcel()">
+                                                Download Excel
+                                            </button>
+                                        </div>
+                                    </div>
+                                </nb-card-body>
+                            </nb-card>
+                        </div>
+                    </div>
+
                 </div>
             </nb-tab>
             <nb-tab tabTitle="Topic Explorer" style="padding: 0;">
