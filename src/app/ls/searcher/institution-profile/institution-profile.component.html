@@ -16,11 +16,6 @@
                         <p style="font-weight: bold; font-size: medium;">
                             {{institutionName}}
                         </p>
-                        <div *ngIf="researchAreas && researchAreas.length > 0" style="display: flex; flex-direction: row; gap: 0.5rem;">
-                            <div *ngFor="let area of researchAreas" style="background: var(--color-primary-transparent-100); padding: 0.2rem; border-radius: 0.5rem;">
-                                {{area}}
-                            </div>
-                        </div>
                     </div>
                 </div>
             </nb-card-body>
@@ -62,8 +57,8 @@
                             <nb-card-body>
                                 <div style="display: flex; flex-direction: row; justify-content: space-between;">
                                     <h5>Top Researchers</h5>
-                                    <nb-select style="min-width: 10rem;" [(ngModel)]="selectedResearchArea" (ngModelChange)="onAreaChange($event)">
-                                        <nb-option *ngFor="let option of topResearchAreas" [value]="option.keyword">{{option.keyword}}</nb-option>
+                                    <nb-select style="min-width: 10rem;" [(ngModel)]="selectedResearchArea">
+                                        <nb-option *ngFor="let option of topResearchAreas" [value]="option">{{option}}</nb-option>
                                     </nb-select>
                                 </div>
                                 <nb-list-item *ngFor="let result of topResearchers" style="align-items: baseline; gap: .25rem; flex-direction: column; position: relative;" class ="result-item">

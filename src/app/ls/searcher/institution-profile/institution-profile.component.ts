@@ -231,6 +231,9 @@ export class InstitutionProfileComponent {
         this.backendBridge.getInstitutionTopResearchers(this.institutionId, this.selectedResearchArea).subscribe(data => {
           this.topResearchers = data;
         });
+
+        this.selectedResearchArea = "Computational Science and Engineering";
+        this.topResearchAreas = ["Computational Science and Engineering", "Quantum Physics and Quantum Technologies", "Materials and Matter", "Information and Communication Technology", "Energy and Environment"]
         this.backendBridge.getInstitutionTopResearchers(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
           this.topResearchersExtended = data;
         })
