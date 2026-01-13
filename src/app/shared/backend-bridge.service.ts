@@ -178,96 +178,74 @@ export class BackendBridgeService {
   // Funding Match-Maker Methods
   getMockFundingOpportunities(): Observable<any> {
     const mockFundings = [{
-      id: 'horizon-ai-2026',
-      title: 'Horizon Europe: AI for Healthcare Innovation',
-      abstract: 'Development of AI-driven diagnostic tools for early disease detection. Focus on machine learning, medical imaging, and clinical decision support systems.',
-      topics: ['artificial intelligence', 'machine learning', 'healthcare', 'medical imaging', 'clinical systems'],
+      id: 'HORIZON-CL6-2027-01-ZEROPOLLUTION-02',
+      title: 'Developing effective air quality planning strategies through innovative multi-scale modelling',
+      abstract: `This Horizon Europe call seeks proposals to advance air quality modelling capabilities across multiple spatial and temporal scales, from regional to street-level resolution. The core challenge is that current models struggle to accurately capture complex interactions between different scales and urban environments, limiting their usefulness for effective air quality planning and public health protection.
+Successful proposals should develop integrated multi-scale modelling chains with two-way nesting capabilities, improve urban canopy parameterisation to account for how buildings and vegetation influence pollution, and create validated micro-scale models for assessing hotspot locations. The work should reach Technology Readiness Level 5 and produce practical guidelines for decision-makers developing Air Quality Plans and Roadmaps under the revised Ambient Air Quality Directive.
+A key requirement is addressing the vulnerability dimension—recognising that children, older people, those with lower socioeconomic status, and people with underlying health conditions are disproportionately affected by air pollution. Proposals should provide recommendations on linking air quality data with social and spatial inequality assessments.
+The call emphasises building on existing initiatives including FAIRMODE and AQUILA communities, utilising research infrastructures like ACTRIS, ensuring data is FAIR-compliant, and preparing outputs for potential integration into the Copernicus Atmosphere Monitoring Service. Collaboration with ESA's FuturEO programme and international partners is encouraged. The Joint Research Centre may participate in funded consortia to support harmonised modelling approaches and best practice development.`,
+      topics: ['Air Quality Modelling', 'Public Health', 'Data Science / Computational Modelling'],
       trlMin: 4,
-      trlMax: 7,
-      budgetMin: 2000000,
-      budgetMax: 5000000,
+      trlMax: 6,
+      budgetMin: 9800000,
+      budgetMax: 24000000,
       consortiumSize: 3,
-      deadline: '2026-09-15'
+      deadline: '22 September 2027'
     }];
     return of(mockFundings);
   }
 
   getInstitutionMatchesForFunding(institutionId: string, fundingId: string, topics: string[]): Observable<any> {
     const mockInstitutions = [
-      { id: institutionId, name: 'Current Institution', previousCollaborations: 15, smartScore: 92, isLocked: true },
-      { id: 'inst-stanford', name: 'Stanford University', previousCollaborations: 8, smartScore: 88 },
-      { id: 'inst-mit', name: 'Massachusetts Institute of Technology', previousCollaborations: 12, smartScore: 91 },
-      { id: 'inst-oxford', name: 'University of Oxford', previousCollaborations: 6, smartScore: 85 },
-      { id: 'inst-eth', name: 'ETH Zurich', previousCollaborations: 10, smartScore: 87 },
-      { id: 'inst-cambridge', name: 'University of Cambridge', previousCollaborations: 9, smartScore: 89 },
-      { id: 'inst-harvard', name: 'Harvard University', previousCollaborations: 7, smartScore: 86 },
-      { id: 'inst-berkeley', name: 'UC Berkeley', previousCollaborations: 11, smartScore: 84 },
-      { id: 'inst-imperial', name: 'Imperial College London', previousCollaborations: 5, smartScore: 83 },
-      { id: 'inst-toronto', name: 'University of Toronto', previousCollaborations: 4, smartScore: 80 },
-      { id: 'inst-cmu', name: 'Carnegie Mellon University', previousCollaborations: 8, smartScore: 82 },
-      { id: 'inst-caltech', name: 'California Institute of Technology', previousCollaborations: 6, smartScore: 81 },
-      { id: 'inst-princeton', name: 'Princeton University', previousCollaborations: 5, smartScore: 79 },
-      { id: 'inst-yale', name: 'Yale University', previousCollaborations: 4, smartScore: 78 },
-      { id: 'inst-chicago', name: 'University of Chicago', previousCollaborations: 7, smartScore: 77 },
-      { id: 'inst-columbia', name: 'Columbia University', previousCollaborations: 6, smartScore: 76 },
-      { id: 'inst-penn', name: 'University of Pennsylvania', previousCollaborations: 5, smartScore: 75 },
-      { id: 'inst-ucl', name: 'University College London', previousCollaborations: 8, smartScore: 82 },
-      { id: 'inst-edinburgh', name: 'University of Edinburgh', previousCollaborations: 4, smartScore: 74 },
-      { id: 'inst-cornell', name: 'Cornell University', previousCollaborations: 3, smartScore: 73 },
-      { id: 'inst-michigan', name: 'University of Michigan', previousCollaborations: 6, smartScore: 72 },
-      { id: 'inst-northwestern', name: 'Northwestern University', previousCollaborations: 5, smartScore: 71 },
-      { id: 'inst-duke', name: 'Duke University', previousCollaborations: 4, smartScore: 70 },
-      { id: 'inst-washington', name: 'University of Washington', previousCollaborations: 7, smartScore: 75 },
-      { id: 'inst-melbourne', name: 'University of Melbourne', previousCollaborations: 3, smartScore: 69 },
-      { id: 'inst-tsinghua', name: 'Tsinghua University', previousCollaborations: 9, smartScore: 84 },
-      { id: 'inst-tokyo', name: 'University of Tokyo', previousCollaborations: 5, smartScore: 76 },
-      { id: 'inst-kaist', name: 'KAIST', previousCollaborations: 4, smartScore: 73 }
+      { id: 'inst-tuwien', name: 'TU Wien', previousCollaborations: 0, smartScore: 92, isLocked: true },
+      { id: 'inst-polito', name: 'Politecnico di Torino', previousCollaborations: 6, smartScore: 82 },
+      { id: 'inst-zhaw', name: 'Zurich University of Applied Sciences', previousCollaborations: 6, smartScore: 79 },
+      { id: 'inst-dtu', name: 'Technical University of Denmark', previousCollaborations: 3, smartScore: 85 },
+      { id: 'inst-surrey', name: 'University of Surrey', previousCollaborations: 3, smartScore: 78 },
+      { id: 'inst-hannover', name: 'Leibniz University Hannover', previousCollaborations: 5, smartScore: 80 },
+      { id: 'inst-lut', name: 'LUT University', previousCollaborations: 5, smartScore: 77 },
+      { id: 'inst-ntua', name: 'National Technical University of Athens', previousCollaborations: 5, smartScore: 81 },
+      { id: 'inst-ait', name: 'AIT Austrian Institute of Technology', previousCollaborations: 12, smartScore: 90 },
+      { id: 'inst-bosch', name: 'Bosch Rexroth AG', previousCollaborations: 6, smartScore: 82 }
     ];
     return of(mockInstitutions);
   }
 
   getResearcherCandidatesForFunding(institutionIds: string[], fundingId: string, topics: string[]): Observable<any> {
     const mockResearchers = [
-      { id: 'res-001', name: 'Dr. Sarah Chen', institutionId: 'inst-stanford', institutionName: 'Stanford University', role: 'Senior Researcher', publicationCount: 45, citationCount: 1250, expertiseScore: 94, collaborationHistory: 8 },
-      { id: 'res-002', name: 'Prof. Michael Brown', institutionId: 'inst-mit', institutionName: 'Massachusetts Institute of Technology', role: 'Principal Investigator', publicationCount: 67, citationCount: 2100, expertiseScore: 96, collaborationHistory: 12 },
-      { id: 'res-003', name: 'Dr. Emily Watson', institutionId: 'inst-oxford', institutionName: 'University of Oxford', role: 'Postdoctoral Researcher', publicationCount: 38, citationCount: 980, expertiseScore: 89, collaborationHistory: 5 },
-      { id: 'res-004', name: 'Dr. James Liu', institutionId: 'inst-stanford', institutionName: 'Stanford University', role: 'Research Scientist', publicationCount: 52, citationCount: 1580, expertiseScore: 92, collaborationHistory: 10 },
-      { id: 'res-005', name: 'Prof. Anna Schmidt', institutionId: 'inst-eth', institutionName: 'ETH Zurich', role: 'Principal Investigator', publicationCount: 78, citationCount: 2450, expertiseScore: 97, collaborationHistory: 15 },
-      { id: 'res-006', name: 'Dr. David Kim', institutionId: 'inst-kaist', institutionName: 'KAIST', role: 'Assistant Professor', publicationCount: 41, citationCount: 1180, expertiseScore: 88, collaborationHistory: 7 },
-      { id: 'res-007', name: 'Prof. Maria Garcia', institutionId: 'inst-cambridge', institutionName: 'University of Cambridge', role: 'Associate Professor', publicationCount: 63, citationCount: 1920, expertiseScore: 95, collaborationHistory: 11 },
-      { id: 'res-008', name: 'Dr. Robert Johnson', institutionId: 'inst-harvard', institutionName: 'Harvard University', role: 'Senior Researcher', publicationCount: 49, citationCount: 1340, expertiseScore: 91, collaborationHistory: 9 },
-      { id: 'res-009', name: 'Prof. Li Wei', institutionId: 'inst-tsinghua', institutionName: 'Tsinghua University', role: 'Full Professor', publicationCount: 56, citationCount: 1670, expertiseScore: 93, collaborationHistory: 10 },
-      { id: 'res-010', name: 'Dr. Sophie Martin', institutionId: 'inst-imperial', institutionName: 'Imperial College London', role: 'Research Fellow', publicationCount: 44, citationCount: 1210, expertiseScore: 90, collaborationHistory: 8 },
-      { id: 'res-011', name: 'Prof. Ahmed Hassan', institutionId: 'inst-berkeley', institutionName: 'UC Berkeley', role: 'Principal Investigator', publicationCount: 71, citationCount: 2280, expertiseScore: 96, collaborationHistory: 13 },
-      { id: 'res-012', name: 'Dr. Jennifer Lee', institutionId: 'inst-toronto', institutionName: 'University of Toronto', role: 'Postdoctoral Researcher', publicationCount: 39, citationCount: 1050, expertiseScore: 87, collaborationHistory: 6 },
-      { id: 'res-013', name: 'Prof. Thomas Anderson', institutionId: 'inst-cmu', institutionName: 'Carnegie Mellon University', role: 'Full Professor', publicationCount: 65, citationCount: 1980, expertiseScore: 94, collaborationHistory: 12 },
-      { id: 'res-014', name: 'Dr. Laura Rossi', institutionId: 'inst-oxford', institutionName: 'University of Oxford', role: 'Research Scientist', publicationCount: 42, citationCount: 1140, expertiseScore: 88, collaborationHistory: 7 },
-      { id: 'res-015', name: 'Prof. John Williams', institutionId: 'inst-caltech', institutionName: 'California Institute of Technology', role: 'Associate Professor', publicationCount: 69, citationCount: 2150, expertiseScore: 95, collaborationHistory: 14 },
-      { id: 'res-016', name: 'Dr. Nina Patel', institutionId: 'inst-stanford', institutionName: 'Stanford University', role: 'Assistant Professor', publicationCount: 47, citationCount: 1290, expertiseScore: 90, collaborationHistory: 8 },
-      { id: 'res-017', name: 'Prof. Carlos Rodriguez', institutionId: 'inst-mit', institutionName: 'Massachusetts Institute of Technology', role: 'Principal Investigator', publicationCount: 73, citationCount: 2320, expertiseScore: 97, collaborationHistory: 15 },
-      { id: 'res-018', name: 'Dr. Yuki Tanaka', institutionId: 'inst-tokyo', institutionName: 'University of Tokyo', role: 'PhD Student', publicationCount: 40, citationCount: 1090, expertiseScore: 86, collaborationHistory: 6 },
-      { id: 'res-019', name: 'Prof. Helena Novak', institutionId: 'inst-cambridge', institutionName: 'University of Cambridge', role: 'Full Professor', publicationCount: 61, citationCount: 1850, expertiseScore: 93, collaborationHistory: 11 },
-      { id: 'res-020', name: 'Dr. Marcus Fischer', institutionId: 'inst-eth', institutionName: 'ETH Zurich', role: 'Senior Researcher', publicationCount: 48, citationCount: 1360, expertiseScore: 91, collaborationHistory: 9 },
-      { id: 'res-021', name: 'Prof. Priya Sharma', institutionId: 'inst-harvard', institutionName: 'Harvard University', role: 'Associate Professor', publicationCount: 58, citationCount: 1720, expertiseScore: 92, collaborationHistory: 10 },
-      { id: 'res-022', name: 'Dr. Daniel Cohen', institutionId: 'inst-princeton', institutionName: 'Princeton University', role: 'Postdoctoral Researcher', publicationCount: 36, citationCount: 940, expertiseScore: 85, collaborationHistory: 5 },
-      { id: 'res-023', name: 'Prof. Isabella Ferrari', institutionId: 'inst-yale', institutionName: 'Yale University', role: 'Assistant Professor', publicationCount: 54, citationCount: 1620, expertiseScore: 91, collaborationHistory: 9 },
-      { id: 'res-024', name: 'Dr. Kevin O\'Brien', institutionId: 'inst-chicago', institutionName: 'University of Chicago', role: 'Research Fellow', publicationCount: 43, citationCount: 1190, expertiseScore: 88, collaborationHistory: 7 },
-      { id: 'res-025', name: 'Prof. Mei Zhang', institutionId: 'inst-tsinghua', institutionName: 'Tsinghua University', role: 'Full Professor', publicationCount: 62, citationCount: 1890, expertiseScore: 94, collaborationHistory: 12 },
-      { id: 'res-026', name: 'Dr. Oliver Schmidt', institutionId: 'inst-columbia', institutionName: 'Columbia University', role: 'PhD Student', publicationCount: 37, citationCount: 1010, expertiseScore: 86, collaborationHistory: 6 },
-      { id: 'res-027', name: 'Prof. Rachel Adams', institutionId: 'inst-penn', institutionName: 'University of Pennsylvania', role: 'Associate Professor', publicationCount: 59, citationCount: 1780, expertiseScore: 93, collaborationHistory: 11 },
-      { id: 'res-028', name: 'Dr. Pierre Dubois', institutionId: 'inst-ucl', institutionName: 'University College London', role: 'Research Scientist', publicationCount: 46, citationCount: 1270, expertiseScore: 89, collaborationHistory: 8 },
-      { id: 'res-029', name: 'Prof. Aisha Muhammad', institutionId: 'inst-edinburgh', institutionName: 'University of Edinburgh', role: 'Senior Researcher', publicationCount: 50, citationCount: 1450, expertiseScore: 90, collaborationHistory: 9 },
-      { id: 'res-030', name: 'Dr. Henrik Larsson', institutionId: 'inst-cornell', institutionName: 'Cornell University', role: 'Postdoctoral Researcher', publicationCount: 35, citationCount: 920, expertiseScore: 84, collaborationHistory: 5 },
-      { id: 'res-031', name: 'Prof. Sophia Papadopoulos', institutionId: 'inst-michigan', institutionName: 'University of Michigan', role: 'Full Professor', publicationCount: 55, citationCount: 1640, expertiseScore: 92, collaborationHistory: 10 },
-      { id: 'res-032', name: 'Dr. Lucas Silva', institutionId: 'inst-northwestern', institutionName: 'Northwestern University', role: 'Research Fellow', publicationCount: 41, citationCount: 1150, expertiseScore: 87, collaborationHistory: 7 },
-      { id: 'res-033', name: 'Prof. Catherine Blanc', institutionId: 'inst-duke', institutionName: 'Duke University', role: 'Associate Professor', publicationCount: 57, citationCount: 1700, expertiseScore: 93, collaborationHistory: 11 },
-      { id: 'res-034', name: 'Dr. Rajesh Kumar', institutionId: 'inst-washington', institutionName: 'University of Washington', role: 'Assistant Professor', publicationCount: 44, citationCount: 1230, expertiseScore: 89, collaborationHistory: 8 },
-      { id: 'res-035', name: 'Prof. Emma Wilson', institutionId: 'inst-melbourne', institutionName: 'University of Melbourne', role: 'Senior Researcher', publicationCount: 51, citationCount: 1510, expertiseScore: 90, collaborationHistory: 9 },
-      { id: 'res-036', name: 'Dr. Alexander Ivanov', institutionId: 'inst-imperial', institutionName: 'Imperial College London', role: 'Research Scientist', publicationCount: 48, citationCount: 1380, expertiseScore: 91, collaborationHistory: 9 },
-      { id: 'res-037', name: 'Prof. Fatima Al-Rashid', institutionId: 'inst-berkeley', institutionName: 'UC Berkeley', role: 'Principal Investigator', publicationCount: 66, citationCount: 2050, expertiseScore: 95, collaborationHistory: 13 },
-      { id: 'res-038', name: 'Dr. Sebastian Meyer', institutionId: 'inst-cmu', institutionName: 'Carnegie Mellon University', role: 'Postdoctoral Researcher', publicationCount: 39, citationCount: 1070, expertiseScore: 87, collaborationHistory: 6 },
-      { id: 'res-039', name: 'Prof. Victoria Chang', institutionId: 'inst-caltech', institutionName: 'California Institute of Technology', role: 'Full Professor', publicationCount: 64, citationCount: 1970, expertiseScore: 94, collaborationHistory: 12 },
-      { id: 'res-040', name: 'Dr. Nathan Park', institutionId: 'inst-kaist', institutionName: 'KAIST', role: 'Research Fellow', publicationCount: 42, citationCount: 1160, expertiseScore: 88, collaborationHistory: 7 }
+      // TU Wien (4 researchers) - real names from Institute of Materials Chemistry / Chemical Technologies and Analytics
+      { id: 'res-040', name: 'Prof. Hinrich Grothe', institutionId: 'inst-tuwien', institutionName: 'TU Wien', role: 'Full Professor', publicationCount: 213, citationCount: 10367, expertiseScore: 93, collaborationHistory: 0 },
+      { id: 'res-041', name: 'Dr. Dominik Stolzenburg', institutionId: 'inst-tuwien', institutionName: 'TU Wien', role: 'Senior Researcher', publicationCount: 91, citationCount: 2992, expertiseScore: 89, collaborationHistory: 0 },
+      { id: 'res-042', name: 'Prof. Anne Kasper-Giebl', institutionId: 'inst-tuwien', institutionName: 'TU Wien', role: 'Full Professor', publicationCount: 111, citationCount: 8431, expertiseScore: 91, collaborationHistory: 0 },
+      { id: 'res-043', name: 'Dr. Lubna Dada', institutionId: 'inst-tuwien', institutionName: 'TU Wien', role: 'Senior Researcher', publicationCount: 91, citationCount: 2992, expertiseScore: 88, collaborationHistory: 0 },
+      // Politecnico di Torino (3 researchers) - real names from DAUIN department
+      { id: 'res-001', name: 'Prof. Stefano Di Carlo', institutionId: 'inst-polito', institutionName: 'Politecnico di Torino', role: 'Full Professor', publicationCount: 40, citationCount: 4600, expertiseScore: 91, collaborationHistory: 10 },
+      { id: 'res-002', name: 'Prof. Alessandro Savino', institutionId: 'inst-polito', institutionName: 'Politecnico di Torino', role: 'Associate Professor', publicationCount: 35, citationCount: 1600	, expertiseScore: 87, collaborationHistory: 7 },
+      { id: 'res-003', name: 'Prof. Erasmo Carrera', institutionId: 'inst-polito', institutionName: 'Politecnico di Torino', role: 'Full Professor', publicationCount: 180, citationCount: 39700, expertiseScore: 84, collaborationHistory: 5 },
+      // Zurich University of Applied Sciences (3 researchers) - real names
+      { id: 'res-004', name: 'Dr. Jacinta Edebeli', institutionId: 'inst-zhaw', institutionName: 'Zurich University of Applied Sciences', role: 'Senior Researcher', publicationCount: 31, citationCount: 559, expertiseScore: 79, collaborationHistory: 6 },
+      { id: 'res-005', name: 'Dr. Tobias Schripp', institutionId: 'inst-zhaw', institutionName: 'Zurich University of Applied Sciences', role: 'Senior Researcher', publicationCount: 102, citationCount: 3838, expertiseScore: 85, collaborationHistory: 6 },
+      { id: 'res-044', name: 'Dr. Bruno Neininger', institutionId: 'inst-zhaw', institutionName: 'Zurich University of Applied Sciences', role: 'Senior Researcher', publicationCount: 51, citationCount: 2270, expertiseScore: 82, collaborationHistory: 6 },
+      // Technical University of Denmark (3 researchers) - real names
+      { id: 'res-006', name: 'Prof. Lars Dittmann', institutionId: 'inst-dtu', institutionName: 'Technical University of Denmark', role: 'Full Professor', publicationCount: 67, citationCount: 4400, expertiseScore: 94, collaborationHistory: 12 },
+      { id: 'res-007', name: 'Prof. Søren Linderoth', institutionId: 'inst-dtu', institutionName: 'Technical University of Denmark', role: 'Head of Department', publicationCount: 303, citationCount: 8305, expertiseScore: 88, collaborationHistory: 8 },
+      { id: 'res-008', name: 'Prof. Claus Hélix-Nielsen', institutionId: 'inst-dtu', institutionName: 'Technical University of Denmark', role: 'Head of Department', publicationCount: 70, citationCount: 8260, expertiseScore: 82, collaborationHistory: 4 },
+      // University of Surrey (2 researchers) - real names
+      { id: 'res-010', name: 'Prof. Sir Martin Sweeting', institutionId: 'inst-surrey', institutionName: 'University of Surrey', role: 'Distinguished Professor', publicationCount: 350, citationCount: 4925, expertiseScore: 86, collaborationHistory: 7 },
+      // Leibniz University Hannover (2 researchers) - real names
+      { id: 'res-011', name: 'Prof. Udo Nackenhorst', institutionId: 'inst-hannover', institutionName: 'Leibniz University Hannover', role: 'Full Professor', publicationCount: 75, citationCount: 3250, expertiseScore: 92, collaborationHistory: 11 },
+      // LUT University (2 researchers) - real names (Highly Cited Researchers)
+      { id: 'res-013', name: 'Prof. Christian Breyer', institutionId: 'inst-lut', institutionName: 'LUT University', role: 'Full Professor', publicationCount: 550, citationCount: 33900, expertiseScore: 88, collaborationHistory: 8 },
+      { id: 'res-014', name: 'Prof. Behnam M. Ivatloo', institutionId: 'inst-lut', institutionName: 'LUT University', role: 'Full Professor', publicationCount: 450, citationCount: 26550, expertiseScore: 83, collaborationHistory: 5 },
+     // National Technical University of Athens (3 researchers) - real names
+      { id: 'res-018', name: 'Prof. Dimitrios C. Rakopoulos', institutionId: 'inst-ntua', institutionName: 'National Technical University of Athens', role: 'Full Professor', publicationCount: 150, citationCount: 11700, expertiseScore: 87, collaborationHistory: 7 },
+      { id: 'res-019', name: 'Prof. Nikos Lagaros', institutionId: 'inst-ntua', institutionName: 'National Technical University of Athens', role: 'Vice Rector', publicationCount: 550, citationCount: 9700, expertiseScore: 82, collaborationHistory: 4 },
+      // AIT Austrian Institute of Technology (3 researchers) - real names
+      { id: 'res-024', name: 'Prof. Stefano Passerini', institutionId: 'inst-ait', institutionName: 'AIT Austrian Institute of Technology', role: 'Principal Scientist', publicationCount: 450, citationCount: 81470, expertiseScore: 95, collaborationHistory: 14 },
+      { id: 'res-025', name: 'Dr. Ivan Barisic', institutionId: 'inst-ait', institutionName: 'AIT Austrian Institute of Technology', role: 'Principal Investigator', publicationCount: 80, citationCount: 1030, expertiseScore: 90, collaborationHistory: 9 },
+      { id: 'res-026', name: 'Dr. Rainer Hainberger', institutionId: 'inst-ait', institutionName: 'AIT Austrian Institute of Technology', role: 'Principal Investigator', publicationCount: 230, citationCount: 1900, expertiseScore: 86, collaborationHistory: 6 },
+      // Bosch Rexroth AG (2 researchers) - real name for leadership
+      { id: 'res-033', name: 'Dr. Claudia Schwarz', institutionId: 'inst-bosch', institutionName: 'Bosch Rexroth AG', role: 'Senior Research Scientist', publicationCount: 0, citationCount: 0, expertiseScore: 87, collaborationHistory: 8 }
     ];
     return of(mockResearchers);
   }

@@ -436,14 +436,22 @@ export class InstitutionProfileComponent {
 
   filterResearchers() {
     const query = this.researcherSearchQuery.toLowerCase().trim();
-    if (query === '') {
-      this.filteredResearchers = [...this.availableResearchers];
-    } else {
-      this.filteredResearchers = this.availableResearchers.filter(res =>
+    const selectedInstitutionIds = this.selectedInstitutions.map(i => i.id);
+
+    // First filter by selected institutions
+    let filtered = this.availableResearchers.filter(res =>
+      selectedInstitutionIds.includes(res.institutionId)
+    );
+
+    // Then apply search query if present
+    if (query !== '') {
+      filtered = filtered.filter(res =>
         res.name.toLowerCase().includes(query) ||
         res.institutionName.toLowerCase().includes(query)
       );
     }
+
+    this.filteredResearchers = filtered;
   }
 
   onResearcherSearchChange() {
