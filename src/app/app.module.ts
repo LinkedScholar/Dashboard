@@ -22,6 +22,7 @@ import {
 } from '@nebular/theme';
 import { NbAuthModule, NbAuthService, NbDummyAuthStrategy } from '@nebular/auth';
 import { PermissionsService } from './auth-gard.service';
+import { CensorNamePipe } from './censor-name.pipe';
 
 const formSetting: any = {
   redirectDelay: 0,
@@ -32,7 +33,7 @@ const formSetting: any = {
 };
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, CensorNamePipe],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

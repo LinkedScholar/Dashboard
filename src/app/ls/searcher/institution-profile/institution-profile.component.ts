@@ -5,7 +5,7 @@ import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaperData } from '../person-profile/person-profile.component';
 import * as XLSX from 'xlsx';
-
+import { CensorNamePipe } from '../../../censor-name.pipe';
 type researchArea = {
   keyword: string,
   count: number
@@ -132,7 +132,11 @@ export class InstitutionProfileComponent {
     private backendBridge: BackendBridgeService,
     private titleService: Title) {}
   
-  
+    censorName(name: string): string {
+      if (!name) return '';
+      // Splits by space, takes first char, adds stars, joins back together
+      return name.split(' ').map(w => w.charAt(0) + '***').join(' ');
+    }
 
   onAreaChange(area: string) {
     this.selectedResearchArea = area;
@@ -140,6 +144,7 @@ export class InstitutionProfileComponent {
       this.topResearchers = data;
     })
   }
+  
 
   onAreaChangeExtended(area: string) {
     this.selectedResearchAreaExtended = area;
@@ -155,6 +160,7 @@ export class InstitutionProfileComponent {
 
     this.backendBridge.getInstitutionTopResearchers(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
       this.topResearchersExtended = data;
+
     })
 
     this.backendBridge.getCoInstitutionsFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {

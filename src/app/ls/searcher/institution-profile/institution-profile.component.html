@@ -31,7 +31,7 @@
     <div class="col">
         <nb-tabset fullWidth>
             <nb-tab tabTitle="Overview" style="padding: 0;">
-                <div class="row" *nbTabContent style="width: 66%; margin: auto; padding: 1rem;">
+                <div class="row" *nbTabContent style="width: 75%; margin: auto; padding: 1rem;">
                     <div class="col-6">
                         <nb-card>
                             <nb-card-body style="display: flex; flex-direction: column;">
@@ -56,18 +56,7 @@
                             </nb-card-body>
                         </nb-card>
                     </div>
-                    <div class="col-6">
-                        <nb-card style="height: 67vh;">
-                            <nb-card-body style="display: flex; flex-direction: column;">
-                                <h5>Top Resarch fields</h5>
-                                <div style="display: flex; flex: 1; align-items: center;">
-                                    <ls-bar-chart style="flex: 1;"
-                                    [data]="chartData">
-                                    </ls-bar-chart>
-                                </div>
-                            </nb-card-body>
-                        </nb-card>
-                    </div>
+
                     <div class="col-6">
                         <nb-card>
                             <nb-card-body>
@@ -82,7 +71,7 @@
                                         <div style="display: flex; flex-direction: row; gap: 1rem;">
                                             <nb-user onlyPicture [name]="result.name" size="large"></nb-user>
                                             <div class="info">
-                                                <a style="cursor: pointer;" (click)="navigateToPerson(result.id)">{{result.name}}</a>
+                                                <a style="cursor: pointer;" (click)="navigateToPerson(result.id)">{{censorName(result.name)}}</a>
                                             </div>
                                         </div>
                                         <div style="display: flex; flex-direction: column; gap: 0.1rem; width: 6rem;">
@@ -99,33 +88,19 @@
                             <nb-card-body>
                                 <div class="row">
                                     <div class="col">
-                                            <h5>Collaborating institutions</h5>
-                                            <ls-chord-diagram
-                                                [matrix]="matrix" 
-                                                [labels]="labels"
-                                                class="chord-diagram"
-                                                [ngClass]="(matrix.length > 0) ? '' : 'chord-diagram-empty'">
-                                            </ls-chord-diagram>
-                                    </div>
-                                    <div class="col">
-                                        <nb-list
-                                            style="max-height: 50vh; overflow: hidden;">
-                                            <nb-list-item *ngFor="let coAuthor of coInstitutions">
-                                                <div (click)="navigateToInstitution(coAuthor.id)" style="cursor: pointer;">
-                                                    <nb-user 
-                                                        [name]="coAuthor.name"
-                                                        [badgeText]="coAuthor.count"
-                                                        badgePosition="bottom right">
-                                                    </nb-user>
-                                                </div>
-                                            </nb-list-item>
-                                        </nb-list>
+                                        <h5>Collaborating institutions</h5>
+                                        <ls-chord-diagram
+                                            [matrix]="matrix" 
+                                            [labels]="labels"
+                                            class="chord-diagram"
+                                            [ngClass]="(matrix.length > 0) ? '' : 'chord-diagram-empty'">
+                                        </ls-chord-diagram>
                                     </div>
                                 </div>
                             </nb-card-body>
                         </nb-card>
                     </div>
-                    <div class="col-6">
+                    <div class="col-12">
                         <nb-card>
                             <nb-card-body>
                                 <div class="row">
@@ -142,7 +117,7 @@
                 </div>
             </nb-tab>
             <nb-tab tabTitle="Funding Match-Maker" style="padding: 0;">
-                <div class="funding-match-maker" *nbTabContent style="padding: 1rem; width: 66%; margin: auto;">
+                <div class="funding-match-maker" *nbTabContent style="padding: 1rem; width: 75%; margin: auto;">
 
                     <!-- Progress Indicator -->
                     <div class="row" style="margin-bottom: 1.5rem;">
