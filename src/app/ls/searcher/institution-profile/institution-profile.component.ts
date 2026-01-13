@@ -160,11 +160,11 @@ export class InstitutionProfileComponent {
     this.backendBridge.getCoInstitutionsFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
       this.coInstitutionsFiltered = data;
     }).add(() => {
-      this.backendBridge.getCoInstitutionMatrixFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
-        this.matrixFiltered = data;
+      this.labelsFiltered = [this.institutionName] .concat(this.coInstitutions.slice(0, 6).map(coAuthor => coAuthor.name));
+      // this.backendBridge.getCoInstitutionMatrixFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
+        // this.matrixFiltered = data;
         // concat only 6 names
-        this.labelsFiltered = [this.institutionName] .concat(this.coInstitutions.slice(0, 6).map(coAuthor => coAuthor.name));
-      })
+      // })
     });
 
     this.backendBridge.getInstitutionPubsOverTimeFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
@@ -232,11 +232,11 @@ export class InstitutionProfileComponent {
         this.backendBridge.getCoInstitutionsFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
           this.coInstitutionsFiltered = data;
         }).add(() => {
-          this.backendBridge.getCoInstitutionMatrixFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
-            this.matrixFiltered = data;
+          this.labelsFiltered = [this.institutionName] .concat(this.coInstitutions.slice(0, 6).map(coAuthor => coAuthor.name));
+          // this.backendBridge.getCoInstitutionMatrixFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
+          //   this.matrixFiltered = data;
             // concat only 6 names
-            this.labelsFiltered = [this.institutionName] .concat(this.coInstitutions.slice(0, 6).map(coAuthor => coAuthor.name));
-          })
+          // })
         });
 
         this.backendBridge.getInstitutionPubsOverTimeFiltered(this.institutionId, this.selectedResearchAreaExtended).subscribe(data => {
